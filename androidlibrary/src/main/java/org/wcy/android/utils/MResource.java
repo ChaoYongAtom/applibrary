@@ -56,5 +56,7 @@ public class MResource {
 	public static int getdrawableByIdName(Context context,  String name) {
 		return getByIdName(context,"drawable", name);
 	}
-	
+	public static int getmipmapByIdName(Context context,  String name) {
+		return getByIdName(context,"mipmap", name);
+	}
 }

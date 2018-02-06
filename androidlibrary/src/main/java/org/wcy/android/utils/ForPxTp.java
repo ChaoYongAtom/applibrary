@@ -65,4 +65,12 @@ public abstract class ForPxTp {
         wm.getDefaultDisplay().getMetrics( outMetrics);
         return outMetrics .widthPixels ;
     }
+    public static float limitValue(float a, float b) {
+        float valve = 0;
+        final float min = Math.min(a, b);
+        final float max = Math.max(a, b);
+        valve = valve > min ? valve : min;
+        valve = valve < max ? valve : max;
+        return valve;
+    }
 }
