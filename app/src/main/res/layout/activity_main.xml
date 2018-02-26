@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.wcy.ruiyun.mvp.app.ui.activity.MainActivity">
-
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:text="传值"/>
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"

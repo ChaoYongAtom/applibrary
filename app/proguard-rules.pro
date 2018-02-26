@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Parceler Parceler进行Bundle数据存取！https://github.com/JumeiRdGroup/Parceler
+-keep class com.lzh.compiler.parceler.annotation.**
+-keep class * implements com.lzh.compiler.parceler.ParcelInjector
+-keepclasseswithmembernames class * {
+    @com.lzh.compiler.parceler.annotation.Arg <fields>;
+}

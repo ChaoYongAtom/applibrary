@@ -51,4 +51,6 @@
         <!--分割线高度-->
         <attr name="dividerLineWidth" format="integer" />
     </declare-styleable>
+    <attr name="app_primary_color" format="color"/> <!-- topbar -->
+    <attr name="app_content_bg_color" format="color"/> <!-- content-->
 </resources>

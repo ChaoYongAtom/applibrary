@@ -4,4 +4,9 @@
     <color name="material_green">#ff4CAF50</color>
     <color name="material_blue">#ff03A9F4</color>
     <color name="material_yellow">#ffFFEB3B</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="trans_success_stroke_color">#33A5DC86</color>
+    <color name="error_stroke_color">#F27474</color>
+    <color name="warning_stroke_color">#F8BB86</color>
+    <color name="message_point_color">#f29600</color>
 </resources>
