@@ -161,8 +161,7 @@ public class EmptyLayout extends RelativeLayout {
             LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
             lp.addRule(RelativeLayout.CENTER_VERTICAL);
-            if (mEmptyView != null)
-                mainview.addView(mEmptyView, lp);
+            if (mEmptyView != null) mainview.addView(mEmptyView, lp);
             if (mLoadingView != null) {
                 LayoutParams lp1 = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
                 lp1.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -170,46 +169,41 @@ public class EmptyLayout extends RelativeLayout {
                 mainview.addView(mLoadingView, lp1);
             }
 
-            if (mErrorView != null)
-                mainview.addView(mErrorView, lp);
+            if (mErrorView != null) mainview.addView(mErrorView, lp);
             if (mNetView != null) {
                 mainview.addView(mNetView, lp);
             }
             mViewsAdded = true;
         }
         if (childView != null) {
-            TextView message_tv;
+            TextView message_tv, textretry = null;
             switch (mEmptyType) {
                 case TYPE_EMPTY:
-                    if (childView != null)
-                        childView.setVisibility(View.GONE);
-                    if (mNetView != null)
-                        mNetView.setVisibility(View.GONE);
+                    if (childView != null) childView.setVisibility(View.GONE);
+                    if (mNetView != null) mNetView.setVisibility(View.GONE);
                     if (mEmptyView != null) {
                         mEmptyView.setVisibility(View.VISIBLE);
-                        message_tv = (TextView) mEmptyView.findViewById(R.id.textViewMessage);
+                        message_tv = mEmptyView.findViewById(R.id.textViewMessage);
+                        textretry = mEmptyView.findViewById(R.id.textretry);
                         if (message != null && !message.equals("")) {
                             message_tv.setText(message);
                         } else {
                             message_tv.setText(mContext.getString(R.string.empty_message));
                         }
                     }
-                    if (mErrorView != null)
-                        mErrorView.setVisibility(View.GONE);
+                    if (mErrorView != null) mErrorView.setVisibility(View.GONE);
                     if (mLoadingView != null) {
                         mLoadingView.setVisibility(View.GONE);
                     }
                     break;
                 case TYPE_ERROR:
-                    if (childView != null)
-                        childView.setVisibility(View.GONE);
-                    if (mEmptyView != null)
-                        mEmptyView.setVisibility(View.GONE);
-                    if (mNetView != null)
-                        mNetView.setVisibility(View.GONE);
+                    if (childView != null) childView.setVisibility(View.GONE);
+                    if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
+                    if (mNetView != null) mNetView.setVisibility(View.GONE);
                     if (mErrorView != null) {
                         mErrorView.setVisibility(View.VISIBLE);
-                        message_tv = (TextView) mErrorView.findViewById(R.id.textViewMessage);
+                        message_tv = mErrorView.findViewById(R.id.textViewMessage);
+                        textretry = mErrorView.findViewById(R.id.textretry);
                         if (message != null && !message.equals("")) {
                             message_tv.setText(message);
                         } else {
@@ -221,17 +215,13 @@ public class EmptyLayout extends RelativeLayout {
                     }
                     break;
                 case TYPE_LOADING:
-                    if (childView != null)
-                        childView.setVisibility(View.GONE);
-                    if (mEmptyView != null)
-                        mEmptyView.setVisibility(View.GONE);
-                    if (mErrorView != null)
-                        mErrorView.setVisibility(View.GONE);
-                    if (mNetView != null)
-                        mNetView.setVisibility(View.GONE);
+                    if (childView != null) childView.setVisibility(View.GONE);
+                    if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
+                    if (mErrorView != null) mErrorView.setVisibility(View.GONE);
+                    if (mNetView != null) mNetView.setVisibility(View.GONE);
                     if (mLoadingView != null) {
                         mLoadingView.setVisibility(View.VISIBLE);
-                        message_tv = (TextView) mLoadingView.findViewById(R.id.textViewMessage);
+                        message_tv = mLoadingView.findViewById(R.id.textViewMessage);
                         if (message != null && !message.equals("")) {
                             message_tv.setText(message);
                         } else {
@@ -240,26 +230,20 @@ public class EmptyLayout extends RelativeLayout {
                     }
                     break;
                 case TYPE_VIEW:
-                    if (mEmptyView != null)
-                        mEmptyView.setVisibility(View.GONE);
-                    if (mErrorView != null)
-                        mErrorView.setVisibility(View.GONE);
-                    if (mNetView != null)
-                        mNetView.setVisibility(View.GONE);
+                    if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
+                    if (mErrorView != null) mErrorView.setVisibility(View.GONE);
+                    if (mNetView != null) mNetView.setVisibility(View.GONE);
                     if (mLoadingView != null) {
                         mLoadingView.setVisibility(View.GONE);
                     }
-                    if (childView != null)
-                        childView.setVisibility(View.VISIBLE);
+                    if (childView != null) childView.setVisibility(View.VISIBLE);
                     break;
                 case TYPE_NET:
-                    if (childView != null)
-                        childView.setVisibility(View.GONE);
-                    if (mEmptyView != null)
-                        mEmptyView.setVisibility(View.GONE);
-                    if (mErrorView != null)
-                        mErrorView.setVisibility(View.GONE);
+                    if (childView != null) childView.setVisibility(View.GONE);
+                    if (mEmptyView != null) mEmptyView.setVisibility(View.GONE);
+                    if (mErrorView != null) mErrorView.setVisibility(View.GONE);
                     if (mNetView != null) {
+                        textretry = mNetView.findViewById(R.id.textretry);
                         mNetView.setVisibility(View.VISIBLE);
                     }
                     if (mLoadingView != null) {
@@ -268,6 +252,13 @@ public class EmptyLayout extends RelativeLayout {
                     break;
                 default:
                     break;
+            }
+            if (textretry != null) {
+                if (mErrorClickListener != null) {
+                    textretry.setVisibility(View.VISIBLE);
+                } else {
+                    textretry.setVisibility(GONE);
+                }
             }
         }
 
@@ -382,9 +373,9 @@ public class EmptyLayout extends RelativeLayout {
      */
     public void showError(String message) {
         if (StringUtil.hasText(message)) {
-            this.message = message + "\n点击刷新";
+            this.message = message;
         } else {
-            this.message = "暂无数据,点击刷新";
+            this.message = "暂无数据";
         }
         this.mEmptyType = TYPE_ERROR;
         changeEmptyType();

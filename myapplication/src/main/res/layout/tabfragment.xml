@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <org.wcy.android.view.HeaderLayout
+        android:id="@+id/headerlayout"
+        style="@style/titleType"
+        app:hlMenu2Icon="@mipmap/add_ic"
+        app:hlMenu2TextId="@+id/add_btn"
+        app:hlMenuIcon="@mipmap/edit_ic"
+        app:hlMenuTextId="@+id/edit_btn"
+        app:hlTitleText="这是主标题" />
+
+    <org.wcy.android.view.EmptyLayout
+        android:id="@+id/emptylayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="这事鑫鑫"
+            android:textSize="@dimen/sp_40" />
+    </org.wcy.android.view.EmptyLayout>
+</LinearLayout>
