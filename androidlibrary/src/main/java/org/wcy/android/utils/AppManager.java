@@ -190,8 +190,6 @@ public class AppManager {
     public void AppExit() {
         try {
             finishAllActivity();
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(10);
         } catch (Exception e) {
         }
     }
