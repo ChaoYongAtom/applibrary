@@ -43,4 +43,18 @@ public class ClassUtil {
 		return (Class) params[0];
 
 	}
+
+	public static <T> T getT(Object o, int i) {
+		try {
+			// 得到泛型父类,包含泛型参数信息,如:Class<User>
+			Type genericClassType = o.getClass().getGenericSuperclass();
+			// 得到泛型实际参数中对应的Class,如Class<User>中的User,参数可为多个，所以定义为数组
+			Type params[] = ((ParameterizedType) genericClassType).getActualTypeArguments();
+			if (params!=null && params.length > i) {
+				return ((Class<T>) params[i]).newInstance();
+			}
+		} catch (Exception e) {
+		}
+		return null;
+	}
 }
