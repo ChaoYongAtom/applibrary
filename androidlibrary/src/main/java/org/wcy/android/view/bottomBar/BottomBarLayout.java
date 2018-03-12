@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,12 +26,14 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
 
     private static final String STATE_INSTANCE = "instance_state";
     private static final String STATE_ITEM = "state_item";
-
-
+    private List<Fragment> fragments; // 一个tab页面对应一个Fragment
+    private FragmentActivity fragmentActivity; // Fragment所属的Activity
+    private int fragmentContentId; // Activity中所要被替换的区域的id
     private ViewPager mViewPager;
     private int mChildCount;//子条目个数
+    private boolean isShoWanimation = true;
     private List<BottomBarItem> mItemViews = new ArrayList<>();
-    private int mCurrentItem;//当前条目的索引
+    private int mCurrentItem=0;//当前条目的索引
     private boolean mSmoothScroll;
 
     public BottomBarLayout(Context context) {
@@ -42,13 +47,20 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
     public BottomBarLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BottomBarLayout);
-        mSmoothScroll = ta.getBoolean(R.styleable.BottomBarLayout_smoothScroll,false);
+        mSmoothScroll = ta.getBoolean(R.styleable.BottomBarLayout_smoothScroll, false);
         ta.recycle();
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        init();
+    }
+
+    public void setFragments(FragmentActivity fragmentActivity, int fragmentContentId, List<Fragment> fragments) {
+        this.fragmentActivity = fragmentActivity;
+        this.fragments = fragments;
+        this.fragmentContentId = fragmentContentId;
         init();
     }
 
@@ -70,6 +82,17 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
                 throw new IllegalArgumentException("LinearLayout的子View数量必须和ViewPager条目数量一致");
             }
         }
+        if (fragments != null) {
+            if (fragments.size() != mChildCount) {
+                throw new IllegalArgumentException("LinearLayout的子View数量必须和fragments条目数量一致");
+            }else{
+                // 默认显示第一页
+                FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+                ft.add(fragmentContentId, fragments.get(mCurrentItem));
+                ft.commit();
+                showTab(mCurrentItem);
+            }
+        }
 
         for (int i = 0; i < mChildCount; i++) {
             if (getChildAt(i) instanceof BottomBarItem) {
@@ -84,7 +107,7 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
 
         mItemViews.get(mCurrentItem).setStatus(true);//设置选中项
 
-        if (mViewPager != null){
+        if (mViewPager != null) {
             mViewPager.setOnPageChangeListener(this);
         }
     }
@@ -98,8 +121,8 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
     public void onPageSelected(int position) {
         resetState();
         mItemViews.get(position).setStatus(true);
-        if (onItemSelectedListener != null){
-            onItemSelectedListener.onItemSelected(getBottomItem(position),mCurrentItem,position);
+        if (onItemSelectedListener != null) {
+            onItemSelectedListener.onItemSelected(getBottomItem(position), mCurrentItem, position);
         }
         mCurrentItem = position;//记录当前位置
     }
@@ -120,89 +143,154 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
         @Override
         public void onClick(View v) {
             //回调点击的位置
-            if(mViewPager != null){
+            if (mViewPager != null) {
                 //有设置viewPager
-                if (currentIndex == mCurrentItem){
+                if (currentIndex == mCurrentItem) {
                     //如果还是同个页签，使用setCurrentItem不会回调OnPageSelecte(),所以在此处需要回调点击监听
                     if (onItemSelectedListener != null) {
-                        onItemSelectedListener.onItemSelected(getBottomItem(currentIndex),mCurrentItem,currentIndex);
+                        onItemSelectedListener.onItemSelected(getBottomItem(currentIndex), mCurrentItem, currentIndex);
                     }
-                }else{
+                } else {
                     mViewPager.setCurrentItem(currentIndex, mSmoothScroll);
                 }
-            }else{
+            } else {
                 //没有设置viewPager
                 if (onItemSelectedListener != null) {
-                    onItemSelectedListener.onItemSelected(getBottomItem(currentIndex),mCurrentItem,currentIndex);
+                    onItemSelectedListener.onItemSelected(getBottomItem(currentIndex), mCurrentItem, currentIndex);
                 }
-
                 updateTabState(currentIndex);
             }
         }
     }
 
-    private void updateTabState(int position){
+    private void updateTabState(int position) {
         resetState();
+        if (fragments != null && fragments.size() > 0) {
+            checkTab(position);
+        }
         mCurrentItem = position;
         mItemViews.get(mCurrentItem).setStatus(true);
+    }
+
+    public void checkTab(int idx) {
+        for (int i = 0; i < mChildCount; i++) {
+            if (i == idx) {
+                Fragment fragment = fragments.get(i);
+                FragmentTransaction ft = obtainFragmentTransaction(i);
+                getCurrentFragment().onPause(); // 暂停当前tab
+                if (fragment.isAdded()) {
+                    fragment.onResume(); // 启动目标tab的onResume()
+                } else {
+                    ft.add(fragmentContentId, fragment);
+                }
+                showTab(i); // 显示目标tab
+                ft.commit();
+            }
+        }
+    }
+
+    /**
+     * 切换tab
+     *
+     * @param idx
+     */
+    private void showTab(int idx) {
+        for (int i = 0; i < fragments.size(); i++) {
+            Fragment fragment = fragments.get(i);
+            FragmentTransaction ft = obtainFragmentTransaction(idx);
+            if (idx == i) {
+                ft.show(fragment);
+            } else {
+                ft.hide(fragment);
+            }
+            ft.commit();
+        }
+    }
+
+    public Fragment getCurrentFragment() {
+        return fragments.get(mCurrentItem);
+    }
+
+    /**
+     * 获取一个带动画的FragmentTransaction
+     *
+     * @param index
+     * @return
+     */
+    private FragmentTransaction obtainFragmentTransaction(int index) {
+        FragmentTransaction ft = fragmentActivity.getSupportFragmentManager().beginTransaction();
+        if (isShoWanimation) {
+            //        // 设置切换动画
+            if (index > mCurrentItem) {
+                ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
+            } else {
+                ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            }
+        }
+        return ft;
     }
 
     /**
      * 重置当前按钮的状态
      */
     private void resetState() {
-        if (mCurrentItem < mItemViews.size()){
+        if (mCurrentItem < mItemViews.size()) {
             mItemViews.get(mCurrentItem).setStatus(false);
         }
     }
 
     public void setCurrentItem(int currentItem) {
-        if (mViewPager != null){
-            mViewPager.setCurrentItem(currentItem,mSmoothScroll);
-        }else{
+        if (mViewPager != null) {
+            mViewPager.setCurrentItem(currentItem, mSmoothScroll);
+        } else {
             updateTabState(currentItem);
         }
     }
 
     /**
      * 设置未读数
-     * @param position 底部标签的下标
+     *
+     * @param position  底部标签的下标
      * @param unreadNum 未读数
      */
-    public void setUnread(int position,int unreadNum){
+    public void setUnread(int position, int unreadNum) {
         mItemViews.get(position).setUnreadNum(unreadNum);
     }
 
     /**
      * 设置提示消息
+     *
      * @param position 底部标签的下标
-     * @param msg 未读数
+     * @param msg      未读数
      */
-    public void setMsg(int position,String msg){
+    public void setMsg(int position, String msg) {
         mItemViews.get(position).setMsg(msg);
     }
 
     /**
      * 隐藏提示消息
+     *
      * @param position 底部标签的下标
      */
-    public void hideMsg(int position){
+    public void hideMsg(int position) {
         mItemViews.get(position).hideMsg();
     }
 
     /**
      * 显示提示的小红点
+     *
      * @param position 底部标签的下标
      */
-    public void showNotify(int position){
+    public void showNotify(int position) {
         mItemViews.get(position).showNotify();
     }
 
     /**
      * 隐藏提示的小红点
+     *
      * @param position 底部标签的下标
      */
-    public void hideNotify(int position){
+    public void hideNotify(int position) {
         mItemViews.get(position).hideNotify();
     }
 
@@ -214,7 +302,7 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
         this.mSmoothScroll = smoothScroll;
     }
 
-    public BottomBarItem getBottomItem(int position){
+    public BottomBarItem getBottomItem(int position) {
         return mItemViews.get(position);
     }
 

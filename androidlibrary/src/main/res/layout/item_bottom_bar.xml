@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="14dp"
-            android:background="@drawable/shape_unread"
             android:gravity="center"
             android:minWidth="15dp"
             android:text="99+"

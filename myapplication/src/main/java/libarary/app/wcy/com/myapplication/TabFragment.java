@@ -19,6 +19,7 @@ import org.wcy.android.view.HeaderLayout;
 public class TabFragment extends Fragment {
     public static final String CONTENT = "content";
     HeaderLayout headerLayout;
+    TextView textmsg;
     EmptyLayout emptyLayout;
     /**
      * The loading state
@@ -31,6 +32,8 @@ public class TabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle bundle) {
         View view = inflater.inflate(R.layout.tabfragment, null);
+        textmsg = view.findViewById(R.id.textmsg);
+        textmsg.setText(getArguments().getString(TabFragment.CONTENT));
         headerLayout = view.findViewById(R.id.headerlayout);
         emptyLayout = view.findViewById(R.id.emptylayout);
         emptyLayout.setErrorClickListener(new View.OnClickListener() {
@@ -39,7 +42,7 @@ public class TabFragment extends Fragment {
 
             }
         });
-        emptyLayout.showEmpty();
+        emptyLayout.showView();
         headerLayout.getMenuView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

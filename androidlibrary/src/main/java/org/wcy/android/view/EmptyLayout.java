@@ -41,7 +41,10 @@ public class EmptyLayout extends RelativeLayout {
     ViewGroup mainview;
     private String message;
     private RecyclerView.Adapter adapter;
-
+    private int view_empty_layout = R.layout.view_empty;
+    private int view_loading_layout = R.layout.view_loading;
+    private int view_error_layout = R.layout.view_error;
+    private int view_notnet_layout = R.layout.view_notnet;
     public EmptyLayout(Context context) {
         super(context);
         initView(context, null);
@@ -265,10 +268,9 @@ public class EmptyLayout extends RelativeLayout {
 
     }
 
-
     private void setDefaultValues() {
         if (mEmptyView == null) {
-            mEmptyView = (ViewGroup) View.inflate(mContext, R.layout.view_empty, null);
+            mEmptyView = (ViewGroup) View.inflate(mContext, view_empty_layout, null);
             mEmptyView.setFocusable(true);
             mEmptyView.setClickable(true);
             if (mErrorClickListener != null) {
@@ -276,10 +278,10 @@ public class EmptyLayout extends RelativeLayout {
             }
         }
         if (mLoadingView == null) {
-            mLoadingView = (ViewGroup) View.inflate(mContext, R.layout.view_loading, null);
+            mLoadingView = (ViewGroup) View.inflate(mContext, view_loading_layout, null);
         }
         if (mErrorView == null) {
-            mErrorView = (ViewGroup) View.inflate(mContext, R.layout.view_error, null);
+            mErrorView = (ViewGroup) View.inflate(mContext, view_error_layout, null);
             if (mErrorClickListener != null) {
                 mErrorView.setFocusable(true);
                 mErrorView.setClickable(true);
@@ -287,7 +289,7 @@ public class EmptyLayout extends RelativeLayout {
             }
         }
         if (mNetView == null) {
-            mNetView = (ViewGroup) View.inflate(mContext, R.layout.view_notnet, null);
+            mNetView = (ViewGroup) View.inflate(mContext, view_notnet_layout, null);
             if (mErrorClickListener != null) {
                 mNetView.setFocusable(true);
                 mNetView.setClickable(true);
@@ -395,6 +397,22 @@ public class EmptyLayout extends RelativeLayout {
 
     public boolean isList() {
         return isList;
+    }
+
+    public void setView_empty_layout(int view_empty_layout) {
+        this.view_empty_layout = view_empty_layout;
+    }
+
+    public void setView_loading_layout(int view_loading_layout) {
+        this.view_loading_layout = view_loading_layout;
+    }
+
+    public void setView_error_layout(int view_error_layout) {
+        this.view_error_layout = view_error_layout;
+    }
+
+    public void setView_notnet_layout(int view_notnet_layout) {
+        this.view_notnet_layout = view_notnet_layout;
     }
 
     public MaterialRefreshLayout getPullToRefreshView() {

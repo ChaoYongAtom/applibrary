@@ -1,9 +1,7 @@
 package org.wcy.android.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
@@ -150,14 +148,6 @@ public class HeaderLayout extends RelativeLayout {
             addView(mNavigationView);
             mNavigationView.setId(R.id.hl_navigation_view);
             addButtonConfig(mNavigationView, navigationText, mItemTextSize, mItemTextColor, (int) mItemTextPaddingLeftAndRight);
-        }
-        if (mNavigationView != null) {
-            mNavigationView.setOnClickListener(new OnClickListener() {  //处理返回键点击事件
-                @Override
-                public void onClick(View view) {
-                    ((Activity) getContext()).finish();
-                }
-            });
         }
         if (menuIcon != 0 || !TextUtils.isEmpty(menuText)) {  //说明有右边按钮
             mMenuLl = new LinearLayout(getContext());
@@ -341,6 +331,12 @@ public class HeaderLayout extends RelativeLayout {
         if (mNavigationView != null) {
             mNavigationView.setOnClickListener(l);
         }
+        if (mMenuLl.getChildCount() > 0) {
+            for (int i = 0; i < mMenuLl.getChildCount(); i++) {
+                View view = mMenuLl.getChildAt(i);
+                view.setOnClickListener(l);
+            }
+        }
     }
 
     @Override
@@ -348,32 +344,6 @@ public class HeaderLayout extends RelativeLayout {
         if (mHedaderLayoutHeight == 0) {
             mHedaderLayoutHeight = getLayoutParams().height;
         }
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    /**
-     * 状态栏高度算法
-     *
-     * @param activity act
-     * @return status bar height
-     */
-    public static int getStatusHeight(Activity activity) {
-        int statusHeight = 0;
-        Rect localRect = new Rect();
-        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(localRect);
-        statusHeight = localRect.top;
-        if (0 == statusHeight) {
-            Class<?> localClass;
-            try {
-                localClass = Class.forName("com.android.internal.R$dimen");
-                Object localObject = localClass.newInstance();
-                int i5 = Integer.parseInt(localClass.getField("status_bar_height").get(localObject).toString());
-                statusHeight = activity.getResources().getDimensionPixelSize(i5);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return statusHeight;
     }
 }
