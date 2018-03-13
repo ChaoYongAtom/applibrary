@@ -60,8 +60,9 @@ public class MaterialRefreshLayout extends FrameLayout {
     private int progressSizeType;
     private int progressSize = 0;
     private boolean isLoadMoreing;
-    private boolean isLoadMore;
     private boolean isSunStyle = false;
+    //设置状体
+    private int model = Mode.BOTH;
 
     public MaterialRefreshLayout(Context context) {
         this(context, null, 0);
@@ -122,7 +123,6 @@ public class MaterialRefreshLayout extends FrameLayout {
         } else {
             progressSize = BIG_PROGRESS_SIZE;
         }
-        isLoadMore = t.getBoolean(R.styleable.MaterialRefreshLayout_isLoadMore, false);
         t.recycle();
     }
 
@@ -190,8 +190,7 @@ public class MaterialRefreshLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        System.out.println("onInterceptTouchEvent----------------");
-        if (isRefreshing) return true;
+        if (isRefreshing || isLoadMoreing) return true;
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mTouchY = ev.getY();
@@ -201,15 +200,17 @@ public class MaterialRefreshLayout extends FrameLayout {
                 float currentY = ev.getY();
                 float dy = currentY - mTouchY;
                 if (dy > 0 && !canChildScrollUp()) {
-                    if (mMaterialHeaderView != null) {
-                        mMaterialHeaderView.setVisibility(View.VISIBLE);
-                        mMaterialHeaderView.onBegin(this);
-                    } else if (mSunLayout != null) {
-                        mSunLayout.setVisibility(View.VISIBLE);
-                        mSunLayout.onBegin(this);
+                    if (model == Mode.BOTH || model == Mode.START) {
+                        if (mMaterialHeaderView != null) {
+                            mMaterialHeaderView.setVisibility(View.VISIBLE);
+                            mMaterialHeaderView.onBegin(this);
+                        } else if (mSunLayout != null) {
+                            mSunLayout.setVisibility(View.VISIBLE);
+                            mSunLayout.onBegin(this);
+                        }
                     }
                     return true;
-                } else if (dy < 0 && !canChildScrollDown() && isLoadMore) {
+                } else if (dy < 0 && !canChildScrollDown() && (model == Mode.BOTH || model == Mode.END)) {
                     if (mMaterialFooterView != null && !isLoadMoreing) {
                         soveLoadMoreLogic();
                     }
@@ -221,19 +222,20 @@ public class MaterialRefreshLayout extends FrameLayout {
     }
 
     private void soveLoadMoreLogic() {
-        isLoadMoreing = true;
-        mMaterialFooterView.setVisibility(View.VISIBLE);
-        mMaterialFooterView.onBegin(this);
-        mMaterialFooterView.onRefreshing(this);
-        if (refreshListener != null) {
-            refreshListener.onRefreshLoadMore();
+        if (model == Mode.BOTH || model == Mode.END) {
+            isLoadMoreing = true;
+            mMaterialFooterView.setVisibility(View.VISIBLE);
+            mMaterialFooterView.onBegin(this);
+            mMaterialFooterView.onRefreshing(this);
+            if (refreshListener != null) {
+                refreshListener.onRefreshLoadMore();
+            }
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        System.out.println("onTouchEvent----------------");
-        if (isRefreshing) {
+        if (isRefreshing || isLoadMoreing) {
             return super.onTouchEvent(e);
         }
 
@@ -255,42 +257,42 @@ public class MaterialRefreshLayout extends FrameLayout {
                         mSunLayout.requestLayout();
                         mSunLayout.onPull(this, fraction);
                     }
-                    if (!isOverlay)
-                        ViewCompat.setTranslationY(mChildView, offsetY);
+                    if (!isOverlay) ViewCompat.setTranslationY(mChildView, offsetY);
 
                 }
                 return true;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (mChildView != null) {
-                    if (mMaterialHeaderView != null) {
-                        if (isOverlay) {
-                            if (mMaterialHeaderView.getLayoutParams().height > mHeadHeight) {
+                if (model == Mode.BOTH || model == Mode.START) {
+                    if (mChildView != null) {
+                        if (mMaterialHeaderView != null) {
 
-                                updateListener();
+                            if (isOverlay) {
+                                if (mMaterialHeaderView.getLayoutParams().height > mHeadHeight) {
 
-                                mMaterialHeaderView.getLayoutParams().height = (int) mHeadHeight;
-                                mMaterialHeaderView.requestLayout();
+                                    updateListener();
+
+                                    mMaterialHeaderView.getLayoutParams().height = (int) mHeadHeight;
+                                    mMaterialHeaderView.requestLayout();
+
+                                } else {
+                                    mMaterialHeaderView.getLayoutParams().height = 0;
+                                    mMaterialHeaderView.requestLayout();
+                                }
 
                             } else {
-                                mMaterialHeaderView.getLayoutParams().height = 0;
-                                mMaterialHeaderView.requestLayout();
-                            }
-
-                        } else {
-                            if (ViewCompat.getTranslationY(mChildView) >= mHeadHeight) {
-                                createAnimatorTranslationY(mChildView, mHeadHeight, mMaterialHeaderView);
-                                updateListener();
-                            } else {
-                                createAnimatorTranslationY(mChildView, 0, mMaterialHeaderView);
+                                if (ViewCompat.getTranslationY(mChildView) >= mHeadHeight) {
+                                    createAnimatorTranslationY(mChildView, mHeadHeight, mMaterialHeaderView);
+                                    updateListener();
+                                } else {
+                                    createAnimatorTranslationY(mChildView, 0, mMaterialHeaderView);
+                                }
                             }
                         }
                     } else if (mSunLayout != null) {
                         if (isOverlay) {
                             if (mSunLayout.getLayoutParams().height > mHeadHeight) {
-
                                 updateListener();
-
                                 mSunLayout.getLayoutParams().height = (int) mHeadHeight;
                                 mSunLayout.requestLayout();
 
@@ -308,15 +310,11 @@ public class MaterialRefreshLayout extends FrameLayout {
                             }
                         }
                     }
-
-
                 }
                 return true;
         }
 
-        return super.
-
-                onTouchEvent(e);
+        return super.onTouchEvent(e);
 
     }
 
@@ -362,7 +360,7 @@ public class MaterialRefreshLayout extends FrameLayout {
         this.post(new Runnable() {
             @Override
             public void run() {
-                if (isLoadMore) {
+                if (model == Mode.END || model == Mode.BOTH) {
                     soveLoadMoreLogic();
                 } else {
                     throw new RuntimeException("you must setLoadMore ture");
@@ -372,22 +370,23 @@ public class MaterialRefreshLayout extends FrameLayout {
     }
 
     public void updateListener() {
-        isRefreshing = true;
+        if (model == Mode.BOTH || model == Mode.START) {
+            isRefreshing = true;
 
-        if (mMaterialHeaderView != null) {
-            mMaterialHeaderView.onRefreshing(MaterialRefreshLayout.this);
-        } else if (mSunLayout != null) {
-            mSunLayout.onRefreshing(MaterialRefreshLayout.this);
+            if (mMaterialHeaderView != null) {
+                mMaterialHeaderView.onRefreshing(MaterialRefreshLayout.this);
+            } else if (mSunLayout != null) {
+                mSunLayout.onRefreshing(MaterialRefreshLayout.this);
+            }
+
+            if (refreshListener != null) {
+                refreshListener.onRefresh();
+            }
         }
-
-        if (refreshListener != null) {
-            refreshListener.onRefresh();
-        }
-
     }
 
-    public void setLoadMore(boolean isLoadMore) {
-        this.isLoadMore = isLoadMore;
+    public void setMore(int model) {
+        this.model = model;
     }
 
     public void setProgressColors(int[] colors) {
@@ -446,9 +445,7 @@ public class MaterialRefreshLayout extends FrameLayout {
         if (Build.VERSION.SDK_INT < 14) {
             if (mChildView instanceof AbsListView) {
                 final AbsListView absListView = (AbsListView) mChildView;
-                return absListView.getChildCount() > 0
-                        && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
-                        .getTop() < absListView.getPaddingTop());
+                return absListView.getChildCount() > 0 && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0).getTop() < absListView.getPaddingTop());
             } else {
                 return ViewCompat.canScrollVertically(mChildView, -1) || mChildView.getScrollY() > 0;
             }
@@ -525,6 +522,13 @@ public class MaterialRefreshLayout extends FrameLayout {
             }
         });
 
+    }
+
+    public interface Mode {
+        public int DISABLED = 0x0;
+        public int BOTH = 0x1;
+        public int START = 0x2;
+        public int END = 0x3;
     }
 
     private void setHeaderView(final View headerView) {

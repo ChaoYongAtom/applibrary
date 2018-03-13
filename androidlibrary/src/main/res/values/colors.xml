@@ -9,6 +9,7 @@
     <color name="error_stroke_color">#F27474</color>
     <color name="warning_stroke_color">#F8BB86</color>
     <color name="message_point_color">#f29600</color>
+    <color name="waveColor">#40ffffff</color>
     <!-- 通用 -->
     <color name="app_background">#f6f6f6</color>
     <color name="black">#000000</color>

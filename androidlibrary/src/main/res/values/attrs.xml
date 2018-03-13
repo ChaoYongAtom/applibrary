@@ -30,7 +30,6 @@
             <enum name="normal" value="0"></enum>
             <enum name="big" value="1"></enum>
         </attr>
-        <attr name="isLoadMore" format="boolean"></attr>
     </declare-styleable>
     <declare-styleable name="EmptyLayout">
         <!--是否启用刷新-->

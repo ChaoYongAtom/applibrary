@@ -136,7 +136,6 @@ public class MaterialWaveView extends View implements MaterialHeadListener {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                Log.i("anim", "value--->" + (int) animation.getAnimatedValue());
                 setWaveHeight((int) animation.getAnimatedValue());
                 invalidate();
             }
