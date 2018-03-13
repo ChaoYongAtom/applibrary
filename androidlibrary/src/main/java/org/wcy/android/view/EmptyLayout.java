@@ -45,6 +45,7 @@ public class EmptyLayout extends RelativeLayout {
     private int view_loading_layout = R.layout.view_loading;
     private int view_error_layout = R.layout.view_error;
     private int view_notnet_layout = R.layout.view_notnet;
+
     public EmptyLayout(Context context) {
         super(context);
         initView(context, null);
@@ -92,23 +93,22 @@ public class EmptyLayout extends RelativeLayout {
                 viewGroup.setClickable(true);
                 mainview.removeAllViews();
                 pullToRefreshView = new MaterialRefreshLayout(mContext);
-                pullToRefreshView.setBackgroundColor(Color.RED);
                 pullToRefreshView.addView(viewGroup);
-                pullToRefreshView.setLoadMore(true);
                 pullToRefreshView.setIsOverLay(true);
-                pullToRefreshView.setWaveShow(false);
+                pullToRefreshView.setWaveColor(getResources().getColor(R.color.waveColor));
                 mainview.addView(pullToRefreshView, lp);
             }
         } else if (isRefresh && isList) {//同时需要刷新而且是列表并且内部无childview
             pullToRefreshView = new MaterialRefreshLayout(mContext);
-            pullToRefreshView.setBackgroundColor(Color.RED);
+            pullToRefreshView.setIsOverLay(true);
+            pullToRefreshView.setWaveColor(getResources().getColor(R.color.waveColor));
+            initListView(null);
             pullToRefreshView.addView(listView);
             mainview.addView(pullToRefreshView, lp);
         } else if (!isRefresh && isList) {//同时需要刷新而且是列表并且内部无childview
             initListView(null);
             mainview.addView(listView);
         }
-
         childView = getChildAt(0);
     }
 
@@ -397,6 +397,10 @@ public class EmptyLayout extends RelativeLayout {
 
     public boolean isList() {
         return isList;
+    }
+
+    public RecyclerView getListView() {
+        return listView;
     }
 
     public void setView_empty_layout(int view_empty_layout) {
