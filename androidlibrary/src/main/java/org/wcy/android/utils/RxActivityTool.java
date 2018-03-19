@@ -5,13 +5,13 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-
 import java.util.List;
 import java.util.Stack;
 
@@ -25,7 +25,82 @@ import java.util.Stack;
 public class RxActivityTool {
 
     private static Stack<Activity> activityStack;
+    /**
+     * 获取App版本号
+     *
+     * @param context     上下文
+     * @param packageName 包名
+     * @return App版本号
+     */
+    public static String getAppVersionName(Context context, String packageName) {
+        if (RxDataTool.isNullString(packageName)) return null;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(packageName, 0);
+            return pi == null ? null : pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    /**
+     * 获取App版本码
+     *
+     * @param context 上下文
+     * @return App版本码
+     */
+    public static int getAppVersionCode(Context context) {
+        return getAppVersionCode(context, context.getPackageName());
+    }
+
+    /**
+     * 获取App版本码
+     *
+     * @param context     上下文
+     * @param packageName 包名
+     * @return App版本码
+     */
+    public static int getAppVersionCode(Context context, String packageName) {
+        if (RxDataTool.isNullString(packageName)) return -1;
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(packageName, 0);
+            return pi == null ? -1 : pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * 判断App是否是Debug版本
+     *
+     * @param context 上下文
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isAppDebug(Context context) {
+        return isAppDebug(context, context.getPackageName());
+    }
+
+    /**
+     * 判断App是否是Debug版本
+     *
+     * @param context     上下文
+     * @param packageName 包名
+     * @return {@code true}: 是<br>{@code false}: 否
+     */
+    public static boolean isAppDebug(Context context, String packageName) {
+        if (RxDataTool.isNullString(packageName)) return false;
+        try {
+            PackageManager pm = context.getPackageManager();
+            ApplicationInfo ai = pm.getApplicationInfo(packageName, 0);
+            return ai != null && (ai.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     /**
      * 添加Activity 到栈
      *
