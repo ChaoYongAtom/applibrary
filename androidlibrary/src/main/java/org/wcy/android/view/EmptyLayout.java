@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import org.wcy.android.R;
 import org.wcy.android.utils.DividerGridItemDecoration;
-import org.wcy.android.utils.StringUtil;
+import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.view.refresh.MaterialRefreshLayout;
 import org.wcy.android.view.refresh.MaterialRefreshListener;
 
@@ -374,7 +374,7 @@ public class EmptyLayout extends RelativeLayout {
      * Shows error layout if the list is empty
      */
     public void showError(String message) {
-        if (StringUtil.hasText(message)) {
+        if (!RxDataTool.isNullString(message)) {
             this.message = message;
         } else {
             this.message = "暂无数据";

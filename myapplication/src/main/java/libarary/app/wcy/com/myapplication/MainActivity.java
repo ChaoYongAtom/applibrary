@@ -1,5 +1,6 @@
 package libarary.app.wcy.com.myapplication;
 
+import android.Manifest;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import org.wcy.android.utils.RxPermissionsTool;
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
 
@@ -31,6 +33,15 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        RxPermissionsTool.
+                with(this).
+                addPermission(Manifest.permission.ACCESS_FINE_LOCATION).
+                addPermission(Manifest.permission.ACCESS_COARSE_LOCATION).
+                addPermission(Manifest.permission.READ_EXTERNAL_STORAGE).
+                addPermission(Manifest.permission.CAMERA).
+                addPermission(Manifest.permission.CALL_PHONE).
+                addPermission(Manifest.permission.READ_PHONE_STATE).
+                initPermission();
         initView();
         initData();
         initListener();

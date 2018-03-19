@@ -1,13 +1,9 @@
 package org.wcy.android.retrofit.subscribers;
 
-import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
 import android.widget.TextView;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.Api.BaseApi;
@@ -15,10 +11,9 @@ import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.retrofit.exception.HttpTimeException;
 import org.wcy.android.retrofit.listener.HttpOnNextListener;
-import org.wcy.android.utils.StringUtil;
+import org.wcy.android.utils.RxDataTool;
 
 import java.lang.ref.SoftReference;
-import java.util.Set;
 
 import rx.Subscriber;
 
@@ -63,7 +58,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                     @Override
                     protected void setView(Window window) {
                         TextView tv = window.findViewById(R.id.textViewMessage);
-                        if (StringUtil.hasText(api.getMsg())) {
+                        if (!RxDataTool.isNullString(api.getMsg())) {
                             tv.setText(api.getMsg());
                         }
                     }
@@ -158,7 +153,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                 String result = (String) t;
                 Log.i("ProgressSubscriber未解密", result);
                 Log.i("方法：", api.getMethod());
-                if (StringUtil.hasText(result)) {
+                if (!RxDataTool.isNullString(result)) {
                     httpOnNextListener.onNext(api, result);
                 } else {
                     httpOnNextListener.onError(new ApiException(null, CodeException.ERROR, "服务器返回数据错误"), api.getMethod());

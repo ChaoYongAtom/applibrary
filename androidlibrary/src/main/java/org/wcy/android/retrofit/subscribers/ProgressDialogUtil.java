@@ -3,10 +3,8 @@ package org.wcy.android.retrofit.subscribers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.Window;
-import android.widget.TextView;
 
 import org.wcy.android.R;
-import org.wcy.android.utils.StringUtil;
 
 /**
  * dialog提示框（也包含圆形提示框ProgressDialogUtil）

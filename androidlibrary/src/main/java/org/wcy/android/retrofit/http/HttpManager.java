@@ -14,7 +14,7 @@ import org.wcy.android.retrofit.exception.FactoryException;
 import org.wcy.android.retrofit.exception.RetryWhenNetworkException;
 import org.wcy.android.retrofit.listener.HttpOnNextListener;
 import org.wcy.android.retrofit.subscribers.ProgressSubscriber;
-import org.wcy.android.utils.StringUtil;
+import org.wcy.android.utils.RxDataTool;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -62,7 +62,7 @@ public class HttpManager {
      */
     @SuppressLint("WrongConstant")
     public void doHttpDeal(BaseApi basePar) {
-        if (!StringUtil.hasText(basePar.getBaseUrl())) {
+        if (RxDataTool.isNullString(basePar.getBaseUrl())) {
             onNextListener.get().onError(new ApiException(null, CodeException.NOT_NETWORD, "服务器地址错误"), basePar.getMethod());
         } else {
             //手动创建一个OkHttpClient并设置超时时间缓存等设置

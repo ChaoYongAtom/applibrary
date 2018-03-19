@@ -8,9 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.wcy.android.adapter.CommonRecyclerAdapter;
+import org.wcy.android.adapter.ViewRecyclerHolder;
 import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.HeaderLayout;
+import org.wcy.android.view.dialog.RxDialogSure;
+import org.wcy.android.view.dialog.RxDialogSureCancel;
+import org.wcy.android.view.refresh.MaterialRefreshLayout;
+import org.wcy.android.view.refresh.MaterialRefreshListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author wcy
@@ -27,13 +37,14 @@ public class TabFragment extends Fragment {
     private final int TYPE_LOADING = 2;
 
     int type = TYPE_LOADING;
+    CommonRecyclerAdapter<String> adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle bundle) {
         View view = inflater.inflate(R.layout.tabfragment, null);
-        textmsg = view.findViewById(R.id.textmsg);
-        textmsg.setText(getArguments().getString(TabFragment.CONTENT));
+//        textmsg = view.findViewById(R.id.textmsg);
+//        textmsg.setText(getArguments().getString(TabFragment.CONTENT));
         headerLayout = view.findViewById(R.id.headerlayout);
         emptyLayout = view.findViewById(R.id.emptylayout);
         emptyLayout.setErrorClickListener(new View.OnClickListener() {
@@ -46,26 +57,86 @@ public class TabFragment extends Fragment {
         headerLayout.getMenuView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (type > 5) {
-                    type = 1;
-                } else {
-                    type++;
-                }
-                if (type == 1) {
-                    emptyLayout.showEmpty();
-                } else if (type == 2) {
-                    emptyLayout.showLoading();
-                } else if (type == 3) {
-                    emptyLayout.showError();
-                } else if (type == 4) {
-                    emptyLayout.showView();
-                } else if (type == 5) {
-                    emptyLayout.showNet();
-                }
+                final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(getContext());//提示弹窗
+                rxDialogSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rxDialogSureCancel.cancel();
+                    }
+                });
+                rxDialogSureCancel.getCancelView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        rxDialogSureCancel.cancel();
+                    }
+                });
+                rxDialogSureCancel.show();
+
+
+
+//                if (type > 5) {
+//                    type = 1;
+//                } else {
+//                    type++;
+//                }
+//                if (type == 1) {
+//                    emptyLayout.showEmpty();
+//                } else if (type == 2) {
+//                    emptyLayout.showLoading();
+//                } else if (type == 3) {
+//                    emptyLayout.showError();
+//                } else if (type == 4) {
+//                    emptyLayout.showView();
+//                } else if (type == 5) {
+//                    emptyLayout.showNet();
+//                }
             }
         });
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initView();
+    }
 
+    private void initView() {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            list.add("数据" + i);
+        }
+        adapter = new CommonRecyclerAdapter<String>(getContext(), list, R.layout.layout_iteam) {
+            @Override
+            public void convert(ViewRecyclerHolder helper, String item) {
+                helper.setText(R.id.tv_msg, item);
+            }
+        };
+        emptyLayout.setAdapter(adapter);
+        emptyLayout.getPullToRefreshView().setMore(MaterialRefreshLayout.Mode.BOTH);
+        emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getContext(), "onRefresh", Toast.LENGTH_LONG).show();
+                emptyLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        emptyLayout.onRefreshComplete();
+
+                    }
+                }, 3000);
+            }
+
+            @Override
+            public void onRefreshLoadMore() {
+                Toast.makeText(getContext(), "LoadMore", Toast.LENGTH_LONG).show();
+                emptyLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        emptyLayout.onRefreshComplete();
+                    }
+                }, 3000);
+            }
+        });
+    }
 }

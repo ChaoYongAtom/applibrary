@@ -17,13 +17,7 @@
     <org.wcy.android.view.EmptyLayout
         android:id="@+id/emptylayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/textmsg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="这事鑫鑫"
-            android:textSize="@dimen/sp_40" />
-    </org.wcy.android.view.EmptyLayout>
+        android:layout_height="match_parent"
+        app:isList="true"
+        app:isRefresh="true"/>
 </LinearLayout>

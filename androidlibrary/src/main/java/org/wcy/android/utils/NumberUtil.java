@@ -214,7 +214,7 @@ public class NumberUtil implements Serializable {
      */
     public static String getString(Object value, int scale) {
         StringBuffer sb = new StringBuffer();
-        if (value != null && StringUtil.hasText(value.toString())) {
+        if (value != null && !RxDataTool.isNullString(value.toString())) {
             if (value instanceof Double) {
                 sb.append(value);
                 int leng = sb.substring(sb.indexOf(".") + 1, sb.length()).length();
