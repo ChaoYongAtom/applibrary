@@ -39,4 +39,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     //权限
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+    //图片加载
+    compile 'com.github.bumptech.glide:glide:3.7.0'
 }

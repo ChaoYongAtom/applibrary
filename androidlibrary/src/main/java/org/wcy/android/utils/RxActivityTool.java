@@ -12,6 +12,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+
 import java.util.List;
 import java.util.Stack;
 
@@ -19,12 +20,13 @@ import java.util.Stack;
 /**
  * @author wcy
  * @date 2016/1/24
- *
+ * <p>
  * 封装Activity相关工具类
  */
 public class RxActivityTool {
 
     private static Stack<Activity> activityStack;
+
     /**
      * 获取App版本号
      *
@@ -101,6 +103,7 @@ public class RxActivityTool {
             return false;
         }
     }
+
     /**
      * 添加Activity 到栈
      *
@@ -126,7 +129,27 @@ public class RxActivityTool {
      */
     public static void finishActivity() {
         Activity activity = activityStack.lastElement();
+        activity.finish();
+    }
 
+    /**
+     * 查找activity是否存在
+     *
+     * @param cls
+     * @return
+     */
+    public boolean findActivity(Class<?> cls) {
+        if (activityStack != null && activityStack.size() > 0) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                Activity activity = activityStack.get(i);
+                if (activity != null) {
+                    if (activity.getClass().equals(cls)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -309,13 +332,12 @@ public class RxActivityTool {
         }
         return "no " + packageName;
     }
+
     /**
      * title : 设置Activity全屏显示 description :设置Activity全屏显示。
      *
-     * @param activity
-     *            Activity引用
-     * @param isFull
-     *            true为全屏，false为非全屏
+     * @param activity Activity引用
+     * @param isFull   true为全屏，false为非全屏
      */
     public static void setFullScreen(Activity activity, boolean isFull) {
         Window window = activity.getWindow();
@@ -334,8 +356,7 @@ public class RxActivityTool {
     /**
      * title : 隐藏系统标题栏 description :隐藏Activity的系统默认标题栏
      *
-     * @param activity
-     *            Activity对象
+     * @param activity Activity对象
      */
     public static void hideTitleBar(Activity activity) {
         activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -344,8 +365,7 @@ public class RxActivityTool {
     /**
      * title : 设置Activity的显示方向为垂直方向 description :强制设置Actiity的显示方向为垂直方向。
      *
-     * @param activity
-     *            Activity对象
+     * @param activity Activity对象
      */
     public static void setScreenVertical(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -354,8 +374,7 @@ public class RxActivityTool {
     /**
      * title : 设置Activity的显示方向为横向 description :强制设置Actiity的显示方向为横向。
      *
-     * @param activity
-     *            Activity对象
+     * @param activity Activity对象
      */
     public static void setScreenHorizontal(Activity activity) {
         /**
