@@ -138,7 +138,7 @@ public class RxActivityTool {
      * @param cls
      * @return
      */
-    public boolean findActivity(Class<?> cls) {
+    public static boolean findActivity(Class<?> cls) {
         if (activityStack != null && activityStack.size() > 0) {
             for (int i = 0; i < activityStack.size(); i++) {
                 Activity activity = activityStack.get(i);
