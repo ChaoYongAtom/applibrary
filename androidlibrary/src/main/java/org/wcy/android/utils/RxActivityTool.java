@@ -169,9 +169,15 @@ public class RxActivityTool {
      * 结束指定类名的Activity
      */
     public static void finishActivity(Class<?> cls) {
-        for (Activity activity : activityStack) {
-            if (activity.getClass().equals(cls)) {
-                finishActivity(activity);
+        if (activityStack != null && activityStack.size() > 0) {
+            for (int i = 0; i < activityStack.size(); i++) {
+                Activity activity = activityStack.get(i);
+                if (activity != null) {
+                    if (activity.getClass().equals(cls)) {
+                        activityStack.remove(activity);
+                        activity.finish();
+                    }
+                }
             }
         }
     }
@@ -187,6 +193,17 @@ public class RxActivityTool {
             }
         }
         activityStack.clear();
+    }
+
+    /**
+     * 结束制定除开外的其他所有Activity
+     */
+    public static void finishAllActivity(Class<?> cla) {
+        for (Activity activity : activityStack) {
+            if (!activity.getClass().equals(cla)) {
+                finishActivity(activity);
+            }
+        }
     }
 
     public static void AppExit(Context context) {

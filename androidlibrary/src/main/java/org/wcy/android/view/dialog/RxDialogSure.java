@@ -100,6 +100,12 @@ public class RxDialogSure extends RxDialog {
         mTvContent.setMovementMethod(ScrollingMovementMethod.getInstance());
         mTvContent.setTextIsSelectable(true);
         mIvLogo = dialogView.findViewById(R.id.iv_logo);
+        mTvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
     }
 
     protected void initView() {

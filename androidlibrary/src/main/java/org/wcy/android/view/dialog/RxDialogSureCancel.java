@@ -46,6 +46,12 @@ public class RxDialogSureCancel extends RxDialogSure {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sure_false, null);
         setView(dialogView);
         mTvCancel = dialogView.findViewById(R.id.tv_cancel);
+        mTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         setContentView(dialogView);
     }
 

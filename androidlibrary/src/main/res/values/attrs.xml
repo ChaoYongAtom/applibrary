@@ -61,4 +61,11 @@
         <attr name="pivotX" format="fraction" />
         <attr name="pivotY" format="fraction" />
     </declare-styleable>
+    <declare-styleable name="CircleImageViewMessage">
+        <attr name="cim_border_width" format="dimension" />
+        <attr name="cim_border_color" format="color" />
+        <attr name="cim_border_overlay" format="boolean" />
+        <attr name="cim_fill_color" format="color" />
+        <attr name="msg_point_color" format="color"></attr>
+    </declare-styleable>
 </resources>
