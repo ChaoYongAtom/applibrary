@@ -1,8 +1,10 @@
 package libarary.app.wcy.com.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,38 +60,14 @@ public class TabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(getContext());//提示弹窗
-                rxDialogSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rxDialogSureCancel.cancel();
-                    }
-                });
-                rxDialogSureCancel.getCancelView().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rxDialogSureCancel.cancel();
-                    }
-                });
                 rxDialogSureCancel.show();
+            }
+        });
 
-
-
-//                if (type > 5) {
-//                    type = 1;
-//                } else {
-//                    type++;
-//                }
-//                if (type == 1) {
-//                    emptyLayout.showEmpty();
-//                } else if (type == 2) {
-//                    emptyLayout.showLoading();
-//                } else if (type == 3) {
-//                    emptyLayout.showError();
-//                } else if (type == 4) {
-//                    emptyLayout.showView();
-//                } else if (type == 5) {
-//                    emptyLayout.showNet();
-//                }
+        headerLayout.getMenu2View().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SettingActivity.class));
             }
         });
         return view;

@@ -391,6 +391,15 @@ public class EmptyLayout extends RelativeLayout {
         return adapter;
     }
 
+    public void notifyDataSetChanged() {
+        if (adapter != null) adapter.notifyDataSetChanged();
+        showView();
+    }
+
+    public void setMode(int mode) {
+        pullToRefreshView.setMore(mode);
+    }
+
     public boolean isRefresh() {
         return isRefresh;
     }

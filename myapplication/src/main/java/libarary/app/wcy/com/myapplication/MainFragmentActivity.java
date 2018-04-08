@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
+import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
 
@@ -29,7 +30,9 @@ public class MainFragmentActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("--------------------------------------------------------MainFragmentActivity");
         setContentView(R.layout.activity_main2);
+        RxActivityTool.addActivity(this);
         initView();
         initData();
         initListener();

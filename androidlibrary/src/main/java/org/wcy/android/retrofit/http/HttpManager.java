@@ -46,11 +46,11 @@ public class HttpManager {
     private String headers = "";
 
     /*软引用對象*/
-    private SoftReference<HttpOnNextListener> onNextListener;
+    private HttpOnNextListener onNextListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
 
     public HttpManager(AppCompatActivity appCompatActivity, HttpOnNextListener onNextListener, String headers) {
-        this.onNextListener = new SoftReference(onNextListener);
+        this.onNextListener = onNextListener;
         this.appCompatActivity = new SoftReference(appCompatActivity);
         this.headers = headers;
     }
@@ -63,7 +63,7 @@ public class HttpManager {
     @SuppressLint("WrongConstant")
     public void doHttpDeal(BaseApi basePar) {
         if (RxDataTool.isNullString(basePar.getBaseUrl())) {
-            onNextListener.get().onError(new ApiException(null, CodeException.NOT_NETWORD, "服务器地址错误"), basePar.getMethod());
+            onNextListener.onError(new ApiException(null, CodeException.NOT_NETWORD, "服务器地址错误"), basePar.getMethod());
         } else {
             //手动创建一个OkHttpClient并设置超时时间缓存等设置
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -87,30 +87,31 @@ public class HttpManager {
             });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(loggingInterceptor);
-        /*创建retrofit对象*/
+            /*创建retrofit对象*/
             Retrofit retrofit = new Retrofit.Builder()
                     .client(builder.build())
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .baseUrl(basePar.getBaseUrl())
                     .build();
-        /*rx处理*/
+            /*rx处理*/
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity.get());
+
             Observable observable = basePar.getObservable(retrofit)
-                /*失败后的retry配置*/
+                    /*失败后的retry配置*/
                     .retryWhen(new RetryWhenNetworkException())
-                /*异常处理*/
+                    /*异常处理*/
                     .onErrorResumeNext(funcException)
-                /*生命周期管理*/
+                    /*生命周期管理*/
                     .compose(appCompatActivity.get().bindToLifecycle())
                     //Note:手动设置在activity onDestroy的时候取消订阅
                     .compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY))
-                /*http请求线程*/
+                    /*http请求线程*/
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
-                /*回调线程*/
+                    /*回调线程*/
                     .observeOn(AndroidSchedulers.mainThread());
-        /*数据回调*/
+            /*数据回调*/
             observable.subscribe(subscriber);
         }
     }

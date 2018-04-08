@@ -95,6 +95,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/intermediate-jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/res" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/rs" />
@@ -103,42 +104,47 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/typedefs.txt" />
+      <excludeFolder url="file://$MODULE_DIR$/build/libs" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/reports" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 26 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.android.support:animated-vector-drawable-27.0.2" level="project" />
-    <orderEntry type="library" name="com.android.support:appcompat-v7-27.0.2" level="project" />
-    <orderEntry type="library" name="com.apkfuns.logutils:library-1.5.1.1" level="project" />
-    <orderEntry type="library" name="com.google.code.findbugs:jsr305:3.0.1@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-annotations:27.0.2@jar" level="project" />
-    <orderEntry type="library" name="com.alibaba:fastjson:1.2.10@jar" level="project" />
-    <orderEntry type="library" name="com.squareup.okhttp3:logging-interceptor:3.4.1@jar" level="project" />
-    <orderEntry type="library" name="com.squareup.retrofit2:retrofit:2.1.0@jar" level="project" />
-    <orderEntry type="library" name="com.trello:rxlifecycle:1.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:recyclerview-v7-27.0.2" level="project" />
-    <orderEntry type="library" name="io.reactivex:rxandroid-1.1.0" level="project" />
-    <orderEntry type="library" name="com.squareup.retrofit2:adapter-rxjava:2.1.0@jar" level="project" />
-    <orderEntry type="library" name="com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
-    <orderEntry type="library" name="com.trello:rxlifecycle-components-1.0" level="project" />
-    <orderEntry type="library" name="android.arch.lifecycle:runtime-1.0.3" level="project" />
-    <orderEntry type="library" name="com.android.support:support-vector-drawable-27.0.2" level="project" />
-    <orderEntry type="library" name="io.reactivex:rxjava:1.2.1@jar" level="project" />
-    <orderEntry type="library" name="android.arch.lifecycle:common:1.0.3@jar" level="project" />
-    <orderEntry type="library" name="com.squareup.okhttp3:okhttp:3.4.1@jar" level="project" />
-    <orderEntry type="library" name="com.tbruyelle.rxpermissions:rxpermissions-0.7.0" level="project" />
-    <orderEntry type="library" name="com.jakewharton:butterknife-8.5.1" level="project" />
-    <orderEntry type="library" name="android.arch.core:common:1.0.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-ui-27.0.2" level="project" />
-    <orderEntry type="library" name="com.android.support:support-compat-27.0.2" level="project" />
-    <orderEntry type="library" name="com.squareup.retrofit2:converter-scalars:2.0.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-core-utils-27.0.2" level="project" />
-    <orderEntry type="library" name="com.trello:rxlifecycle-android-1.0" level="project" />
-    <orderEntry type="library" name="com.android.support:support-fragment-27.0.2" level="project" />
-    <orderEntry type="library" name="com.android.support:support-media-compat-27.0.2" level="project" />
-    <orderEntry type="library" name="com.squareup.okio:okio:1.9.0@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-v4-27.0.2" level="project" />
-    <orderEntry type="library" name="com.jakewharton.rxbinding:rxbinding-0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-v4-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-annotations:8.5.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-compat-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.apkfuns.logutils:library-1.5.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.trello:rxlifecycle:1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.jakewharton:butterknife-8.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.core:common:1.0.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.retrofit2:retrofit:2.1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: io.reactivex:rxandroid-1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-media-compat-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-ui-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.2.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-core-utils-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-annotations:27.0.2@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.trello:rxlifecycle-android-1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.alibaba:fastjson:1.2.10@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.nineoldandroids:library:2.4.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.tbruyelle.rxpermissions:rxpermissions-0.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:support-fragment-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.retrofit2:adapter-rxjava:2.1.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.android.support:appcompat-v7-27.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.trello:rxlifecycle-components-1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.4.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.bumptech.glide:glide:3.7.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.jakewharton.rxbinding:rxbinding-0.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.4.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.9.0@jar" level="project" />
+    <orderEntry type="library" name="Gradle: android.arch.lifecycle:common:1.0.3@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.retrofit2:converter-scalars:2.0.0@jar" level="project" />
   </component>
 </module>

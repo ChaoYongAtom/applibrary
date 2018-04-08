@@ -21,7 +21,8 @@
             android:gravity="center"
             android:text="@string/empty_message"
             android:textColor="#999999"
-            android:textSize="@dimen/sp_15" />
+            android:textSize="@dimen/sp_15"
+            android:drawablePadding="@dimen/dp_10"/>
 
         <TextView
             android:id="@+id/textretry"
