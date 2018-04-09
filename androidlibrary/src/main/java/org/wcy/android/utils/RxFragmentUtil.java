@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+
 import org.wcy.android.R;
 
 import java.util.List;
@@ -145,6 +146,15 @@ public class RxFragmentUtil {
      * @param idx
      */
     public static int showTab(int frameId, int idx, int currentTab, List<? extends Fragment> fragments, AppCompatActivity activity) {
+        return showTab(frameId, idx, currentTab, fragments, activity, true);
+    }
+
+    /**
+     * 切换tab
+     *
+     * @param idx
+     */
+    public static int showTab(int frameId, int idx, int currentTab, List<? extends Fragment> fragments, AppCompatActivity activity, boolean isShoWanimation) {
         if (idx != currentTab) {
             if (idx == -1) {
                 FragmentTransaction ftshow = activity.getSupportFragmentManager().beginTransaction();
@@ -153,7 +163,7 @@ public class RxFragmentUtil {
             } else {
                 Fragment cufragment = fragments.get(currentTab);
                 cufragment.onPause(); // 暂停当前tab
-                FragmentTransaction fthide = RxFragmentUtil.obtainFragmentTransaction(idx, currentTab, activity);
+                FragmentTransaction fthide = obtainFragmentTransaction(idx, currentTab, activity, isShoWanimation);
                 fthide.hide(cufragment);
                 Fragment fragment = fragments.get(idx);
                 if (fragment.isAdded()) {
@@ -176,14 +186,21 @@ public class RxFragmentUtil {
      * @return
      */
     public static FragmentTransaction obtainFragmentTransaction(int index, int index2, AppCompatActivity appCompatActivity) {
+        return obtainFragmentTransaction(index, index2, appCompatActivity, true);
+    }
+
+    public static FragmentTransaction obtainFragmentTransaction(int index, int index2, AppCompatActivity appCompatActivity, boolean isShoWanimation) {
         FragmentTransaction ft = appCompatActivity.getSupportFragmentManager().beginTransaction();
-        //        // 设置切换动画
-        if (index > index2) {
-            ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
-        } else {
-            ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+        if (isShoWanimation) {
+            //        // 设置切换动画
+            if (index > index2) {
+                ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
+            } else {
+                ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            }
         }
         return ft;
     }
+
 
 }
