@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/corners">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/success_frame"
+                style="@style/toast_style"
+                >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/success_bow" />
+
+                <View
+                    android:id="@+id/mask_right"
+                    android:layout_width="35dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="-13dp"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:id="@+id/mask_left"
+                    android:layout_width="21dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="-3dp"
+                    android:background="@android:color/transparent" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/success_circle" />
+
+                <org.wcy.android.view.toast.SuccessTickView
+                    android:id="@+id/success_tick"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/error_frame"
+                style="@style/toast_style">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/error_circle" />
+
+                <ImageView
+                    android:id="@+id/error_x"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="center"
+                    android:src="@drawable/error_center_x" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/warning_frame"
+                style="@style/toast_style">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/warning_circle" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                    android:src="@drawable/warning_sigh" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_10"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

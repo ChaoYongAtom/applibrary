@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="hl_status_padding_iv" type="id"/>
+    <item name="hl_navigation_view" type="id"/>
+
+    <color name="default_header_layout_title_textColor">#000</color>
+    <dimen name="default_header_layout_title_textSize">20sp</dimen>
+    <dimen name="default_header_layout_menu_textSize">15sp</dimen>
+    <declare-styleable name="HeaderLayout">
+        <attr name="hlSupportTranslucentStatus" format="boolean"/>
+        <attr name="hlTitleText" format="string"/>
+        <attr name="hlTitleTextColor" format="color"/>
+        <attr name="hlTitleTextSize" format="dimension"/>
+        <attr name="hlItemTextColor" format="color"/>  <!-- 所有按钮文字按钮颜色 -->
+        <attr name="hlItemTextSize" format="dimension"/>  <!-- 所有按钮文字按钮大小-->
+        <attr name="hlItemTextPaddingLeftAndRight" format="dimension"/>  <!-- 所有文字按钮左右间距 -->
+        <attr name="hlItemMarginLeftAndRight" format="dimension"/>  <!-- 所有文字按钮左右间距 -->
+        <attr name="hlNavigationIcon" format="reference"/>   <!-- 返回按钮 or 左边按钮 图片 二选一 -->
+        <attr name="hlNavigationText" format="string"/>   <!-- 返回按钮 or 左边按钮 文字 二选一 -->
+        <attr name="hlNavigationWidth" format="dimension" />
+        <attr name="hlNavigationMinWidth" format="dimension" />
+        <attr name="hlNavigationMaxWidth" format="dimension" />
+        <attr name="hlNavigationHeight" format="dimension" />
+        <attr name="hlNavigationMinHeight" format="dimension" />
+        <attr name="hlNavigationMaxHeight" format="dimension" />
+        <attr name="hlMenuIcon" format="reference"/>  <!-- 右边按钮 -->
+        <attr name="hlMenu2Icon" format="reference"/>  <!-- 右边按钮 -->
+        <attr name="hlMenuText" format="string"/>  <!-- 右边文字按钮 -->
+        <attr name="hlMenuTextId" format="string"/>  <!-- 右边文字按钮id -->
+        <attr name="hlMenu2Text" format="string"/>  <!-- 右边文字按钮 -->
+        <attr name="hlMenu2TextId" format="string"/>  <!-- 右边文字按钮id -->
+        <attr name="hlMenuAlign" format="enum">  <!-- 右边按钮排序 -->
+            <enum name="alignText" value="0"/>  <!-- 文字在最右边 -->
+            <enum name="alignIcon" value="1"/>  <!-- 图标在最右边 -->
+        </attr>
+        <attr name="hlSpitLineColor" format="reference"/>   <!-- 底部分割线 -->
+        <attr name="hlSpitLineHeight" format="dimension"/>   <!-- 底部分割线 -->
+        <attr name="hlTitleAlignLeft" format="boolean"/>  <!-- 居左显示 -->
+    </declare-styleable>
+</resources>

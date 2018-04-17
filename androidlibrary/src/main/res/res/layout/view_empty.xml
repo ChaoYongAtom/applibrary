@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:background="@android:color/transparent"
+    android:minHeight="300dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@mipmap/empty_bg"
+            android:gravity="center"
+            android:text="@string/empty_message"
+            android:textColor="#999999"
+            android:textSize="@dimen/sp_15"
+            android:drawablePadding="@dimen/dp_10"/>
+
+        <TextView
+            android:id="@+id/textretry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewMessage"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_12"
+            android:text="轻点屏幕重试"
+            android:textColor="#999999"
+            android:visibility="gone"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+</RelativeLayout>

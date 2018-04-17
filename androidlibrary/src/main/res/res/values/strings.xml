@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">applibrary</string>
+    <string name="permission_get_accounts_hint">没有此权限，无法开启这个功能，请开启权限。访问GMail账户列表 </string>
+    <string name="permission_read_phone_hint">没有此权限，无法开启这个功能，请开启权限。手机状态</string>
+    <string name="permission_call_phone_hint">没有此权限，无法开启这个功能，请开启权限。拨打电话</string>
+    <string name="permission_camera_hint">没有此权限，无法开启这个功能，请开启权限。相机</string>
+    <string name="permission_access_fine_location_hint">没有此权限，无法开启这个功能，请开启权限。GPS定位</string>
+    <string name="permission_access_coarse_location_hint">没有此权限，无法开启这个功能，请开启权限。网络定位</string>
+    <string name="permission_read_external_hint">没有此权限，无法开启这个功能，请开启权限。文件读取</string>
+    <string name="permission_white_external_hint">没有此权限，无法开启这个功能，请开启权限。文件写入</string>
+    <string name="permission_recode_audio_hint">没有此权限，无法开启这个功能，请开启权限。录音</string>
+    <string name="empty_message">暂无数据</string>
+    <string name="loading_message">极速加载中...</string>
+    <string name="error_message">加载失败</string>
+    <string name="pull_to_refresh">下拉刷新...</string>
+    <string name="release_to_refresh">松开立即刷新...</string>
+    <string name="refreshing">加载数据中...</string>
+    <string name="refresh_succeed">加载成功</string>
+    <string name="refresh_fail">加载失败</string>
+    <string name="pullup_to_load">上拉加载更多...</string>
+    <string name="release_to_load">松开立即加载</string>
+    <string name="loading">加载数据中...</string>
+    <string name="load_succeed">加载成功</string>
+    <string name="load_fail">加载失败</string>
+    <integer-array name="material_colors">
+        <item>@color/material_red</item>
+        <item>@color/material_green</item>
+        <item>@color/material_blue</item>
+        <item>@color/material_yellow</item>
+    </integer-array>
+</resources>
