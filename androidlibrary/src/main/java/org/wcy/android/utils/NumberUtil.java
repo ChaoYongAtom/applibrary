@@ -312,7 +312,15 @@ public class NumberUtil implements Serializable {
             return bigDecimal.floatValue() + unit;
         }
     }
-
+    public static int getScale(float value) {
+        if ((value >= 1 && value < 10) || value <= 0) {
+            return 0;
+        } else if (value >= 10) {
+            return 1 + getScale(value / 10);
+        } else {
+            return getScale(value * 10) - 1;
+        }
+    }
     public static String formaNumber(int number) {
         return formaNumber(number, "K");
     }

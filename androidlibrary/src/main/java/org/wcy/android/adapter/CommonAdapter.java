@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * 为所有ListView\GridView等提供通用adapter
- * @author Altas
+ * @author wcy
  * @date 2014年9月2日
  */
 public abstract class CommonAdapter<T> extends BaseAdapter {

@@ -12,8 +12,15 @@ public abstract class ForPxTp {
     /**
      */
     public static int dip2px(Context context, float dpValue) {
+
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     */
+    public static int dp2px(Context context, float dpValue) {
+        return dip2px(context, dpValue);
     }
 
     /**
@@ -48,37 +55,39 @@ public abstract class ForPxTp {
             r = c.getResources();
         return TypedValue.applyDimension(unit, size, r.getDisplayMetrics());
     }
+
     private static float textWidth(Paint paint, String str) {
         return paint.measureText(str);
     }
+
     /**
      * 获得屏幕宽度
      *
      * @param context
      * @return
      */
-    public static int getScreenWidth(Context context)
-    {
+    public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE );
+                .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics( outMetrics);
-        return outMetrics .widthPixels ;
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
     }
+
     /**
      * 获得屏幕高度
      *
      * @param context
      * @return
      */
-    public static int getScreenHeight(Context context)
-    {
+    public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context
-                .getSystemService(Context.WINDOW_SERVICE );
+                .getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics( outMetrics);
-        return outMetrics .heightPixels ;
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.heightPixels;
     }
+
     public static float limitValue(float a, float b) {
         float valve = 0;
         final float min = Math.min(a, b);
