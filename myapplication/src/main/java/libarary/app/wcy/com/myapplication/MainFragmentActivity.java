@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -19,7 +20,7 @@ import org.wcy.android.view.bottomBar.BottomBarLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragmentActivity extends FragmentActivity {
+public class MainFragmentActivity extends AppCompatActivity {
 
     private BottomBarLayout mBottomBarLayout;
 
@@ -30,7 +31,6 @@ public class MainFragmentActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("--------------------------------------------------------MainFragmentActivity");
         setContentView(R.layout.activity_main2);
         RxActivityTool.addActivity(this);
         initView();

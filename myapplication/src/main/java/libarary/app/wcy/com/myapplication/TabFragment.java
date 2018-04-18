@@ -16,6 +16,7 @@ import org.wcy.android.adapter.CommonRecyclerAdapter;
 import org.wcy.android.adapter.ViewRecyclerHolder;
 import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.HeaderLayout;
+import org.wcy.android.view.ImageZoomPopupWindow;
 import org.wcy.android.view.dialog.RxDialogSure;
 import org.wcy.android.view.dialog.RxDialogSureCancel;
 import org.wcy.android.view.refresh.MaterialRefreshLayout;
@@ -59,8 +60,14 @@ public class TabFragment extends Fragment {
         headerLayout.getMenuView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(getContext());//提示弹窗
-                rxDialogSureCancel.show();
+                List<String> list = new ArrayList<>();
+                list.add("http://img.zcool.cn/community/0142135541fe180000019ae9b8cf86.jpg@1280w_1l_2o_100sh.png");
+                list.add("http://img1.imgtn.bdimg.com/it/u=594559231,2167829292&fm=27&gp=0.jpg");
+                list.add("http://img07.tooopen.com/images/20170316/tooopen_sy_201956178977.jpg");
+                ImageZoomPopupWindow imageZoomPopupWindow = new ImageZoomPopupWindow(getActivity(), list, 0);
+                imageZoomPopupWindow.show();
+//                final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(getContext());//提示弹窗
+//                rxDialogSureCancel.show();
             }
         });
 
