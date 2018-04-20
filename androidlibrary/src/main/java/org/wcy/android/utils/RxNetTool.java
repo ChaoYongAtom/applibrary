@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.telephony.TelephonyManager;
 
-
 import org.wcy.android.view.RxToast;
 
 import java.io.BufferedReader;

@@ -17,7 +17,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import org.wcy.android.R;
-
 import java.util.ArrayList;
 import java.util.List;
 

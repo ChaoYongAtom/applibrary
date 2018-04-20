@@ -15,7 +15,6 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 import org.wcy.android.interfaces.OnDelayListener;
 
 import java.security.MessageDigest;

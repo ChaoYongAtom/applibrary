@@ -19,7 +19,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-
 import org.wcy.android.view.RxToast;
 
 import java.text.SimpleDateFormat;

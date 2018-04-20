@@ -7,7 +7,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 /**
  * Created by lee on 2014/7/31.
  */
-public class Slit extends BaseEffects{
+public class Slit extends BaseEffects {
 
     @Override
     protected void setupAnimation(View view) {

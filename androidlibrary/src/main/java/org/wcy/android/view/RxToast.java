@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import org.wcy.android.R;
 
 import static org.wcy.android.utils.RxTool.getContext;

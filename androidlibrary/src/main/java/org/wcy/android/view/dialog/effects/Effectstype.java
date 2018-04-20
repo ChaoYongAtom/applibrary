@@ -8,16 +8,16 @@ public enum  Effectstype {
     Fadein(FadeIn.class),
     Slideleft(SlideLeft.class),
     Slidetop(SlideTop.class),
-    SlideBottom(SlideBottom.class),
+    SlideBottom(org.wcy.android.view.dialog.effects.SlideBottom.class),
     Slideright(SlideRight.class),
-    Fall(Fall.class),
+    Fall(org.wcy.android.view.dialog.effects.Fall.class),
     Newspager(NewsPaper.class),
     Fliph(FlipH.class),
     Flipv(FlipV.class),
     RotateBottom(RotateBottom.class),
     RotateLeft(RotateLeft.class),
     Slit(Slit.class),
-    Shake(Shake.class),
+    Shake(org.wcy.android.view.dialog.effects.Shake.class),
     Sidefill(SideFall.class);
     private Class<? extends BaseEffects> effectsClazz;
 

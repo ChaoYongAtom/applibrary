@@ -13,7 +13,7 @@ import android.widget.TextView;
 /**
  * 通用ViewHolder
  *
- * @author wcy
+ * @author Altas
  * @date 2014年9月2日
  */
 public class ViewHolder {

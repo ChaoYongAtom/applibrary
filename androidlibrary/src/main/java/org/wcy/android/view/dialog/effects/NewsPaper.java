@@ -7,7 +7,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 /**
  * Created by lee on 2014/7/31.
  */
-public class NewsPaper extends BaseEffects{
+public class NewsPaper extends BaseEffects {
 
     @Override
     protected void setupAnimation(View view) {

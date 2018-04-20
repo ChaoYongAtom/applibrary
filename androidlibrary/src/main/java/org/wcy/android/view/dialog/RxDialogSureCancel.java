@@ -1,8 +1,10 @@
 package org.wcy.android.view.dialog;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
 import org.wcy.android.R;
 
 

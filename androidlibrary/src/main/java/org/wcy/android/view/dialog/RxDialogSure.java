@@ -1,6 +1,7 @@
 package org.wcy.android.view.dialog;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -31,7 +32,7 @@ public class RxDialogSure extends RxDialog {
         initView();
     }
 
-    public RxDialogSure(Context context, boolean cancelable, OnCancelListener cancelListener) {
+    public RxDialogSure(Context context, boolean cancelable, DialogInterface.OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
         initView();
     }

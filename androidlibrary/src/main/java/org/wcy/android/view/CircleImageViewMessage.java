@@ -35,7 +35,6 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.util.AttributeSet;
 
-
 import org.wcy.android.R;
 import org.wcy.android.utils.ForPxTp;
 
