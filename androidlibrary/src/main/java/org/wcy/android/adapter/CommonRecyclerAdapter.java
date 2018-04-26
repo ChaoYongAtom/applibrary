@@ -49,18 +49,15 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<View
     @Override
     public void onBindViewHolder(ViewRecyclerHolder viewHolder, int position) {
 
-        if (position >= mDatas.size()) {
-            return;
-        }
+        if (position <= mDatas.size()) {
+            if (getHeaderView() != null) {
+                if (position != 0) {
+                    this.convert(viewHolder, this.mDatas.get(position - 1));
+                }
+            } else {
+                this.convert(viewHolder, this.mDatas.get(position));
+            }
 
-        if (mHeaderView != null && position == 0) {
-            return;
-        }
-
-        if (mHeaderView != null) {
-            convert(viewHolder, mDatas.get(position - 1));
-        } else {
-            convert(viewHolder, mDatas.get(position));
         }
     }
 
@@ -84,12 +81,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<View
     //获取数据的数量
     @Override
     public int getItemCount() {
-
-        if (mHeaderView != null && mFooterView != null)
-            return mDatas.size() + 2;
-        if (mFooterView != null || mFooterView != null)
-            return mDatas.size() + 1;
-        return mDatas.size();
+        return getHeaderView() != null && this.getFooterView() != null ? this.mDatas.size() + 2 : (getHeaderView() == null && this.getFooterView() == null ? this.mDatas.size() : this.mDatas.size() + 1);
     }
 
     protected int position;
