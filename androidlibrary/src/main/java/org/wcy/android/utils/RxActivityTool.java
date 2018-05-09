@@ -46,6 +46,10 @@ public class RxActivityTool {
         }
     }
 
+    public static String getAppVersionName(Context context) {
+        return getAppVersionName(context, context.getPackageName());
+    }
+
     /**
      * 获取App版本码
      *

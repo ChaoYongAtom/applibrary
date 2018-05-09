@@ -1,6 +1,7 @@
 package org.wcy.android.utils;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.Editable;
@@ -24,7 +25,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- *
  * @author vondear
  * @date 2016/1/24
  * RxTools的常用工具类
@@ -95,31 +95,6 @@ public class RxTool {
         timer.start();
     }
 
-    /**
-     * 手动计算出listView的高度，但是不再具有滚动效果
-     *
-     * @param listView
-     */
-    public static void fixListViewHeight(ListView listView) {
-        // 如果没有设置数据适配器，则ListView没有子项，返回。
-        ListAdapter listAdapter = listView.getAdapter();
-        int totalHeight = 0;
-        if (listAdapter == null) {
-            return;
-        }
-        for (int index = 0, len = listAdapter.getCount(); index < len; index++) {
-            View listViewItem = listAdapter.getView(index, null, listView);
-            // 计算子项View 的宽高
-            listViewItem.measure(0, 0);
-            // 计算所有子项的高度
-            totalHeight += listViewItem.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        // listView.getDividerHeight()获取子项间分隔符的高度
-        // params.height设置ListView完全显示需要的高度
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
 
     //---------------------------------------------MD5加密-------------------------------------------
 
@@ -193,11 +168,10 @@ public class RxTool {
     }
 
     /**
-     *
      * @param editText
      * @param type
      */
-    public static void setEdType(final EditText editText,int type){
+    public static void setEdType(final EditText editText, int type) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void
@@ -295,5 +269,18 @@ public class RxTool {
         thread.start();
         Handler mBackgroundHandler = new Handler(thread.getLooper());
         return mBackgroundHandler;
+    }
+
+    /**
+     * 判断当前应用是否是debug状态
+     */
+
+    public static boolean isApkInDebug() {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

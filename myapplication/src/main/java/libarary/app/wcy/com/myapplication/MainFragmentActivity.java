@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.wcy.android.utils.RxActivityTool;
+import org.wcy.android.utils.RxLogTool;
+import org.wcy.android.utils.RxTool;
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
 
@@ -32,10 +35,12 @@ public class MainFragmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        RxActivityTool.addActivity(this);
-        initView();
-        initData();
-        initListener();
+        RxTool.init(this);
+        Toast.makeText(this, RxLogTool.isApkInDebug()+"asdfasdf", Toast.LENGTH_LONG).show();
+//        RxActivityTool.addActivity(this);
+//        initView();
+//        initData();
+//        initListener();
     }
 
     private void initView() {
@@ -43,19 +48,12 @@ public class MainFragmentActivity extends AppCompatActivity {
     }
 
     private void initData() {
-
+        mFragmentList.add(new TabEditFragment());
         TabFragment homeFragment = new TabFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putString(TabFragment.CONTENT, "首页");
         homeFragment.setArguments(bundle1);
         mFragmentList.add(homeFragment);
-
-        TabFragment videoFragment = new TabFragment();
-        Bundle bundle2 = new Bundle();
-        bundle2.putString(TabFragment.CONTENT, "视频");
-        videoFragment.setArguments(bundle2);
-        mFragmentList.add(videoFragment);
-
         TabFragment microFragment = new TabFragment();
         Bundle bundle3 = new Bundle();
         bundle3.putString(TabFragment.CONTENT, "微头条");

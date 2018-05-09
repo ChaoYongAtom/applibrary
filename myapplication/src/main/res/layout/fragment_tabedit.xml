@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入1" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入2" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入3" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入4" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入5" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入6" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入7" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入8" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入9" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入10" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入11" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:hint="请输入12" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

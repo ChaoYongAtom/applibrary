@@ -2,8 +2,6 @@ package org.wcy.android.retrofit.http;
 
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -15,6 +13,7 @@ import org.wcy.android.retrofit.exception.RetryWhenNetworkException;
 import org.wcy.android.retrofit.listener.HttpOnNextListener;
 import org.wcy.android.retrofit.subscribers.ProgressSubscriber;
 import org.wcy.android.utils.RxDataTool;
+import org.wcy.android.utils.RxLogTool;
 
 import java.io.IOException;
 import java.lang.ref.SoftReference;
@@ -82,7 +81,7 @@ public class HttpManager {
                 @Override
                 public void log(String message) {
                     //打印retrofit日志
-                    Log.i("RetrofitLog", "retrofitBack = " + message);
+                    //RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
                 }
             });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
