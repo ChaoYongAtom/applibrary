@@ -3,19 +3,12 @@ package libarary.app.wcy.com.myapplication;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import org.wcy.android.utils.RxActivityTool;
-import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxTool;
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
@@ -36,7 +29,6 @@ public class MainFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         RxTool.init(this);
-        Toast.makeText(this, RxLogTool.isApkInDebug()+"asdfasdf", Toast.LENGTH_LONG).show();
 //        RxActivityTool.addActivity(this);
 //        initView();
 //        initData();
