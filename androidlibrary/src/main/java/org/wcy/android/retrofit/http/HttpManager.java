@@ -81,7 +81,7 @@ public class HttpManager {
                 @Override
                 public void log(String message) {
                     //打印retrofit日志
-                    //RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
+                    RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
                 }
             });
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

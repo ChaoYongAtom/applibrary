@@ -1,8 +1,8 @@
 package org.wcy.android.view.refresh;
 
 
-public abstract class MaterialRefreshListener {
-    public abstract void onRefresh();
+public interface  MaterialRefreshListener {
+    public  void onRefresh();
 
-    public abstract void onRefreshLoadMore();
+    public  void onRefreshLoadMore();
 }

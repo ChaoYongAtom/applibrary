@@ -48,17 +48,33 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<View
     //将数据与界面进行绑定的操作
     @Override
     public void onBindViewHolder(ViewRecyclerHolder viewHolder, int position) {
-
-        if (position <= mDatas.size()) {
-            if (getHeaderView() != null) {
+        if (position <getItemCount()) {
+            if(getHeaderView() != null&&getFooterView()==null){
                 if (position != 0) {
                     this.convert(viewHolder, this.mDatas.get(position - 1));
                 }
-            } else {
+            }else if(getHeaderView() == null&&getFooterView()!=null){
+                if(position!=getItemCount()-1){
+                    this.convert(viewHolder, this.mDatas.get(position));
+                }
+            }else if(getHeaderView() != null&&getFooterView()!=null){
+                if (position > 0&&position!=getItemCount()-1) {
+                    this.convert(viewHolder, this.mDatas.get(position - 1));
+                }
+            }else{
                 this.convert(viewHolder, this.mDatas.get(position));
             }
-
         }
+//        if (position <getItemCount()) {
+//            if (getHeaderView() != null&&getFooterView()==null) {
+//                if (position != 0) {
+//                    this.convert(viewHolder, this.mDatas.get(position - 1));
+//                }
+//            } else {
+//                this.convert(viewHolder, this.mDatas.get(position));
+//            }
+//
+//        }
     }
 
     public void updateList(List<T> datas) {
