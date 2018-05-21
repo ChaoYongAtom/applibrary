@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.wcy.android.R;
+import org.wcy.android.utils.RxDataTool;
 
 /**
  * 实现头部布局
@@ -26,7 +27,7 @@ public class HeaderLayout extends RelativeLayout {
     private int mSpitLineColor;
     private float mSpitLineHeight;
 
-    private TextView mTitleTv;
+    private TextView mNavigationView, mTitleTv, mMenuOne, mMenuTwo;
 
     private int mHedaderLayoutHeight = 0;
 
@@ -34,7 +35,6 @@ public class HeaderLayout extends RelativeLayout {
     private float mTitleTextSize;
     private boolean mTitleAlignLeft;
 
-    private TextView mNavigationView;
     private float mNavigationWidth;
     private float mNavigationMinWidth;
     private float mNavigationMaxWidth;
@@ -104,7 +104,6 @@ public class HeaderLayout extends RelativeLayout {
         String navigationText = "";
         int menuIcon = 0, menu2Icon = 0;  //右边的按钮
         String menuText = "", menu2Text = "";  //右边的文字按钮
-        int menuTextId = 0, menu2TextId = 0;  //右边的文字按钮
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.HeaderLayout);
             //标题相关配置
@@ -112,8 +111,6 @@ public class HeaderLayout extends RelativeLayout {
             mTitleTextColor = a.getColor(R.styleable.HeaderLayout_hlTitleTextColor, getResources().getColor(R.color.default_header_layout_title_textColor));
             mTitleTextSize = a.getDimension(R.styleable.HeaderLayout_hlTitleTextSize, getResources().getDimension(R.dimen.default_header_layout_title_textSize));
             mTitleAlignLeft = a.getBoolean(R.styleable.HeaderLayout_hlTitleAlignLeft, false);
-            menu2TextId = a.getResourceId(R.styleable.HeaderLayout_hlMenu2TextId, +0xa25);
-
             //文字按钮相关配置
             mItemTextColor = a.getColor(R.styleable.HeaderLayout_hlItemTextColor, getResources().getColor(R.color.default_header_layout_title_textColor));
             mItemTextSize = a.getDimension(R.styleable.HeaderLayout_hlItemTextSize, getResources().getDimension(R.dimen.default_header_layout_menu_textSize));
@@ -130,7 +127,6 @@ public class HeaderLayout extends RelativeLayout {
             menuIcon = a.getResourceId(R.styleable.HeaderLayout_hlMenuIcon, 0);
             menu2Icon = a.getResourceId(R.styleable.HeaderLayout_hlMenu2Icon, 0);
             menuText = a.getString(R.styleable.HeaderLayout_hlMenuText);
-            menuTextId = a.getResourceId(R.styleable.HeaderLayout_hlMenuTextId, +0xa24);
             menu2Text = a.getString(R.styleable.HeaderLayout_hlMenu2Text);
             menuAlignType = a.getInt(R.styleable.HeaderLayout_hlMenuAlign, -1);
             mSpitLineColor = a.getResourceId(R.styleable.HeaderLayout_hlSpitLineColor, 0);
@@ -146,34 +142,44 @@ public class HeaderLayout extends RelativeLayout {
             }
             mNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
             addView(mNavigationView);
-            mNavigationView.setId(R.id.hl_navigation_view);
+            mNavigationView.setId(R.id.header_navigation);
             addButtonConfig(mNavigationView, navigationText, mItemTextSize, mItemTextColor, (int) mItemTextPaddingLeftAndRight);
         }
-        if (menuIcon != 0 || !TextUtils.isEmpty(menuText)) {  //说明有右边按钮
-            mMenuLl = new LinearLayout(getContext());
-            mMenuLl.setOrientation(LinearLayout.HORIZONTAL);
-            addView(mMenuLl);
-            params = (LayoutParams) mMenuLl.getLayoutParams();
-            params.width = LayoutParams.WRAP_CONTENT;
-            params.height = LayoutParams.MATCH_PARENT;
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.setMargins(mItemMarginLeftAndRight, 0, mItemMarginLeftAndRight, 0);
-            mMenuLl.setLayoutParams(params);
-            createMenuTextButton(menuText, menuIcon, menuTextId);
-            if (menu2Icon != 0 || !TextUtils.isEmpty(menu2Text)) {
-                createMenuTextButton(menu2Text, menu2Icon, menu2TextId);
-            }
-        }
-
+//        if (menuIcon != 0 || !TextUtils.isEmpty(menuText)) {  //说明有右边按钮
+//            mMenuLl = new LinearLayout(getContext());
+//            mMenuLl.setOrientation(LinearLayout.HORIZONTAL);
+//            addView(mMenuLl);
+//            params = (LayoutParams) mMenuLl.getLayoutParams();
+//            params.width = LayoutParams.WRAP_CONTENT;
+//            params.height = LayoutParams.MATCH_PARENT;
+//            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            params.setMargins(mItemMarginLeftAndRight, 0, mItemMarginLeftAndRight, 0);
+//            mMenuLl.setLayoutParams(params);
+//            createMenuTextButton(menuText, menuIcon, menuTextId);
+//            if (menu2Icon != 0 || !TextUtils.isEmpty(menu2Text)) {
+//                createMenuTextButton(menu2Text, menu2Icon, menu2TextId);
+//            }
+//        }
+        mMenuLl = new LinearLayout(getContext());
+        mMenuLl.setOrientation(LinearLayout.HORIZONTAL);
+        addView(mMenuLl);
+        params = (LayoutParams) mMenuLl.getLayoutParams();
+        params.width = LayoutParams.WRAP_CONTENT;
+        params.height = LayoutParams.MATCH_PARENT;
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params.setMargins(mItemMarginLeftAndRight, 0, mItemMarginLeftAndRight, 0);
+        mMenuLl.setLayoutParams(params);
+        mMenuOne = createMenuTextButton(menuText, menuIcon, R.id.header_menuOne);
+        mMenuTwo = createMenuTextButton(menu2Text, menu2Icon, R.id.header_menuTwo);
         //标题栏
         mTitleTv = new TextView(getContext());
+        mTitleTv.setId(R.id.header_title);
         mTitleTv.setMaxLines(1);
         addView(mTitleTv);
         mTitleTv.setGravity(Gravity.CENTER);  //实现文字居中效果  在setSupportTranslucentStatus中设置高度和HeaderLayout一样就好了
         params = (LayoutParams) mTitleTv.getLayoutParams();
         params.width = LayoutParams.WRAP_CONTENT;
         params.height = LayoutParams.MATCH_PARENT;
-
         if (!mTitleAlignLeft) {
             params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         } else {
@@ -204,23 +210,21 @@ public class HeaderLayout extends RelativeLayout {
         }
     }
 
-    private void createMenuTextButton(String menuText, int menuIcon, int menuTextId) {
+    private TextView createMenuTextButton(String menuText, int menuIcon, int menuTextId) {
         TextView tv = new TextView(getContext());
+        tv.setVisibility(GONE);
         if (menuTextId != 0) {
             tv.setId(menuTextId);
         }
         if (menuIcon > 0) {
-            switch (MenuAlign.getType(menuAlignType)) {
-                case ALIGN_TEXT:
-                    tv.setCompoundDrawablesRelativeWithIntrinsicBounds(menuIcon, 0, 0, 0);
-                    break;
-                case ALIGN_ICON:
-                    tv.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, menuIcon, 0);
-                    break;
-            }
+            setIcon(tv, menuIcon);
         }
         mMenuLl.addView(tv);
         addButtonConfig(tv, menuText, mItemTextSize, mItemTextColor, (int) mItemTextPaddingLeftAndRight);
+        if (!RxDataTool.isNullString(menuText) || menuIcon > 0) {
+            tv.setVisibility(VISIBLE);
+        }
+        return tv;
     }
 
     private View addButtonConfig(TextView view, String text, float textSize, int textColor, int padding) {
@@ -286,6 +290,54 @@ public class HeaderLayout extends RelativeLayout {
         }
     }
 
+    public void setmNavigationText(String str) {
+        if (mNavigationView != null && !RxDataTool.isNullString(str)) {
+            mNavigationView.setText(str);
+            mNavigationView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+        }
+
+    }
+
+    public void setmMenuOneText(String str) {
+        if (mMenuOne != null && !RxDataTool.isNullString(str)) {
+            mMenuOne.setText(str);
+            mMenuOne.setVisibility(VISIBLE);
+        }
+
+    }
+
+    public void setmMenuTwoText(String str) {
+        if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
+            mMenuTwo.setText(str);
+        }
+    }
+
+    public void setmMenuOneIcon(int icon) {
+        if (mMenuOne != null && icon > 0) {
+            setIcon(mMenuOne, icon);
+            mMenuOne.setVisibility(VISIBLE);
+        }
+
+    }
+
+    public void setmMenuTwoIcon(int icon) {
+        if (mMenuTwo != null && icon > 0) {
+            setIcon(mMenuOne, icon);
+            mMenuTwo.setVisibility(VISIBLE);
+        }
+    }
+
+    private void setIcon(TextView tv, int menuIcon) {
+        switch (MenuAlign.getType(menuAlignType)) {
+            case ALIGN_TEXT:
+                tv.setCompoundDrawablesRelativeWithIntrinsicBounds(menuIcon, 0, 0, 0);
+                break;
+            case ALIGN_ICON:
+                tv.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, menuIcon, 0);
+                break;
+        }
+    }
+
     /**
      * 获取导航栏左边按钮
      *
@@ -304,11 +356,8 @@ public class HeaderLayout extends RelativeLayout {
      *
      * @return
      */
-    public TextView getMenuView() {
-        if (mMenuLl.getChildCount() >= 0) {
-            return (TextView) mMenuLl.getChildAt(0);
-        }
-        return null;
+    public TextView getMenuOneView() {
+        return mMenuOne;
     }
 
     /**
@@ -316,11 +365,8 @@ public class HeaderLayout extends RelativeLayout {
      *
      * @return
      */
-    public TextView getMenu2View() {
-        if (mMenuLl.getChildCount() > 0) {
-            return (TextView) mMenuLl.getChildAt(1);
-        }
-        return null;
+    public TextView getMenuTwoView() {
+        return mMenuTwo;
     }
 
     /***

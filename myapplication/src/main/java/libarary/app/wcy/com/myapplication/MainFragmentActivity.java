@@ -29,10 +29,9 @@ public class MainFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         RxTool.init(this);
-//        RxActivityTool.addActivity(this);
-//        initView();
-//        initData();
-//        initListener();
+        initView();
+        initData();
+        initListener();
     }
 
     private void initView() {

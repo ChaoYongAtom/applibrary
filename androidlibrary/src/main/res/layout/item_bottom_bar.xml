@@ -22,15 +22,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="14dp"
+            android:layout_marginLeft="22dp"
             android:gravity="center"
             android:minWidth="15dp"
             android:text="99+"
             android:textColor="@color/white"
             android:textSize="10sp"
             android:visibility="gone"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_8"
+            android:paddingRight="@dimen/dp_8"
             android:paddingTop="@dimen/dp_1"
             android:paddingBottom="@dimen/dp_1"/>
 

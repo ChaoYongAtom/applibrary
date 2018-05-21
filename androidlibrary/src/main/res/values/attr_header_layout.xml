@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="hl_status_padding_iv" type="id"/>
-    <item name="hl_navigation_view" type="id"/>
-
+    <item type="id" name="header_title" />
+    <item type="id" name="header_navigation" />
+    <item type="id" name="header_menuOne" />
+    <item type="id" name="header_menuTwo" />
     <color name="default_header_layout_title_textColor">#000</color>
     <dimen name="default_header_layout_title_textSize">20sp</dimen>
     <dimen name="default_header_layout_menu_textSize">15sp</dimen>
@@ -26,9 +27,7 @@
         <attr name="hlMenuIcon" format="reference"/>  <!-- 右边按钮 -->
         <attr name="hlMenu2Icon" format="reference"/>  <!-- 右边按钮 -->
         <attr name="hlMenuText" format="string"/>  <!-- 右边文字按钮 -->
-        <attr name="hlMenuTextId" format="string"/>  <!-- 右边文字按钮id -->
         <attr name="hlMenu2Text" format="string"/>  <!-- 右边文字按钮 -->
-        <attr name="hlMenu2TextId" format="string"/>  <!-- 右边文字按钮id -->
         <attr name="hlMenuAlign" format="enum">  <!-- 右边按钮排序 -->
             <enum name="alignText" value="0"/>  <!-- 文字在最右边 -->
             <enum name="alignIcon" value="1"/>  <!-- 图标在最右边 -->

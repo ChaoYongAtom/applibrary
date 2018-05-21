@@ -45,8 +45,7 @@
             app:itemTextSize="8sp"
             app:openTouchBg="false"
             app:textColorNormal="@color/blue"
-            app:textColorSelected="@color/red"
-            app:unreadThreshold="999" />
+            app:textColorSelected="@color/red"/>
 
 
         <org.wcy.android.view.bottomBar.BottomBarItem
