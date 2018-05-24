@@ -306,8 +306,22 @@ public class HeaderLayout extends RelativeLayout {
 
     }
 
+    public void setmMenuOneText(String str, OnClickListener onClickListener) {
+        if (mMenuOne != null && !RxDataTool.isNullString(str)) {
+            mMenuOne.setOnClickListener(onClickListener);
+            mMenuOne.setText(str);
+        }
+    }
+
     public void setmMenuTwoText(String str) {
         if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
+            mMenuTwo.setText(str);
+        }
+    }
+
+    public void setmMenuTwoText(String str, OnClickListener onClickListener) {
+        if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
+            mMenuTwo.setOnClickListener(onClickListener);
             mMenuTwo.setText(str);
         }
     }
@@ -320,9 +334,24 @@ public class HeaderLayout extends RelativeLayout {
 
     }
 
+    public void setmMenuOneIcon(int icon, OnClickListener onClickListener) {
+        if (mMenuOne != null && icon > 0) {
+            setIcon(mMenuOne, icon);
+            mMenuOne.setOnClickListener(onClickListener);
+            mMenuOne.setVisibility(VISIBLE);
+        }
+
+    }
     public void setmMenuTwoIcon(int icon) {
         if (mMenuTwo != null && icon > 0) {
             setIcon(mMenuOne, icon);
+            mMenuTwo.setVisibility(VISIBLE);
+        }
+    }
+    public void setmMenuTwoIcon(int icon, OnClickListener onClickListener) {
+        if (mMenuTwo != null && icon > 0) {
+            setIcon(mMenuOne, icon);
+            mMenuTwo.setOnClickListener(onClickListener);
             mMenuTwo.setVisibility(VISIBLE);
         }
     }
