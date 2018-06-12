@@ -81,19 +81,21 @@ public class GlideCatchUtil {
 
 
     // 获取指定文件夹内所有文件大小的和
-    private long getFolderSize(File file) throws Exception {
+    private long getFolderSize(File file){
         long size = 0;
         try {
             File[] fileList = file.listFiles();
-            for (File aFileList : fileList) {
-                if (aFileList.isDirectory()) {
-                    size = size + getFolderSize(aFileList);
-                } else {
-                    size = size + aFileList.length();
+            if (fileList != null) {
+                for (File aFileList : fileList) {
+                    if (aFileList.isDirectory()) {
+                        size = size + getFolderSize(aFileList);
+                    } else {
+                        size = size + aFileList.length();
+                    }
                 }
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
         }
         return size;
     }

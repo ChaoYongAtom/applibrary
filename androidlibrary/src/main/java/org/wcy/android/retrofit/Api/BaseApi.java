@@ -14,24 +14,23 @@ import rx.Observable;
  * @company 重庆锐云科技有限公司
  */
 public abstract class BaseApi {
+    public static String a="";
     /*是否能取消加载框*/
     private boolean cancel = false;
     /*是否显示加载框*/
     private boolean showProgress = true;
     /*基础url*/
-//    private String baseUrl = "http://appadviser.cqlure.cn/version2/";
     private String baseUrl = "";
-    //private String baseUrl="http://testapps.hejuzg.com/version1/"prysy.hejuzg.cc;
-//    private String baseUrl = "http://appadviser.yj.cn.com/version2/";
     /*方法-如果需要缓存必须设置这个参数；不需要p不用設置*/
     private String method;
     /*超时时间-默认6秒*/
-    private int connectionTime = 6;
+    private int connectionTime = 5;
     private Class<?> data;
     private boolean isList = false;
     private String msg;
     private ProgressDialogUtil progressDialog;//自定义提示
-
+    /* retry次数*/
+    private int count = 2;
     /**
      * 设置参数
      *
@@ -111,4 +110,13 @@ public abstract class BaseApi {
     public void setProgressDialog(ProgressDialogUtil progressDialog) {
         this.progressDialog = progressDialog;
     }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
 }

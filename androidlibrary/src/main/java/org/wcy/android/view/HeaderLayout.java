@@ -342,17 +342,34 @@ public class HeaderLayout extends RelativeLayout {
         }
 
     }
+
     public void setmMenuTwoIcon(int icon) {
         if (mMenuTwo != null && icon > 0) {
             setIcon(mMenuOne, icon);
             mMenuTwo.setVisibility(VISIBLE);
         }
     }
+
     public void setmMenuTwoIcon(int icon, OnClickListener onClickListener) {
         if (mMenuTwo != null && icon > 0) {
             setIcon(mMenuOne, icon);
             mMenuTwo.setOnClickListener(onClickListener);
             mMenuTwo.setVisibility(VISIBLE);
+        }
+    }
+
+    public void setNavigationView(int icon, OnClickListener onClickListener) {
+        if (mNavigationView != null && icon > 0) {
+            setIcon(mNavigationView, icon);
+            mNavigationView.setOnClickListener(onClickListener);
+            mNavigationView.setVisibility(VISIBLE);
+        }
+    }
+
+    public void setNavigationView(int icon) {
+        if (mNavigationView != null && icon > 0) {
+            setIcon(mNavigationView, icon);
+            mNavigationView.setVisibility(VISIBLE);
         }
     }
 

@@ -98,7 +98,7 @@ public class HttpManager {
 
             Observable observable = basePar.getObservable(retrofit)
                     /*失败后的retry配置*/
-                    .retryWhen(new RetryWhenNetworkException())
+                    .retryWhen(new RetryWhenNetworkException(basePar.getCount(),basePar.getConnectionTime()))
                     /*异常处理*/
                     .onErrorResumeNext(funcException)
                     /*生命周期管理*/

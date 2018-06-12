@@ -34,6 +34,7 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
     private List<BottomBarItem> mItemViews = new ArrayList<>();
     private int mCurrentItem = 0;//当前条目的索引
     private boolean mSmoothScroll;
+    private boolean isShowFragmentAnim = false;
 
     public BottomBarLayout(Context context) {
         this(context, null);
@@ -168,7 +169,7 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
     }
 
     private void checkTab(int idx) {
-        mCurrentItem= RxFragmentUtil.showTab(fragmentContentId, idx, mCurrentItem, fragments, fragmentActivity);
+        mCurrentItem = RxFragmentUtil.showTab(fragmentContentId, idx, mCurrentItem, fragments, fragmentActivity.getSupportFragmentManager(), isShowFragmentAnim);
     }
 
     /**
@@ -284,5 +285,9 @@ public class BottomBarLayout extends LinearLayout implements ViewPager.OnPageCha
 
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
         this.onItemSelectedListener = onItemSelectedListener;
+    }
+
+    public void setShowFragmentAnim(boolean showFragmentAnim) {
+        isShowFragmentAnim = showFragmentAnim;
     }
 }
