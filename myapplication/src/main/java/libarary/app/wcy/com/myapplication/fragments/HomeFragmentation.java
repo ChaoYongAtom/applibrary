@@ -6,9 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
-import com.ruiyun.comm.library.utils.TurnFragmentUtil;
+import com.ruiyun.comm.library.ui.SwipeBackFragment;
 
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
@@ -19,14 +18,13 @@ import java.util.List;
 import butterknife.BindView;
 import libarary.app.wcy.com.myapplication.R;
 import libarary.app.wcy.com.myapplication.uibase.base.BaseFragment;
-import me.yokeyword.fragmentation.SupportFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragmentation extends BaseFragment {
-    private List<SupportFragment> mFragmentList = new ArrayList<>();
+    private List<SwipeBackFragment> mFragmentList = new ArrayList<>();
     @BindView(R.id.bottom_bar)
     BottomBarLayout mBottomBarLayout;
 
@@ -43,7 +41,7 @@ public class HomeFragmentation extends BaseFragment {
         mFragmentList.add(new TwoFragmentation());
         mFragmentList.add(new MyFragmentation());
         //loadRootFragment(R.id.bottom_bar_delegate_container, new BottomFragmentation());
-        final SupportFragment[] fragmentArray = mFragmentList.toArray(new SupportFragment[mFragmentList.size()]);
+        final SwipeBackFragment[] fragmentArray = mFragmentList.toArray(new SwipeBackFragment[mFragmentList.size()]);
         loadMultipleRootFragment(R.id.bottom_fragment, 0, fragmentArray);
         mBottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override

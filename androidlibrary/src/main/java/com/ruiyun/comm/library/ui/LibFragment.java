@@ -17,7 +17,6 @@ import org.wcy.android.view.HeaderLayout;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 
 /**
  * Created by wcy on 2018/1/18.

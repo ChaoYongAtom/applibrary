@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.mvp.BaseView;
+import com.trello.rxlifecycle.LifecycleProvider;
+import com.trello.rxlifecycle.android.ActivityEvent;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.exception.ApiException;
@@ -21,17 +23,15 @@ import org.wcy.android.view.toast.ToastUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
-import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * 公共baseactivity
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class BaseActivity extends SwipeBackActivity implements BaseView {
+public abstract class BaseActivity extends SwipeBackActivity implements BaseView, LifecycleProvider<ActivityEvent> {
     Unbinder unbinder;
     private HeaderLayout headerLayout;
     @Override

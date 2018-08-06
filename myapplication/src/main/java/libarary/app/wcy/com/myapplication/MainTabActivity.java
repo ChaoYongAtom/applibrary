@@ -3,6 +3,7 @@ package libarary.app.wcy.com.myapplication;
 import android.os.Bundle;
 
 import com.ruiyun.comm.library.ui.BaseActivity;
+import com.ruiyun.comm.library.ui.SwipeBackFragment;
 
 import org.wcy.android.view.bottomBar.BottomBarItem;
 import org.wcy.android.view.bottomBar.BottomBarLayout;
@@ -16,7 +17,7 @@ import libarary.app.wcy.com.myapplication.fragments.TwoFragmentation;
 import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainTabActivity extends BaseActivity {
-    private List<SupportFragment> mFragmentList = new ArrayList<>();
+    private List<SwipeBackFragment> mFragmentList = new ArrayList<>();
     private BottomBarLayout mBottomBarLayout;
 
     @Override
@@ -28,7 +29,7 @@ public class MainTabActivity extends BaseActivity {
         mFragmentList.add(new TwoFragmentation());
         mFragmentList.add(new MyFragmentation());
         //loadRootFragment(R.id.bottom_bar_delegate_container, new BottomFragmentation());
-        final SupportFragment[] fragmentArray = mFragmentList.toArray(new SupportFragment[mFragmentList.size()]);
+        final SwipeBackFragment[] fragmentArray = mFragmentList.toArray(new SwipeBackFragment[mFragmentList.size()]);
         loadMultipleRootFragment(R.id.bottom_bar_delegate_container, 0, fragmentArray);
         mBottomBarLayout.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
