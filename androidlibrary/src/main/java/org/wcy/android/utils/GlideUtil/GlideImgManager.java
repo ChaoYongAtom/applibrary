@@ -1,15 +1,11 @@
 package org.wcy.android.utils.GlideUtil;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.RequestOptions;
 
 /**
  * Created by wcy on 2017/3/28.
@@ -18,63 +14,50 @@ import com.bumptech.glide.request.target.SimpleTarget;
 public class GlideImgManager {
     private static int placeholderImage = 0;
 
+    /**
+     * @param context
+     * @param url      图片地址
+     * @param erroImg  加载错误之后的错误图
+     * @param emptyImg 加载成功之前占位图
+     * @param iv
+     * @param width    加载成功之前占位图
+     * @param height
+     */
+    public static void loadImage(Context context, String url, int erroImg, int emptyImg, final ImageView iv, int width,
+                                 int height) {
+        RequestOptions options = new RequestOptions()
+                .override(width, height)
+                .placeholder(emptyImg)  //加载成功之前占位图
+                .error(erroImg);//加载错误之后的错误图
+        Glide.with(context).asBitmap().load(url).apply(options).into(iv);
+    }
+
+    public static void loadImage(Context context, String url, final ImageView iv, int width,
+                                 int height) {
+        RequestOptions options = new RequestOptions()
+                .override(width, height)
+                .placeholder(placeholderImage)  //加载成功之前占位图
+                .error(placeholderImage);//加载错误之后的错误图
+        Glide.with(context).asBitmap().load(url).apply(options).into(iv);
+    }
+
+    /**
+     * @param context
+     * @param url      图片地址
+     * @param erroImg  加载错误之后的错误图
+     * @param emptyImg 加载成功之前占位图
+     * @param iv
+     */
     public static void loadImage(Context context, String url, int erroImg, int emptyImg, final ImageView iv) {
-        //原生 API
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .placeholder(emptyImg)
-                .error(erroImg)
-                .dontAnimate()
-                .into(new SimpleTarget<Bitmap>() {
-
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                            glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        iv.setImageDrawable(errorDrawable);
-                    }
-                });
-
+        RequestOptions options = new RequestOptions()
+                .placeholder(emptyImg)  //加载成功之前占位图
+                .error(erroImg);//加载错误之后的错误图
+        Glide.with(context).asBitmap().load(url).apply(options).into(iv);
     }
 
     public static void loadImage(Context context, String url, final ImageView iv) {
-        //原生 API
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .placeholder(placeholderImage)
-                .error(placeholderImage)
-                .dontAnimate()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                            glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
+        loadImage(context, url, placeholderImage, placeholderImage, iv);
 
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        iv.setImageDrawable(errorDrawable);
-                    }
-                });
-
-    }
-
-
-    public static void loadGifImage(Context context, String url, ImageView iv) {
-        Glide.with(context)
-                .load(url)
-                .asGif()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .placeholder(placeholderImage)
-                .error(placeholderImage).dontAnimate().into(iv);
     }
 
 
@@ -82,27 +65,12 @@ public class GlideImgManager {
      * 圆形显示
      **/
     public static void loadCircleImage(Context context, String url, final ImageView iv) {
+        RequestOptions options = new RequestOptions()
+                .placeholder(placeholderImage)  //加载成功之前占位图
+                .centerCrop()////指定图片的缩放类型为centerCrop （圆形）
+                .error(placeholderImage);//加载错误之后的错误图
         Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .placeholder(placeholderImage)
-                .error(placeholderImage)
-                .transform(new GlideCircleTransform(context))
-                .dontAnimate()
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                            glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        iv.setImageDrawable(errorDrawable);
-                    }
-                });
-
+                .load(url).apply(options).into(iv);
     }
 
 
@@ -110,21 +78,12 @@ public class GlideImgManager {
      * 圆角显示
      **/
     public static void loadRoundCornerImage(Context context, String url, final ImageView iv) {
+        RequestOptions options = new RequestOptions()
+                .centerCrop();
         Glide.with(context)
                 .load(url)
-                .asBitmap()
-                .placeholder(placeholderImage)
-                .error(placeholderImage)
-                .transform(new GlideRoundTransform(context, 10))
-                .dontAnimate()
-                .into(new SimpleTarget<Bitmap>() {
-
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap>
-                            glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
-                });
+                .apply(options)
+                .into(iv);
     }
 
 
@@ -143,8 +102,6 @@ public class GlideImgManager {
                                      int height) {
         Glide.with(context)
                 .load("file://" + imagePath)
-                .override(width, height)
-                .dontAnimate()
                 .into(imageView);
 
 
@@ -153,7 +110,6 @@ public class GlideImgManager {
     public static void loadLockImage(Context context, Uri imagePath, final ImageView imageView) {
         Glide.with(context)
                 .load(imagePath)
-                .dontAnimate()
                 .into(imageView);
 
 
@@ -163,10 +119,10 @@ public class GlideImgManager {
      * 加载app资源图片
      **/
     public static void loadImage(Context context, final int resourceId, final ImageView imageView) {
-        Glide.with(context)
-                .load(resourceId)
-                .dontAnimate()
-                .into(imageView);
+        RequestOptions options = new RequestOptions()
+                .placeholder(placeholderImage)  //加载成功之前占位图
+                .error(placeholderImage);//加载错误之后的错误图
+        Glide.with(context).asBitmap().load(resourceId).apply(options).into(imageView);
     }
 
     /**
@@ -177,8 +133,10 @@ public class GlideImgManager {
      * @param imageView
      */
     public static void loadGif(Context context, int resourceId, final ImageView imageView) {
-        Glide.with(context).load(resourceId).asGif().diskCacheStrategy(DiskCacheStrategy.SOURCE).into
-                (imageView);
+        RequestOptions options = new RequestOptions()
+                .placeholder(placeholderImage)  //加载成功之前占位图
+                .error(placeholderImage);//加载错误之后的错误图
+        Glide.with(context).asBitmap().load(resourceId).apply(options).into(imageView);
     }
 
     public static void setPlaceholderImage(int placeholderImage) {

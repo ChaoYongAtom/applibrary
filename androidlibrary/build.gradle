@@ -1,14 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.ChaoYongAtom'
+group = 'com.github.ChaoYongAtom'
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
     lintOptions {
         abortOnError false
     }
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 26
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }
@@ -17,30 +18,34 @@ android {
 
 dependencies {
     /*rx-android-java*/
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.trello:rxlifecycle:1.0'
-    compile 'com.trello:rxlifecycle-components:1.0'
+    compile "com.squareup.retrofit2:adapter-rxjava:2.1.0"
+    compile "com.trello:rxlifecycle:1.0"
+    compile "com.trello:rxlifecycle-components:1.0"
     /*rotrofit*/
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+    compile "com.squareup.retrofit2:retrofit:2.4.0"
+    compile "com.squareup.retrofit2:converter-scalars:2.0.0"
+    compile "com.squareup.okhttp3:logging-interceptor:3.4.1"
     /* recyclerview**/
     //noinspection GradleCompatible
-    compile 'com.android.support:support-v4:27.0.2'
-    //noinspection GradleCompatible
-    compile 'com.android.support:appcompat-v7:27.0.2'
-    //noinspection GradleCompatible
-    compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile "com.android.support:appcompat-v7:$rootProject.v4Version"
+    compile "com.android.support:design:$rootProject.v4Version"
+    compile "com.android.support:recyclerview-v7:$rootProject.v4Version"
     //debug版本编译日志库
-    compile 'com.apkfuns.logutils:library:1.5.1.1'
+    compile "com.apkfuns.logutils:library:1.5.1.1"
     /* json*/
-    compile 'com.alibaba:fastjson:1.2.10'
+    compile "com.alibaba:fastjson:1.2.10"
     /*注解*/
-    compile 'com.jakewharton:butterknife:8.5.1'
+    compile "com.jakewharton:butterknife:8.5.1"
     //权限
-    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar'
+    compile "com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar"
     //图片加载
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.github.chrisbanes:PhotoView:latest.release'
+    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
+
+    compile "com.nineoldandroids:library:2.4.0"
+    implementation "com.github.chrisbanes:PhotoView:latest.release"
+    implementation "com.zyao89:zloading:1.0.11"
+    compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
+    compile "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
+    compile "me.yokeyword:fragmentation-swipeback:$rootProject.fragmentationVersion"
 }

@@ -39,4 +39,16 @@
         <item name="android:windowEnterAnimation">@anim/pw_push_zoom_in</item>
         <item name="android:windowExitAnimation">@anim/pw_push_zoom_out</item>
     </style>
+    <!-- title样式-->
+    <style name="titleType">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="hlItemTextSize">@dimen/sp_15</item>
+        <item name="hlTitleTextSize">24sp</item>
+        <item name="hlItemTextColor">#333333</item>
+        <item name="hlTitleTextColor">#333333</item>
+        <item name="hlNavigationIcon">@mipmap/back_black_ico</item>
+        <item name="hlItemMarginLeftAndRight">@dimen/dp_10</item>
+        <item name="hlItemTextPaddingLeftAndRight">@dimen/dp_10</item>
+    </style>
 </resources>

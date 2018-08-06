@@ -12,13 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
-import com.github.chrisbanes.photoview.PhotoViewAttacher;
 
 import org.wcy.android.R;
+import org.wcy.android.utils.GlideUtil.GlideImgManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +86,7 @@ public class ImageZoomPopupWindow extends BottomPushPopupWindow {
                     dismiss();
                 }
             });
-            loadImage(context, datas.get(position), R.mipmap.bg_estate_palceholder, R.mipmap.bg_estate_palceholder, photoView);
+            GlideImgManager.loadImage(context, datas.get(position), R.mipmap.bg_estate_palceholder, R.mipmap.bg_estate_palceholder, photoView);
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             return photoView;
         }
@@ -102,28 +102,7 @@ public class ImageZoomPopupWindow extends BottomPushPopupWindow {
         }
 
     }
-    private void loadImage(Context context, String url, int erroImg, int emptyImg, final ImageView iv) {
-        //原生 API
-        Glide.with(context)
-                .load(url)
-                .asBitmap()
-                .placeholder(emptyImg)
-                .error(erroImg)
-                .dontAnimate()
-                .into(new SimpleTarget<Bitmap>(){
 
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        super.onLoadFailed(e, errorDrawable);
-                        iv.setImageDrawable(errorDrawable);
-                    }
-                });
-
-    }
     public void show() {
         viewPager.setCurrentItem(position);
         tv_position.setText((position + 1) + "/" + datas.size());

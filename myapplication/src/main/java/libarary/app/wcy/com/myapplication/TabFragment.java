@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +15,6 @@ import org.wcy.android.adapter.ViewRecyclerHolder;
 import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.HeaderLayout;
 import org.wcy.android.view.ImageZoomPopupWindow;
-import org.wcy.android.view.dialog.RxDialogSure;
-import org.wcy.android.view.dialog.RxDialogSureCancel;
 import org.wcy.android.view.refresh.MaterialRefreshLayout;
 import org.wcy.android.view.refresh.MaterialRefreshListener;
 
@@ -57,7 +53,7 @@ public class TabFragment extends Fragment {
             }
         });
         emptyLayout.showView();
-        headerLayout.getMenuView().setOnClickListener(new View.OnClickListener() {
+        headerLayout.getMenuOneView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> list = new ArrayList<>();
@@ -71,7 +67,7 @@ public class TabFragment extends Fragment {
             }
         });
 
-        headerLayout.getMenu2View().setOnClickListener(new View.OnClickListener() {
+        headerLayout.getMenuTwoView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SettingActivity.class));

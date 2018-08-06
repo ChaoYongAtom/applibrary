@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<org.wcy.android.view.HeaderLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/headerlayout"
+    style="@style/titleType"
+    android:background="@color/white"
+    app:hlTitleTextSize="@dimen/sp_20"/>

@@ -397,7 +397,7 @@ public class EmptyLayout extends RelativeLayout {
     }
 
     public void setMode(int mode) {
-        pullToRefreshView.setMore(mode);
+        if (pullToRefreshView != null) pullToRefreshView.setMore(mode);
     }
 
     public boolean isRefresh() {

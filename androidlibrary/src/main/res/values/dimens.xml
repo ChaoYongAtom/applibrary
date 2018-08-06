@@ -63,6 +63,7 @@
     <dimen name="sp_40">40sp</dimen>
     <dimen name="statusbar_view_height">0dp</dimen>
     <dimen name="tongke_item_text_padding">4dp</dimen>
-
+    <dimen name="pickerview_textsize">18sp</dimen>
+    <bool name="pickerview_customTextSize">true</bool>
 
 </resources>

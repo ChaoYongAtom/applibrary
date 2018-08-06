@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/white" />
+    <!-- 描边，宽度，边的颜色 -->
+    <stroke
+     android:width="0.5dp"
+     android:color="#ededed" />
+    <!-- 圆角半径  四个角的半径都为5 -->
+    <corners android:radius="@dimen/dp_4" />
+</shape>

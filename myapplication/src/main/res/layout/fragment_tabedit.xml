@@ -22,56 +22,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_50"
                 android:hint="请输入2" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入3" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入4" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入5" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入6" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入7" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入8" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入9" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入10" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入11" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
-                android:hint="请输入12" />
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确定"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

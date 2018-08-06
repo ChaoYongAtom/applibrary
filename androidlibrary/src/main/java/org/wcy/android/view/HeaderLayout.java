@@ -310,12 +310,14 @@ public class HeaderLayout extends RelativeLayout {
         if (mMenuOne != null && !RxDataTool.isNullString(str)) {
             mMenuOne.setOnClickListener(onClickListener);
             mMenuOne.setText(str);
+            mMenuOne.setVisibility(VISIBLE);
         }
     }
 
     public void setmMenuTwoText(String str) {
         if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
             mMenuTwo.setText(str);
+            mMenuOne.setVisibility(VISIBLE);
         }
     }
 
@@ -323,6 +325,7 @@ public class HeaderLayout extends RelativeLayout {
         if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
             mMenuTwo.setOnClickListener(onClickListener);
             mMenuTwo.setText(str);
+            mMenuOne.setVisibility(VISIBLE);
         }
     }
 

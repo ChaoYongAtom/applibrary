@@ -9,9 +9,7 @@
         android:id="@+id/headerlayout"
         style="@style/titleType"
         app:hlMenu2Icon="@mipmap/add_ic"
-        app:hlMenu2TextId="@+id/add_btn"
         app:hlMenuIcon="@mipmap/edit_ic"
-        app:hlMenuTextId="@+id/edit_btn"
         app:hlTitleText="这是主标题" />
 
     <org.wcy.android.view.EmptyLayout
