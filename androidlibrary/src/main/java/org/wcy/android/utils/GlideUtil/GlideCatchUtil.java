@@ -1,5 +1,7 @@
 package org.wcy.android.utils.GlideUtil;
 
+import android.content.Context;
+import android.os.Environment;
 import android.os.Looper;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +19,8 @@ import java.math.BigDecimal;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class GlideCatchUtil {
     private static GlideCatchUtil instance;
+    // 图片缓存子目录
+    public final String GLIDE_CARCH_DIR = "/image_manager_disk_cache";
 
     public static GlideCatchUtil getInstance() {
         if (null == instance) {
@@ -25,10 +29,17 @@ public class GlideCatchUtil {
         return instance;
     }
 
+    //外部路径
+    public String getStorageDirectory(Context context) {
+        //手机app路径
+        String appRootPath = context.getCacheDir().getPath() + GLIDE_CARCH_DIR;
+        return appRootPath;
+    }
+
     // 获取Glide磁盘缓存大小
     public String getCacheSize() {
         try {
-            return getFormatSize(getFolderSize(new File(RxTool.getContext().getCacheDir() + "/" + GlideConfiguration.GLIDE_CARCH_DIR)));
+            return getFormatSize(getFolderSize(new File(getStorageDirectory(RxTool.getContext()))));
         } catch (Exception e) {
             e.printStackTrace();
             return "获取失败";
@@ -37,7 +48,7 @@ public class GlideCatchUtil {
 
     // 清除Glide磁盘缓存，自己获取缓存文件夹并删除方法
     public boolean cleanCatchDisk() {
-        return deleteFolderFile(RxTool.getContext().getCacheDir() + "/" + GlideConfiguration.GLIDE_CARCH_DIR, true);
+        return deleteFolderFile(getStorageDirectory(RxTool.getContext()), true);
     }
 
     public void clear() {
@@ -81,7 +92,7 @@ public class GlideCatchUtil {
 
 
     // 获取指定文件夹内所有文件大小的和
-    private long getFolderSize(File file){
+    private long getFolderSize(File file) {
         long size = 0;
         try {
             File[] fileList = file.listFiles();
