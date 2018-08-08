@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 /**
@@ -67,7 +69,8 @@ public class GlideImgManager {
     public static void loadCircleImage(Context context, Object url, final ImageView iv) {
         RequestOptions options = new RequestOptions()
                 .placeholder(placeholderImage)  //加载成功之前占位图
-                .centerCrop()////指定图片的缩放类型为centerCrop （圆形）
+                .centerCrop()
+                .transform(new CircleCrop())
                 .error(placeholderImage);//加载错误之后的错误图
         Glide.with(context)
                 .load(url).apply(options).into(iv);
@@ -78,14 +81,24 @@ public class GlideImgManager {
      * 圆角显示
      **/
     public static void loadRoundCornerImage(Context context, Object url, final ImageView iv) {
-        RequestOptions options = new RequestOptions()
-                .centerCrop();
-        Glide.with(context)
-                .load(url)
-                .apply(options)
-                .into(iv);
+        loadRoundCornerImage(context, url, 20, iv);
     }
 
+    /**
+     *
+     * @param context
+     * @param url 图片加载地址
+     * @param radius  圆角图片大小
+     * @param iv
+     */
+    public static void loadRoundCornerImage(Context context, Object url, int radius, final ImageView iv) {
+        RequestOptions options = new RequestOptions()
+                .placeholder(placeholderImage)  //加载成功之前占位图
+                .transform(new RoundedCorners(radius))
+                .error(placeholderImage);//加载错误之后的错误图
+        Glide.with(context)
+                .load(url).apply(options).into(iv);
+    }
 
     /**
      * 加载本地图片

@@ -37,6 +37,16 @@ public class BottomFragmentation extends BaseFragment {
     }
 
     @Override
+    public int setCreatedLayoutViewId() {
+        return 0;
+    }
+
+    @Override
+    public String setTitle() {
+        return null;
+    }
+
+    @Override
     protected void initView() {
         mFragmentList.add(new HomeFragmentation());
         mFragmentList.add(new TwoFragmentation());

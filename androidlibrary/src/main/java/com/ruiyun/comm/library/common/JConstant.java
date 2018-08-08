@@ -39,7 +39,7 @@ public class JConstant {
     }
 
     public interface LoinOutInterface {
-        public void loginOut();
+        public void loginOut(int code,String msg);
     }
 
     public static String getToken() {

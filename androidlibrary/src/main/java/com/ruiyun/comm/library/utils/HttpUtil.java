@@ -2,7 +2,6 @@ package com.ruiyun.comm.library.utils;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -25,9 +24,6 @@ import org.wcy.android.utils.PreferenceUtils;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
-import org.wcy.android.utils.RxTool;
-import org.wcy.android.view.dialog.RxDialogSure;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -184,26 +180,14 @@ public class HttpUtil implements HttpOnNextListener {
                     baseResult.setMethod(api.getMethod());
                     httpOnListener.onNext(baseResult);
                 } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
-                    final RxDialogSure rxDialogSure = new RxDialogSure(application);
-                    rxDialogSure.setContent(baseResult.getMsg());
-                    rxDialogSure.setSure("立即重新登录");
-                    rxDialogSure.setCancelable(false);
-                    rxDialogSure.setSureListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            rxDialogSure.dismiss();
-                            if (JConstant.getLoinOutInterface() != null) {
-                                JConstant.getLoinOutInterface().loginOut();
-                            }
-                        }
-                    });
-                    rxDialogSure.show();
+                    if (JConstant.getLoinOutInterface() != null) {
+                        JConstant.getLoinOutInterface().loginOut(baseResult.getCode(),baseResult.getMsg());
+                    }
                 } else {
                     httpOnListener.onError(new ApiException(null, CodeException.ERROR, baseResult.getMsg()), api.getMethod());
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             RxLogTool.e("HttpUtilonNext", api.getMethod());
             httpOnListener.onError(new ApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试"), api.getMethod());
         }

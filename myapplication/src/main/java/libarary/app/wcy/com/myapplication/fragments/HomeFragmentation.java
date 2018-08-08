@@ -37,6 +37,16 @@ public class HomeFragmentation extends BaseFragment {
     }
 
     @Override
+    public int setCreatedLayoutViewId() {
+        return 0;
+    }
+
+    @Override
+    public String setTitle() {
+        return null;
+    }
+
+    @Override
     protected void initView() {
         mFragmentList.add(new TwoFragmentation());
         mFragmentList.add(new MyFragmentation());

@@ -29,6 +29,16 @@ public class TwoFragmentation extends BaseFragment {
     }
 
     @Override
+    public int setCreatedLayoutViewId() {
+        return 0;
+    }
+
+    @Override
+    public String setTitle() {
+        return null;
+    }
+
+    @Override
     protected void initView() {
 
     }

@@ -52,6 +52,9 @@ public class ProgressWebView extends WebView {
                     progressbar.setVisibility(VISIBLE);
                 progressbar.setProgress(newProgress);
             }
+            if (ontitle != null) {
+                ontitle.onProgressChanged(newProgress);
+            }
             super.onProgressChanged(view, newProgress);
         }
 
@@ -71,6 +74,7 @@ public class ProgressWebView extends WebView {
 
     public interface onTitle {
         public void UpdateTitle(String title);
+        public void onProgressChanged( int newProgress);
     }
 
     @Override

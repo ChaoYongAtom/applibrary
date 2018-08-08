@@ -31,6 +31,16 @@ public class TabEditFragment extends BaseFragment {
     }
 
     @Override
+    public int setCreatedLayoutViewId() {
+        return 0;
+    }
+
+    @Override
+    public String setTitle() {
+        return null;
+    }
+
+    @Override
     protected void initView() {
         button.setOnClickListener(new View.OnClickListener() {
             @Override

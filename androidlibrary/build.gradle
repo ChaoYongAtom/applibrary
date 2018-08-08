@@ -39,7 +39,7 @@ dependencies {
     //权限
     compile "com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar"
     //图片加载
-    implementation "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
     compile "com.nineoldandroids:library:2.4.0"
@@ -48,4 +48,5 @@ dependencies {
     compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
     compile "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
     compile "me.yokeyword:fragmentation-swipeback:$rootProject.fragmentationVersion"
+    compile 'com.gyf.barlibrary:barlibrary:2.3.0'
 }

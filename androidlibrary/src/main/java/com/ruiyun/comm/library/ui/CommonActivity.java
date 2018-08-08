@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import org.wcy.android.R;
 
-import me.yokeyword.fragmentation.SupportFragment;
-
 
 /**
  * CommonActivity
@@ -31,10 +29,12 @@ public class CommonActivity extends BaseActivity {
         try {
             String fragmentClazz = intent
                     .getStringExtra(EXTRA_FRAGMENT);
-            SupportFragment fragment = (SupportFragment) Class.forName(fragmentClazz)
+            SwipeBackFragment fragment = (SwipeBackFragment) Class.forName(fragmentClazz)
                     .newInstance();
+            fragment.setArguments(intent.getExtras());
             loadRootFragment(R.id.common_frame, fragment);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
