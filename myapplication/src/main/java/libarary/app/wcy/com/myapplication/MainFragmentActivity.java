@@ -3,7 +3,6 @@ package libarary.app.wcy.com.myapplication;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -16,7 +15,9 @@ import org.wcy.android.view.bottomBar.BottomBarLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragmentActivity extends AppCompatActivity {
+import libarary.app.wcy.com.myapplication.uibase.base.BaseActivity;
+
+public class MainFragmentActivity extends BaseActivity {
 
     private BottomBarLayout mBottomBarLayout;
 
@@ -39,7 +40,6 @@ public class MainFragmentActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mFragmentList.add(new TabEditFragment());
         TabFragment homeFragment = new TabFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putString(TabFragment.CONTENT, "首页");
@@ -56,6 +56,7 @@ public class MainFragmentActivity extends AppCompatActivity {
         bundle4.putString(TabFragment.CONTENT, "我的");
         meFragment.setArguments(bundle4);
         mFragmentList.add(meFragment);
+        mFragmentList.add(new TabEditFragment());
     }
 
     private void initListener() {

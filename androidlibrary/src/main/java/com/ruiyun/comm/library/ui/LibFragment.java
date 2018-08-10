@@ -27,8 +27,11 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     private HeaderLayout headerLayout;
     private Unbinder unbinder;
     protected View rootView;
+
     public abstract int setCreatedLayoutViewId();
+
     public abstract String setTitle();
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -38,7 +41,6 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSwipeBackEnable(false);
         activity = (BaseActivity) _mActivity;
     }
 
@@ -90,7 +92,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
         if (rootView == null) {
             rootView = inflater.inflate(layoutId, container, false);
             headerLayout = rootView.findViewById(R.id.headerlayout);
-            if(headerLayout!=null)headerLayout.setTitleText(setTitle());
+            if (headerLayout != null) headerLayout.setTitleText(setTitle());
             unbinder = ButterKnife.bind(this, rootView);
             initTitle(title);
         }

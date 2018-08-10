@@ -1,9 +1,7 @@
 package libarary.app.wcy.com.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +12,23 @@ import org.wcy.android.adapter.CommonRecyclerAdapter;
 import org.wcy.android.adapter.ViewRecyclerHolder;
 import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.HeaderLayout;
-import org.wcy.android.view.ImageZoomPopupWindow;
 import org.wcy.android.view.refresh.MaterialRefreshLayout;
 import org.wcy.android.view.refresh.MaterialRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import libarary.app.wcy.com.myapplication.uibase.base.BaseFragment;
+
 /**
  * @author wcy
  * @date 2017/6/23  11:22
  */
-public class TabFragment extends Fragment {
+public class TabFragment extends BaseFragment {
     public static final String CONTENT = "content";
     HeaderLayout headerLayout;
     TextView textmsg;
-    EmptyLayout emptyLayout;
+    MyViewAndCircle circle;
     /**
      * The loading state
      */
@@ -41,39 +40,10 @@ public class TabFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle bundle) {
-        View view = inflater.inflate(R.layout.tabfragment, null);
-//        textmsg = view.findViewById(R.id.textmsg);
-//        textmsg.setText(getArguments().getString(TabFragment.CONTENT));
-        headerLayout = view.findViewById(R.id.headerlayout);
-        emptyLayout = view.findViewById(R.id.emptylayout);
-        emptyLayout.setErrorClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        emptyLayout.showView();
-        headerLayout.getMenuOneView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> list = new ArrayList<>();
-                list.add("http://img.zcool.cn/community/0142135541fe180000019ae9b8cf86.jpg@1280w_1l_2o_100sh.png");
-                list.add("http://img1.imgtn.bdimg.com/it/u=594559231,2167829292&fm=27&gp=0.jpg");
-                list.add("http://img07.tooopen.com/images/20170316/tooopen_sy_201956178977.jpg");
-                ImageZoomPopupWindow imageZoomPopupWindow = new ImageZoomPopupWindow(getActivity(), list, 0);
-                imageZoomPopupWindow.show();
-//                final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(getContext());//提示弹窗
-//                rxDialogSureCancel.show();
-            }
-        });
-
-        headerLayout.getMenuTwoView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SettingActivity.class));
-            }
-        });
-        return view;
+        rootView = setView(inflater, R.layout.tabfragment, null);
+        headerLayout = rootView.findViewById(R.id.headerlayout);
+        circle = rootView.findViewById(R.id.circle);
+        return rootView;
     }
 
     @Override
@@ -82,42 +52,25 @@ public class TabFragment extends Fragment {
         initView();
     }
 
-    private void initView() {
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            list.add("数据" + i);
-        }
-        adapter = new CommonRecyclerAdapter<String>(getContext(), list, R.layout.layout_iteam) {
-            @Override
-            public void convert(ViewRecyclerHolder helper, String item) {
-                helper.setText(R.id.tv_msg, item);
-            }
-        };
-        emptyLayout.setAdapter(adapter);
-        emptyLayout.getPullToRefreshView().setMore(MaterialRefreshLayout.Mode.BOTH);
-        emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(getContext(), "onRefresh", Toast.LENGTH_LONG).show();
-                emptyLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        emptyLayout.onRefreshComplete();
+    @Override
+    public int setCreatedLayoutViewId() {
+        return 0;
+    }
 
-                    }
-                }, 3000);
-            }
+    @Override
+    public String setTitle() {
+        return "dasasdf";
+    }
 
-            @Override
-            public void onRefreshLoadMore() {
-                Toast.makeText(getContext(), "LoadMore", Toast.LENGTH_LONG).show();
-                emptyLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        emptyLayout.onRefreshComplete();
-                    }
-                }, 3000);
-            }
-        });
+    protected void initView() {
+        circle.setTitleText("adsfadsf");
+        circle.setIsVisiable(true);
+        headerLayout.setmMenuOneText("历史数据");
+//        headerLayout.getMenuOneView().setBackgroundResource(R.color.warning_stroke_color);
+        headerLayout.getMenuOneView().setTipVisibility(true);
+//        List<String> list = new ArrayList<>();
+//        for (int i = 0; i < 30; i++) {
+//            list.add("数据" + i);
+//        }
     }
 }

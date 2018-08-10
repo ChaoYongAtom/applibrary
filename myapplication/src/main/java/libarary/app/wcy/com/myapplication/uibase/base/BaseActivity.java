@@ -15,7 +15,6 @@ public class BaseActivity extends com.ruiyun.comm.library.ui.BaseActivity {
      */
     public void setView(int layoutID) {
         setContentView(layoutID);
-        setStatusBar();
         unbinder = ButterKnife.bind(this);
 
     }

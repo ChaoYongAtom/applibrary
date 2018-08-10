@@ -27,7 +27,8 @@ public class HeaderLayout extends RelativeLayout {
     private int mSpitLineColor;
     private float mSpitLineHeight;
 
-    private TextView mNavigationView, mTitleTv, mMenuOne, mMenuTwo;
+    private TextView mNavigationView, mTitleTv;
+    private  RedTipTextView mMenuOne, mMenuTwo;
 
     private int mHedaderLayoutHeight = 0;
 
@@ -210,8 +211,8 @@ public class HeaderLayout extends RelativeLayout {
         }
     }
 
-    private TextView createMenuTextButton(String menuText, int menuIcon, int menuTextId) {
-        TextView tv = new TextView(getContext());
+    private RedTipTextView createMenuTextButton(String menuText, int menuIcon, int menuTextId) {
+        RedTipTextView tv = new RedTipTextView(getContext());
         tv.setVisibility(GONE);
         if (menuTextId != 0) {
             tv.setId(menuTextId);
@@ -405,7 +406,7 @@ public class HeaderLayout extends RelativeLayout {
      *
      * @return
      */
-    public TextView getMenuOneView() {
+    public RedTipTextView getMenuOneView() {
         return mMenuOne;
     }
 
@@ -414,7 +415,7 @@ public class HeaderLayout extends RelativeLayout {
      *
      * @return
      */
-    public TextView getMenuTwoView() {
+    public RedTipTextView getMenuTwoView() {
         return mMenuTwo;
     }
 

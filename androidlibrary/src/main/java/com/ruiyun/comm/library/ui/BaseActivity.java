@@ -38,15 +38,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     public boolean swipeBackPriority() {
         return super.swipeBackPriority();
     }
-    protected void setStatusBar() {
+    protected void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar .statusBarDarkFont(true, 0.2f).init();
     }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSwipeBackEnable(false);
-        RxActivityTool.setScreenVertical(this);//竖屏显示
         finishInputWindow();//隐藏输入法
         RxActivityTool.addActivity(this);
     }
@@ -95,7 +93,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     }
 
     private void init() {
-        setStatusBar();
+        initImmersionBar();
         unbinder = ButterKnife.bind(this);
     }
 
