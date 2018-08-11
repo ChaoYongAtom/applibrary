@@ -22,6 +22,7 @@ import org.wcy.android.view.toast.ToastUtils;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SwipeBackLayout;
 import me.yokeyword.fragmentation.anim.DefaultHorizontalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
@@ -94,6 +95,24 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
 
     private void init() {
         initImmersionBar();
+        getSwipeBackLayout().addSwipeListener(new SwipeBackLayout.OnSwipeListener() {
+            @Override
+            public void onDragStateChange(int state) {
+              if(state==3){
+                  onBackPressedSupport();
+              }
+            }
+
+            @Override
+            public void onEdgeTouch(int oritentationEdgeFlag) {
+
+            }
+
+            @Override
+            public void onDragScrolled(float scrollPercent) {
+
+            }
+        });
         unbinder = ButterKnife.bind(this);
     }
 
@@ -192,4 +211,5 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
             finishActivity();
         }
     }
+
 }

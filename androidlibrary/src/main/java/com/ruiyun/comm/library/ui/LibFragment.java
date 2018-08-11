@@ -45,7 +45,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     }
 
     public void finishFramager() {
-        if (activity.getSupportFragmentManager().getBackStackEntryCount() == 1) {
+        if (activity.getSupportFragmentManager().getBackStackEntryCount()<=1) {
             RxActivityTool.finishActivity(activity);
         } else {
             pop();
