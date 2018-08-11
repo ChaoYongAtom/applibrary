@@ -1,6 +1,6 @@
 package com.ruiyun.comm.library.widget;
 
-import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -36,7 +36,7 @@ public abstract class ChangeTimeDialogUtils {
     private String minte = "";
 
     private boolean isShowTime;
-    private Context context;
+    private AppCompatActivity context;
     private String showData = "";
 
     /**
@@ -45,7 +45,7 @@ public abstract class ChangeTimeDialogUtils {
      * @param context
      * @param isShowTime 是否显示时间
      */
-    public ChangeTimeDialogUtils(Context context, boolean isShowTime) {
+    public ChangeTimeDialogUtils(AppCompatActivity context, boolean isShowTime) {
         this.context = context;
         this.isShowTime = isShowTime;
     }
@@ -111,7 +111,7 @@ public abstract class ChangeTimeDialogUtils {
         });
 
         //月
-        ChangeTextStyleNumberPicker numPicker_month = (ChangeTextStyleNumberPicker) alertDialog.findViewById(R.id.numPicker_month);
+        ChangeTextStyleNumberPicker numPicker_month = alertDialog.findViewById(R.id.numPicker_month);
         numPicker_month.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         numPicker_month.setNumberPickerDividerColor(numPicker_month);
         numPicker_month.setWrapSelectorWheel(false);

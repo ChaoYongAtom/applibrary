@@ -67,7 +67,7 @@ public class WheelView extends View {
     int dividerColor;
 
     // 条目间距倍数
-    static final float lineSpacingMultiplier = 2.0F;
+    static final float lineSpacingMultiplier = 2.5F;
     public boolean isLoop;
 
     // 第一条线Y坐标值
@@ -88,7 +88,7 @@ public class WheelView extends View {
     int change;
 
     // 显示几个条目
-    int itemsVisible = 15;
+    int itemsVisible = 10;
 
     int measuredHeight;
     int measuredWidth;
@@ -103,7 +103,7 @@ public class WheelView extends View {
     long startTime = 0;
 
     // 修改这个值可以改变滑行速度
-    private static final int VELOCITYFLING = 5;
+    private static final int VELOCITYFLING = 9;
     int widthMeasureSpec;
 
     private int mGravity = Gravity.CENTER;
@@ -223,7 +223,7 @@ public class WheelView extends View {
                 maxTextHeight = textHeight;
             }
         }
-        itemHeight = lineSpacingMultiplier * maxTextHeight;
+        itemHeight = (lineSpacingMultiplier * maxTextHeight)+13;
     }
 
     public void smoothScroll(ACTION action) {

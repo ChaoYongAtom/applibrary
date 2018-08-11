@@ -35,14 +35,17 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     Unbinder unbinder;
     private HeaderLayout headerLayout;
     protected ImmersionBar mImmersionBar;
+
     @Override
     public boolean swipeBackPriority() {
         return super.swipeBackPriority();
     }
+
     protected void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar .statusBarDarkFont(true, 0.2f).init();
+        mImmersionBar.statusBarDarkFont(true, 0.2f).init();
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,9 +101,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
         getSwipeBackLayout().addSwipeListener(new SwipeBackLayout.OnSwipeListener() {
             @Override
             public void onDragStateChange(int state) {
-              if(state==3){
-                  onBackPressedSupport();
-              }
+                if (state == 3) {
+                    onBackPressedSupport();
+                }
             }
 
             @Override
@@ -212,4 +215,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
         }
     }
 
+    public BaseActivity getThisActivity() {
+        return this;
+    }
 }

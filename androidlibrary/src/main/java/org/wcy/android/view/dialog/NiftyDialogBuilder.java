@@ -1,12 +1,17 @@
 package org.wcy.android.view.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+
+import com.gyf.barlibrary.ImmersionBar;
 
 import org.wcy.android.R;
 import org.wcy.android.view.dialog.effects.BaseEffects;
@@ -20,25 +25,32 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     private Effectstype type = null;
     private View mDialogView;
     private int mDuration = -1;
-
+    ImmersionBar mImmersionBarDialog;
     private volatile static NiftyDialogBuilder instance;
+    private Activity activity;
 
     public NiftyDialogBuilder(Context context) {
         super(context);
+
     }
 
-    public NiftyDialogBuilder(Context context, int theme) {
+    public NiftyDialogBuilder(AppCompatActivity context, int theme) {
         super(context, theme);
+        this.activity = context;
+        try {
+            mImmersionBarDialog = ImmersionBar.with(context, this, "Bottom");
+            mImmersionBarDialog.init();
+        } catch (Exception e) {
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WindowManager.LayoutParams params = getWindow().getAttributes();
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
 
-    public static NiftyDialogBuilder getInstance(Context context) {
+    public static NiftyDialogBuilder getInstance(AppCompatActivity context) {
         instance = new NiftyDialogBuilder(context, R.style.dialog_untran);
         return instance;
 
@@ -99,5 +111,6 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     public void dismiss() {
         if (isShowing())
             super.dismiss();
+        if (mImmersionBarDialog != null) mImmersionBarDialog.destroy();
     }
 }
