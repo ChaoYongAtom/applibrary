@@ -10,13 +10,6 @@
         android:id="@+id/headerlayout"
         style="@style/titleType"
         app:hlTitleText="修改了" />
-    <libarary.app.wcy.com.myapplication.MyViewAndCircle
-        android:id="@+id/circle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleSizeview="13sp"
-        android:padding="2dp"
-        app:titleTextview="测试测试测试测试测试测试测试测试测试测试"/>
     <org.wcy.android.view.EmptyLayout
         android:id="@+id/emptylayout"
         android:layout_width="match_parent"

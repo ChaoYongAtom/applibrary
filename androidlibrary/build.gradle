@@ -49,4 +49,7 @@ dependencies {
     compile "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
     compile "me.yokeyword:fragmentation-swipeback:$rootProject.fragmentationVersion"
     compile 'com.gyf.barlibrary:barlibrary:2.3.0'
+
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    //compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }

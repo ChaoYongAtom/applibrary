@@ -1,14 +1,17 @@
 package com.ruiyun.comm.library.common;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+
 import org.wcy.android.utils.RxDataTool;
+import org.wcy.android.utils.RxTool;
 
 /**
  * 系统变量
  */
 public class JConstant {
-    public final static int INTERVAL = 1000;  //间隔时间（毫秒）
     public final static int MIN_PAGE_ROWS = 20;
-    public final static int MAX_PAGE_ROWS = 20;
     public final static String bundleListName = "baseListData";
     private static boolean encrypt = true;
     public final static String heards = "heards";
@@ -39,7 +42,7 @@ public class JConstant {
     }
 
     public interface LoinOutInterface {
-        public void loginOut(int code,String msg);
+        public void loginOut(int code, String msg);
     }
 
     public static String getToken() {
@@ -55,6 +58,14 @@ public class JConstant {
     }
 
     public static String getHttpUrl() {
+        if (RxDataTool.isNullString(httpUrl)) {
+            try {
+                ApplicationInfo appInfo = RxTool.getContext().getPackageManager().getApplicationInfo(RxTool.getContext().getPackageName(), PackageManager.GET_META_DATA);
+                Bundle bundle = appInfo.metaData;
+                httpUrl = bundle.getString("HTTP_URL");
+            } catch (PackageManager.NameNotFoundException e) {
+            }
+        }
         return httpUrl;
     }
 

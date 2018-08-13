@@ -12,6 +12,7 @@ import com.ruiyun.comm.library.api.entitys.UpdateImage;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.ruiyun.comm.library.widget.ProgressDialogView;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.wcy.android.retrofit.Api.BaseApi;
 import org.wcy.android.retrofit.exception.ApiException;
@@ -24,6 +25,7 @@ import org.wcy.android.utils.PreferenceUtils;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -70,11 +72,12 @@ public class HttpUtil implements HttpOnNextListener {
                     JSONObject object = new JSONObject();
                     String http = JConstant.getHttpUrl();
                     object.put("systemType", "1");
-                    object.put("appVersion", RxActivityTool.getAppVersionCode(application));
+                    object.put("appVersion", RxActivityTool.getAppVersionName(application));
                     object.put("mobileCode", ExampleUtil.getImei(application));
                     if (!RxDataTool.isNullString(http))
                         object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));
                     object.put("registrationID", JConstant.getRegistrationID());
+                    RxLogTool.d("heards====", heards);
                     if (JConstant.isEncrypt()) {
                         heards = AESOperator.encrypt(object.toJSONString());
                     } else {
@@ -85,7 +88,7 @@ public class HttpUtil implements HttpOnNextListener {
                     e.printStackTrace();
                 }
             }
-            RxLogTool.d("heards====", heards);
+
         }
         return heards;
     }
@@ -181,7 +184,7 @@ public class HttpUtil implements HttpOnNextListener {
                     httpOnListener.onNext(baseResult);
                 } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
                     if (JConstant.getLoinOutInterface() != null) {
-                        JConstant.getLoinOutInterface().loginOut(baseResult.getCode(),baseResult.getMsg());
+                        JConstant.getLoinOutInterface().loginOut(baseResult.getCode(), baseResult.getMsg());
                     }
                 } else {
                     httpOnListener.onError(new ApiException(null, CodeException.ERROR, baseResult.getMsg()), api.getMethod());
@@ -189,6 +192,10 @@ public class HttpUtil implements HttpOnNextListener {
             }
         } catch (Exception e) {
             RxLogTool.e("HttpUtilonNext", api.getMethod());
+            try {
+                CrashReport.postCatchedException(e);
+            } catch (Exception e1) {
+            }
             httpOnListener.onError(new ApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试"), api.getMethod());
         }
     }

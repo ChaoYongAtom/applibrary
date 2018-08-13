@@ -6,17 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.wcy.android.adapter.CommonRecyclerAdapter;
-import org.wcy.android.adapter.ViewRecyclerHolder;
-import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.HeaderLayout;
-import org.wcy.android.view.refresh.MaterialRefreshLayout;
-import org.wcy.android.view.refresh.MaterialRefreshListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import libarary.app.wcy.com.myapplication.uibase.base.BaseFragment;
 
@@ -28,7 +20,6 @@ public class TabFragment extends BaseFragment {
     public static final String CONTENT = "content";
     HeaderLayout headerLayout;
     TextView textmsg;
-    MyViewAndCircle circle;
     /**
      * The loading state
      */
@@ -42,7 +33,6 @@ public class TabFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle bundle) {
         rootView = setView(inflater, R.layout.tabfragment, null);
         headerLayout = rootView.findViewById(R.id.headerlayout);
-        circle = rootView.findViewById(R.id.circle);
         return rootView;
     }
 
@@ -63,8 +53,6 @@ public class TabFragment extends BaseFragment {
     }
 
     protected void initView() {
-        circle.setTitleText("adsfadsf");
-        circle.setIsVisiable(true);
         headerLayout.setmMenuOneText("历史数据");
 //        headerLayout.getMenuOneView().setBackgroundResource(R.color.warning_stroke_color);
         headerLayout.getMenuOneView().setTipVisibility(true);
