@@ -33,7 +33,7 @@ dependencies {
     //debug版本编译日志库
     compile "com.apkfuns.logutils:library:1.5.1.1"
     /* json*/
-    compile "com.alibaba:fastjson:1.2.10"
+    compile "com.alibaba:fastjson:$rootProject.fastjsonVersion"
     /*注解*/
     compile "com.jakewharton:butterknife:8.5.1"
     //权限

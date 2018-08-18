@@ -32,5 +32,4 @@ public interface BaseView {
     void onError(ApiException e, String mothead);
 
     Context getThisContext();
-
 }

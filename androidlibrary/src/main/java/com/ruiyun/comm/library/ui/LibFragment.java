@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.mvp.BaseView;
+import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.exception.ApiException;
@@ -120,7 +121,9 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
         toastError(e.getDisplayMessage());
 
     }
-
+    public <T> LifecycleTransformer<T> bindToLife() {
+        return this.<T>bindToLifecycle();
+    }
     public void toastError(Object obj) {
         activity.toastError(obj);
     }

@@ -11,6 +11,7 @@ import android.view.View;
 import com.gyf.barlibrary.ImmersionBar;
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.mvp.BaseView;
+import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.exception.ApiException;
@@ -41,7 +42,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
         return super.swipeBackPriority();
     }
 
-    protected void initImmersionBar() {
+    public void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.statusBarDarkFont(true, 0.2f).init();
     }
@@ -214,7 +215,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
             finishActivity();
         }
     }
-
+    public <T> LifecycleTransformer<T> bindToLife() {
+        return this.<T>bindToLifecycle();
+    }
     public BaseActivity getThisActivity() {
         return this;
     }

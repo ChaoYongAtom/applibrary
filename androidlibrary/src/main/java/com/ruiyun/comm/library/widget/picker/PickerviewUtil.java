@@ -89,7 +89,6 @@ public class PickerviewUtil {
     public static void alertBottomWheelOption(Context context, int postion, final List<?> list, final OnWheelViewClick click) {
 
         final PopupWindow popupWindow = new PopupWindow();
-
         View view = LayoutInflater.from(context).inflate(R.layout.layout_bottom_wheel_option, null);
         TextView tv_confirm = (TextView) view.findViewById(R.id.btnSubmit);
         final WheelView wv_option = (WheelView) view.findViewById(R.id.wv_option);

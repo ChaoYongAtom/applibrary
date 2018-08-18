@@ -21,6 +21,7 @@ import org.wcy.android.utils.RxFragmentUtil;
  * @date 2017/3/14
  */
 public class TurnFragmentUtil extends RxFragmentUtil {
+    @Deprecated
     public static void startFragment(Context context, Class cl, Bundle bundle) {
         Intent intent = new Intent(context, CommonActivity.class);
         intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
@@ -28,7 +29,7 @@ public class TurnFragmentUtil extends RxFragmentUtil {
             intent.putExtras(bundle);
         context.startActivity(intent);
     }
-
+    @Deprecated
     public static void startFragmentForResult(AppCompatActivity activity, Class cl, Bundle bundle, Integer requestCode) {
 
         Intent intent = new Intent(activity, CommonActivity.class);
@@ -44,9 +45,11 @@ public class TurnFragmentUtil extends RxFragmentUtil {
      * @param context
      * @param cl
      */
+    @Deprecated
     public static void startFragment(Context context, Class cl) {
         startFragment(context, cl, null);
     }
+    @Deprecated
     public static Fragment replaceFragment(AppCompatActivity activity,
                                            Class<? extends Fragment> fragmentClass, Bundle args) {
         FragmentManager fm = activity.getSupportFragmentManager();
@@ -79,7 +82,7 @@ public class TurnFragmentUtil extends RxFragmentUtil {
         ft.commitAllowingStateLoss();
         return fragment;
     }
-
+    @Deprecated
     public static void turnToFragment(AppCompatActivity activity, Class<? extends Fragment> fragmentClass, Bundle bundle) {
         turnToFragment(activity.getSupportFragmentManager(), R.id.common_frame, fragmentClass, bundle);
     }
@@ -91,6 +94,7 @@ public class TurnFragmentUtil extends RxFragmentUtil {
      * @param fragmentClass
      * @param args
      */
+    @Deprecated
     public static void turnToFragment(FragmentManager fm, int containerId,
                                       Class<? extends Fragment> fragmentClass, Bundle args) {
         final String tag = fragmentClass.getName();
@@ -132,6 +136,7 @@ public class TurnFragmentUtil extends RxFragmentUtil {
      * @param fragmentClass
      * @param args
      */
+    @Deprecated
     public static void turnToFragment(FragmentManager fm, int containerId,
                                       Class<? extends Fragment> fragmentClass, Bundle args,
                                       boolean backAble) {
@@ -165,7 +170,6 @@ public class TurnFragmentUtil extends RxFragmentUtil {
         }
         ft.commitAllowingStateLoss();
     }
-
 
 
 }

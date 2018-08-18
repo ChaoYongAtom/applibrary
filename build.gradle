@@ -36,6 +36,7 @@ ext {
     fragmentationVersion="1.3.5"
     rxlifecycleVersion="2.1.0"
     retrofitVersion="2.4.0"
+    fastjsonVersion= "1.1.70.android"
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

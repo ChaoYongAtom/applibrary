@@ -25,6 +25,7 @@ import org.wcy.android.utils.PreferenceUtils;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
+import org.wcy.android.utils.RxTool;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -192,10 +193,13 @@ public class HttpUtil implements HttpOnNextListener {
             }
         } catch (Exception e) {
             RxLogTool.e("HttpUtilonNext", api.getMethod());
-            try {
-                CrashReport.postCatchedException(e);
-            } catch (Exception e1) {
+            if(!RxTool.isApkInDebug()){
+                try {
+                    CrashReport.postCatchedException(e);
+                } catch (Exception e1) {
+                }
             }
+
             httpOnListener.onError(new ApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试"), api.getMethod());
         }
     }

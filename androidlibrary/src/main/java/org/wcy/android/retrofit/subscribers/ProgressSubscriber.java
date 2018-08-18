@@ -102,7 +102,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      */
     @Override
     public void onCompleted() {
-
+        dismissProgressDialog();
     }
 
     /**
@@ -157,8 +157,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
                 mSubscriberOnNextListener.onError(new ApiException(e, CodeException.JSON_ERROR, "网络数据处理错误"), api.getMethod());
             }
         }
-        dismissProgressDialog();
-
     }
 
 
