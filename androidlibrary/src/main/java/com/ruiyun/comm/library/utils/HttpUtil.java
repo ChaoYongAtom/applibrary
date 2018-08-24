@@ -185,7 +185,7 @@ public class HttpUtil implements HttpOnNextListener {
                     httpOnListener.onNext(baseResult);
                 } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
                     if (JConstant.getLoinOutInterface() != null) {
-                        JConstant.getLoinOutInterface().loginOut(baseResult.getCode(), baseResult.getMsg());
+                        JConstant.getLoinOutInterface().loginOut(application, baseResult.getCode(), baseResult.getMsg());
                     }
                 } else {
                     httpOnListener.onError(new ApiException(null, CodeException.ERROR, baseResult.getMsg()), api.getMethod());
@@ -193,7 +193,7 @@ public class HttpUtil implements HttpOnNextListener {
             }
         } catch (Exception e) {
             RxLogTool.e("HttpUtilonNext", api.getMethod());
-            if(!RxTool.isApkInDebug()){
+            if (!RxTool.isApkInDebug()) {
                 try {
                     CrashReport.postCatchedException(e);
                 } catch (Exception e1) {

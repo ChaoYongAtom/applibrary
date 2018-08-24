@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ruiyun.comm.library.api.entitys.BaseResult;
+import com.ruiyun.comm.library.listener.BackHandledInterface;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
@@ -28,7 +29,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     private HeaderLayout headerLayout;
     private Unbinder unbinder;
     protected View rootView;
-
+    protected BackHandledInterface mBackHandledInterface;
     public abstract int setCreatedLayoutViewId();
 
     public abstract String setTitle();
@@ -43,6 +44,11 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (BaseActivity) _mActivity;
+        if (!(getActivity() instanceof BackHandledInterface)) {
+            // throw new ClassCastException("Hosting Activity must implement BackHandledInterface");
+        } else {
+            this.mBackHandledInterface = (BackHandledInterface) getActivity();
+        }
     }
 
     public void finishFramager() {
@@ -88,7 +94,15 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     public View setView(LayoutInflater inflater, int layoutId, String title) {
         return setView(inflater, null, layoutId, title);
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mBackHandledInterface != null) {
+            //告诉FragmentActivity，当前Fragment在栈顶
+            mBackHandledInterface.setSelectedFragment(this);
+        }
 
+    }
     public View setView(LayoutInflater inflater, ViewGroup container, int layoutId, String title) {
         if (rootView == null) {
             rootView = inflater.inflate(layoutId, container, false);

@@ -1,5 +1,6 @@
 package com.ruiyun.comm.library.common;
 
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class JConstant {
     }
 
     public interface LoinOutInterface {
-        public void loginOut(int code, String msg);
+        public void loginOut(Context context, int code, String msg);
     }
 
     public static String getToken() {

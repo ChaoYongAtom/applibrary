@@ -6,10 +6,12 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.ruiyun.comm.library.api.entitys.BaseResult;
+import com.ruiyun.comm.library.listener.BackHandledInterface;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
@@ -32,10 +34,11 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class BaseActivity extends SwipeBackActivity implements BaseView {
+public abstract class BaseActivity extends SwipeBackActivity implements BaseView, BackHandledInterface {
     Unbinder unbinder;
     private HeaderLayout headerLayout;
     protected ImmersionBar mImmersionBar;
+    private Fragment mBackHandedFragment;
 
     @Override
     public boolean swipeBackPriority() {
@@ -48,10 +51,23 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     }
 
     @Override
+    public void setSelectedFragment(Fragment selectedFragment) {
+        this.mBackHandedFragment = selectedFragment;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         finishInputWindow();//隐藏输入法
         RxActivityTool.addActivity(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mBackHandedFragment != null) {
+            mBackHandedFragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
@@ -215,9 +231,11 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
             finishActivity();
         }
     }
+
     public <T> LifecycleTransformer<T> bindToLife() {
         return this.<T>bindToLifecycle();
     }
+
     public BaseActivity getThisActivity() {
         return this;
     }
