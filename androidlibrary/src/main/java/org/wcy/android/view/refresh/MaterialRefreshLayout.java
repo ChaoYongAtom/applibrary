@@ -210,7 +210,8 @@ public class MaterialRefreshLayout extends FrameLayout {
                         }
                     }
                     return true;
-                } else if (dy < 0 && !canChildScrollDown() && (model == Mode.BOTH || model == Mode.END)) {
+                } else if (dy < -100 && !canChildScrollDown() && (model == Mode.BOTH || model == Mode.END)) {
+                    System.out.println(dy+"---------------------");
                     if (mMaterialFooterView != null && !isLoadMoreing) {
                         soveLoadMoreLogic();
                     }

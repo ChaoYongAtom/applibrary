@@ -147,14 +147,18 @@ public class HttpUtil implements HttpOnNextListener {
                 if (baseResult.getCode() == 200) {
                     if (api.getData() != null) {
                         String dataJson = String.valueOf(baseResult.getResult());
-                        try {
-                            dataJson = AESOperator.decrypt(dataJson);
-                        } catch (Exception e) {
-                            dataJson = String.valueOf(baseResult.getResult());
-                        } finally {
-                            if (RxDataTool.isNullString(dataJson)) {
+                        if (JConstant.isEncrypt()) {
+                            try {
+                                dataJson = AESOperator.decrypt(dataJson);
+                            } catch (Exception e) {
                                 dataJson = String.valueOf(baseResult.getResult());
+                            } finally {
+                                if (RxDataTool.isNullString(dataJson)) {
+                                    dataJson = String.valueOf(baseResult.getResult());
+                                }
+                                baseResult.setData(dataJson);
                             }
+                        } else {
                             baseResult.setData(dataJson);
                         }
                         RxLogTool.d("AESOperatorresult", dataJson);
