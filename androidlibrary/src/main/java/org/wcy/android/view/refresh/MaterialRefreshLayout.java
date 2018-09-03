@@ -199,7 +199,7 @@ public class MaterialRefreshLayout extends FrameLayout {
             case MotionEvent.ACTION_MOVE:
                 float currentY = ev.getY();
                 float dy = currentY - mTouchY;
-                if (dy > 0 && !canChildScrollUp()) {
+                if (dy > 20 && !canChildScrollUp()) {
                     if (model == Mode.BOTH || model == Mode.START) {
                         if (mMaterialHeaderView != null) {
                             mMaterialHeaderView.setVisibility(View.VISIBLE);
@@ -211,7 +211,6 @@ public class MaterialRefreshLayout extends FrameLayout {
                     }
                     return true;
                 } else if (dy < -100 && !canChildScrollDown() && (model == Mode.BOTH || model == Mode.END)) {
-                    System.out.println(dy+"---------------------");
                     if (mMaterialFooterView != null && !isLoadMoreing) {
                         soveLoadMoreLogic();
                     }

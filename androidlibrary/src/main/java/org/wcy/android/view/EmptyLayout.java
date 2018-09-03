@@ -392,7 +392,10 @@ public class EmptyLayout extends RelativeLayout {
     }
 
     public void notifyDataSetChanged() {
-        if (adapter != null) adapter.notifyDataSetChanged();
+        if (adapter != null) {
+            onRefreshComplete();
+            adapter.notifyDataSetChanged();
+        }
         showView();
     }
 
