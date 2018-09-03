@@ -215,10 +215,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
 
     @Override
     protected void onDestroy() {
-        if (unbinder != null) unbinder.unbind();
-        mImmersionBar.destroy();
-        super.onDestroy();
+        try {
+            if (unbinder != null) unbinder.unbind();
+            mImmersionBar.destroy();
+        }catch (Exception e){
+        }
         RxActivityTool.finishActivity(this);
+        super.onDestroy();
     }
 
     public void startActivity(Class<?> c, boolean isclose, Bundle bundle) {

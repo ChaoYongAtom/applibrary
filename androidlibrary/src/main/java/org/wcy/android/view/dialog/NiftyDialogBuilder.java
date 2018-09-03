@@ -109,8 +109,13 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
 
     @Override
     public void dismiss() {
+        try{
+            if (mImmersionBarDialog != null) mImmersionBarDialog.destroy();
+        }catch (Exception e){
+
+        }
         if (isShowing())
             super.dismiss();
-        if (mImmersionBarDialog != null) mImmersionBarDialog.destroy();
+
     }
 }
