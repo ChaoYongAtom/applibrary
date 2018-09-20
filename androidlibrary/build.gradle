@@ -17,6 +17,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     /*rx-android-java*/
     compile "com.squareup.retrofit2:adapter-rxjava:2.1.0"
     compile "com.trello:rxlifecycle:1.0"

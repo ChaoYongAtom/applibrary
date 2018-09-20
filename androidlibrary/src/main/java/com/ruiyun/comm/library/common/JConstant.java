@@ -22,6 +22,8 @@ public class JConstant {
     private static Class httpPostService;
     private static String registrationID;
     private static int connectionTime = 6;
+    private static String watermarkStr;
+    public final static String isWaterMark="isWaterMark";
     /* retry次数*/
     private static int retry = 2;
 
@@ -100,6 +102,14 @@ public class JConstant {
 
     public static void setRegistrationID(String registrationID) {
         JConstant.registrationID = registrationID;
+    }
+
+    public static String getWatermarkStr() {
+        return watermarkStr;
+    }
+
+    public static void setWatermarkStr(String watermarkStr) {
+        JConstant.watermarkStr = watermarkStr;
     }
 
     public static void setHttpPostService(Class httpPostService) {

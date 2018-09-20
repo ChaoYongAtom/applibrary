@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.ruiyun.comm.library.api.entitys.BaseResult;
+import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.trello.rxlifecycle.LifecycleTransformer;
@@ -21,6 +24,7 @@ import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxKeyboardTool;
 import org.wcy.android.view.HeaderLayout;
+import org.wcy.android.view.WaterMarkBg;
 import org.wcy.android.view.toast.ToastUtils;
 
 import butterknife.ButterKnife;
@@ -53,6 +57,29 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     @Override
     public void setSelectedFragment(Fragment selectedFragment) {
         this.mBackHandedFragment = selectedFragment;
+    }
+
+    private boolean isAdd;
+
+    /**
+     * 水印处理
+     */
+    @Override
+    public void onStart() {
+        if (!isAdd && !RxDataTool.isNullString(JConstant.getWatermarkStr())) {
+            boolean isWaterMark = getIntent().getBooleanExtra(JConstant.isWaterMark, true);
+            if (isWaterMark) {
+                ViewGroup viewGroup = findViewById(android.R.id.content);
+                FrameLayout frameLayout = new FrameLayout(getThisContext());
+                ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                frameLayout.setLayoutParams(layoutParams);
+                WaterMarkBg waterMarkBg = new WaterMarkBg(getThisContext(), JConstant.getWatermarkStr(), -15, 13);
+                frameLayout.setBackgroundDrawable(waterMarkBg);
+                viewGroup.addView(frameLayout);
+            }
+            isAdd = true;
+        }
+        super.onStart();
     }
 
     @Override
@@ -218,7 +245,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
         try {
             if (unbinder != null) unbinder.unbind();
             mImmersionBar.destroy();
-        }catch (Exception e){
+        } catch (Exception e) {
         }
         RxActivityTool.finishActivity(this);
         super.onDestroy();

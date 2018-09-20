@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
@@ -14,8 +15,11 @@ import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.exception.ApiException;
+import org.wcy.android.utils.DateUtil;
 import org.wcy.android.utils.RxActivityTool;
+import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.view.HeaderLayout;
+import org.wcy.android.view.WaterMarkBg;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -30,6 +34,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     private Unbinder unbinder;
     protected View rootView;
     protected BackHandledInterface mBackHandledInterface;
+
     public abstract int setCreatedLayoutViewId();
 
     public abstract String setTitle();
@@ -52,7 +57,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     }
 
     public void finishFramager() {
-        if (activity.getSupportFragmentManager().getBackStackEntryCount()<=1) {
+        if (activity.getSupportFragmentManager().getBackStackEntryCount() <= 1) {
             RxActivityTool.finishActivity(activity);
         } else {
             pop();
@@ -94,6 +99,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
     public View setView(LayoutInflater inflater, int layoutId, String title) {
         return setView(inflater, null, layoutId, title);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -103,6 +109,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
         }
 
     }
+
     public View setView(LayoutInflater inflater, ViewGroup container, int layoutId, String title) {
         if (rootView == null) {
             rootView = inflater.inflate(layoutId, container, false);
@@ -111,8 +118,25 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
             unbinder = ButterKnife.bind(this, rootView);
             initTitle(title);
         }
+        if (isSupportSwipeBack()) {
+            return attachToSwipeBack(rootView);
+        } else {
+            return rootView;
+        }
 
-        return attachToSwipeBack(rootView);
+    }
+
+    /**
+     * 是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
+     *
+     * @return
+     */
+    public boolean isSupportSwipeBack() {
+        return false;
+    }
+
+    public String WatermarkStr() {
+        return "";
     }
 
     protected abstract void initTitle(String title);
@@ -135,9 +159,11 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
         toastError(e.getDisplayMessage());
 
     }
+
     public <T> LifecycleTransformer<T> bindToLife() {
         return this.<T>bindToLifecycle();
     }
+
     public void toastError(Object obj) {
         activity.toastError(obj);
     }
