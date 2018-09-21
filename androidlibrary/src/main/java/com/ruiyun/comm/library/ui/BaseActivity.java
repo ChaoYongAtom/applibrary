@@ -38,16 +38,11 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class BaseActivity extends SwipeBackActivity implements BaseView, BackHandledInterface {
+public abstract class BaseActivity extends SupportActivity implements BaseView, BackHandledInterface {
     Unbinder unbinder;
     private HeaderLayout headerLayout;
     protected ImmersionBar mImmersionBar;
     private Fragment mBackHandedFragment;
-
-    @Override
-    public boolean swipeBackPriority() {
-        return super.swipeBackPriority();
-    }
 
     public void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
@@ -60,28 +55,31 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
     }
 
     private boolean isAdd;
+    private FrameLayout waterLayout;
 
     /**
      * 水印处理
      */
     @Override
     public void onStart() {
-        if (!isAdd && !RxDataTool.isNullString(JConstant.getWatermarkStr())) {
+        if (isShowWatermark()&&!isAdd && !RxDataTool.isNullString(JConstant.getWatermarkStr())) {
             boolean isWaterMark = getIntent().getBooleanExtra(JConstant.isWaterMark, true);
             if (isWaterMark) {
                 ViewGroup viewGroup = findViewById(android.R.id.content);
-                FrameLayout frameLayout = new FrameLayout(getThisContext());
+                waterLayout = new FrameLayout(getThisContext());
                 ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                frameLayout.setLayoutParams(layoutParams);
+                waterLayout.setLayoutParams(layoutParams);
                 WaterMarkBg waterMarkBg = new WaterMarkBg(getThisContext(), JConstant.getWatermarkStr(), -15, 13);
-                frameLayout.setBackgroundDrawable(waterMarkBg);
-                viewGroup.addView(frameLayout);
+                waterLayout.setBackgroundDrawable(waterMarkBg);
+                viewGroup.addView(waterLayout);
             }
             isAdd = true;
         }
         super.onStart();
     }
-
+    public boolean isShowWatermark(){
+        return true;
+    }
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,24 +140,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
 
     private void init() {
         initImmersionBar();
-        getSwipeBackLayout().addSwipeListener(new SwipeBackLayout.OnSwipeListener() {
-            @Override
-            public void onDragStateChange(int state) {
-                if (state == 3) {
-                    onBackPressedSupport();
-                }
-            }
-
-            @Override
-            public void onEdgeTouch(int oritentationEdgeFlag) {
-
-            }
-
-            @Override
-            public void onDragScrolled(float scrollPercent) {
-
-            }
-        });
         unbinder = ButterKnife.bind(this);
     }
 
@@ -268,5 +248,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements BaseView
 
     public BaseActivity getThisActivity() {
         return this;
+    }
+
+    public FrameLayout getWaterLayout() {
+        return waterLayout;
     }
 }

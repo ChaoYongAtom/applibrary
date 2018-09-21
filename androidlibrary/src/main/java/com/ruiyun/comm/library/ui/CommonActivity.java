@@ -29,7 +29,7 @@ public class CommonActivity extends BaseActivity {
         try {
             String fragmentClazz = intent
                     .getStringExtra(EXTRA_FRAGMENT);
-            SwipeBackFragment fragment = (SwipeBackFragment) Class.forName(fragmentClazz)
+            SupportFragment fragment = (SupportFragment) Class.forName(fragmentClazz)
                     .newInstance();
             fragment.setArguments(intent.getExtras());
             loadRootFragment(R.id.common_frame, fragment);

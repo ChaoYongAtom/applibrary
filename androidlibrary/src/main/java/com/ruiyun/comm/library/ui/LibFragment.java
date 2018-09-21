@@ -28,7 +28,7 @@ import butterknife.Unbinder;
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class LibFragment extends SwipeBackFragment implements BaseView {
+public abstract class LibFragment extends SupportFragment implements BaseView {
     private BaseActivity activity;
     private HeaderLayout headerLayout;
     private Unbinder unbinder;
@@ -118,12 +118,7 @@ public abstract class LibFragment extends SwipeBackFragment implements BaseView 
             unbinder = ButterKnife.bind(this, rootView);
             initTitle(title);
         }
-        if (isSupportSwipeBack()) {
-            return attachToSwipeBack(rootView);
-        } else {
-            return rootView;
-        }
-
+        return rootView;
     }
 
     /**
