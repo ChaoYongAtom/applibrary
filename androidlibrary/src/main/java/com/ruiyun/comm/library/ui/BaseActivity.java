@@ -224,8 +224,9 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
     protected void onDestroy() {
         try {
             if (unbinder != null) unbinder.unbind();
-            mImmersionBar.destroy();
+            if(mImmersionBar!=null) mImmersionBar.destroy();
         } catch (Exception e) {
+            e.printStackTrace();
         }
         RxActivityTool.finishActivity(this);
         super.onDestroy();

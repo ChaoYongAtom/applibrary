@@ -77,6 +77,7 @@ public class JConstant {
     }
 
     public static int getConnectionTime() {
+        System.out.println(connectionTime+"..................................");
         return connectionTime;
     }
 

@@ -2,6 +2,7 @@ package org.wcy.android.retrofit.http;
 
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
+
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -77,6 +78,8 @@ public class HttpManager {
             });
 
             builder.connectTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
+            builder.readTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
+            builder.writeTimeout(basePar.getConnectionTime(), TimeUnit.SECONDS);
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                 @Override
                 public void log(String message) {
@@ -98,7 +101,7 @@ public class HttpManager {
 
             Observable observable = basePar.getObservable(retrofit)
                     /*失败后的retry配置*/
-                    .retryWhen(new RetryWhenNetworkException(basePar.getCount(),basePar.getConnectionTime()))
+                    .retryWhen(new RetryWhenNetworkException(basePar.getCount(), basePar.getConnectionTime()))
                     /*异常处理*/
                     .onErrorResumeNext(funcException)
                     /*生命周期管理*/

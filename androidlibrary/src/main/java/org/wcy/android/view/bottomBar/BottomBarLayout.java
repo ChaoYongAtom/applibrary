@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import org.wcy.android.R;
 import org.wcy.android.utils.RxFragmentUtil;
+import org.wcy.android.utils.RxKeyboardTool;
 
 import java.util.ArrayList;
 import java.util.List;
