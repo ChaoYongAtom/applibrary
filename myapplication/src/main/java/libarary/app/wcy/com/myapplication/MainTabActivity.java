@@ -14,10 +14,9 @@ import java.util.List;
 import libarary.app.wcy.com.myapplication.fragments.HomeFragmentation;
 import libarary.app.wcy.com.myapplication.fragments.MyFragmentation;
 import libarary.app.wcy.com.myapplication.fragments.TwoFragmentation;
-import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainTabActivity extends BaseActivity {
-    private List<SwipeBackFragment> mFragmentList = new ArrayList<>();
+    private List<com.ruiyun.comm.library.ui.SupportFragment> mFragmentList = new ArrayList<>();
     private BottomBarLayout mBottomBarLayout;
 
     @Override
@@ -37,7 +36,6 @@ public class MainTabActivity extends BaseActivity {
                 showHideFragment(mFragmentList.get(currentPosition), mFragmentList.get(previousPosition));
             }
         });
-        setSwipeBackEnable(false); // 是否允许滑动
     }
 
     @Override

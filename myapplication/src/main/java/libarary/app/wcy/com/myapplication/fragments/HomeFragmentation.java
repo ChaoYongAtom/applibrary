@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ruiyun.comm.library.ui.SupportFragment;
 import com.ruiyun.comm.library.ui.SwipeBackFragment;
 
 import org.wcy.android.view.bottomBar.BottomBarItem;
@@ -24,7 +25,7 @@ import libarary.app.wcy.com.myapplication.uibase.base.BaseFragment;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragmentation extends BaseFragment {
-    private List<SwipeBackFragment> mFragmentList = new ArrayList<>();
+    private List<SupportFragment> mFragmentList = new ArrayList<>();
     @BindView(R.id.bottom_bar)
     BottomBarLayout mBottomBarLayout;
 
