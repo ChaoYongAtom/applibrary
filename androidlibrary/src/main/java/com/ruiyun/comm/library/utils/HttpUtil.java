@@ -1,8 +1,6 @@
 package com.ruiyun.comm.library.utils;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.api.SubjectPostApi;
@@ -13,6 +11,7 @@ import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.ruiyun.comm.library.widget.ProgressDialogView;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.trello.rxlifecycle.LifecycleProvider;
 
 import org.wcy.android.retrofit.Api.BaseApi;
 import org.wcy.android.retrofit.exception.ApiException;
@@ -47,14 +46,14 @@ public class HttpUtil implements HttpOnNextListener {
     private static String heards = null;
     private UploadApi uplaodApi;
 
-    public HttpUtil(AppCompatActivity activity, BaseView onListener) {
-        this.application = activity;
+    public HttpUtil(Context context, LifecycleProvider lifecycleProvider, BaseView onListener) {
+        this.application = context;
         this.httpOnListener = onListener;
-        manager = new HttpManager(activity, this, getHeaders());
+        manager = new HttpManager(context, lifecycleProvider, this, getHeaders());
         postEntity = new SubjectPostApi();
         postEntity.setBaseUrl(JConstant.getHttpUrl());
         postEntity.setConnectionTime(JConstant.getConnectionTime());
-        progressDialogView = new ProgressDialogView(activity);
+        progressDialogView = new ProgressDialogView(context);
         postEntity.setProgressDialog(progressDialogView);
     }
 

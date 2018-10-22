@@ -1,5 +1,6 @@
 package org.wcy.android.retrofit.subscribers;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.TextView;
@@ -40,7 +41,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      *
      * @param api
      */
-    public ProgressSubscriber(final BaseApi api, HttpOnNextListener listenerSoftReference, AppCompatActivity context) {
+    public ProgressSubscriber(final BaseApi api, HttpOnNextListener listenerSoftReference, Context context) {
         this.api = api;
         this.mSubscriberOnNextListener = listenerSoftReference;
         setShowPorgress(api.isShowProgress());

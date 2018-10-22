@@ -3,6 +3,8 @@ package com.ruiyun.comm.library.mvp;
 import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruiyun.comm.library.ui.BaseActivity;
+import com.trello.rxlifecycle.LifecycleProvider;
 
 import java.lang.ref.WeakReference;
 
@@ -18,15 +20,17 @@ import java.lang.ref.WeakReference;
 public class BasePresenter<V extends BaseView, M extends BaseModel> {
     public M mModel;
     public WeakReference<V> mViewRef;
-    private AppCompatActivity appCompatActivity;
+    private BaseActivity appCompatActivity;
+    private LifecycleProvider lifecycleProvider;
     BaseModeImpl baseMode;
 
-    public void attachModelView(V pView, M pModel, AppCompatActivity appCompatActivity) {
+    public void attachModelView(V pView, M pModel, BaseActivity appCompatActivity, LifecycleProvider lifecycleProvider) {
         mViewRef = new WeakReference<>(pView);
         this.appCompatActivity = appCompatActivity;
+        this.lifecycleProvider = lifecycleProvider;
         this.mModel = pModel;
         if (pModel != null) {
-            ((BaseModeImpl) mModel).attachPresenter(getView(), appCompatActivity);
+            ((BaseModeImpl) mModel).attachPresenter(getView(), appCompatActivity, lifecycleProvider);
         }
     }
 
@@ -55,7 +59,7 @@ public class BasePresenter<V extends BaseView, M extends BaseModel> {
      */
     public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String toast, int connectionTime) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
         baseMode.sendPost(method, parameters, cl, isList, isShowProgress, toast, connectionTime);
     }
 
@@ -79,13 +83,13 @@ public class BasePresenter<V extends BaseView, M extends BaseModel> {
      */
     public void upload(String path) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
         baseMode.upload(path);
     }
 
     public void upload(byte[] path) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
         baseMode.upload(path);
     }
 

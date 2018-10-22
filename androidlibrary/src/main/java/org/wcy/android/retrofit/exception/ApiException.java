@@ -15,6 +15,7 @@ public class ApiException extends Exception {
     /*显示的信息*/
     private String displayMessage;
     private boolean isExecute = true;
+    private String method;
 
     public ApiException(Throwable e) {
         super(e);
@@ -23,6 +24,13 @@ public class ApiException extends Exception {
     public ApiException(Throwable cause, @CodeException.CodeEp int code, String showMsg) {
         super(showMsg, cause);
         setCode(code);
+        setDisplayMessage(showMsg);
+    }
+
+    public ApiException(Throwable cause, @CodeException.CodeEp int code, String showMsg, String method) {
+        super(showMsg, cause);
+        setCode(code);
+        setMethod(method);
         setDisplayMessage(showMsg);
     }
 
@@ -45,6 +53,14 @@ public class ApiException extends Exception {
 
     public boolean isExecute() {
         return isExecute;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getMethod() {
+        return method;
     }
 
     public void setExecute(boolean execute) {

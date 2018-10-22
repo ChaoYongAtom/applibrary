@@ -1,8 +1,10 @@
 package org.wcy.android.retrofit.http;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
+import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
@@ -44,15 +46,16 @@ import rx.schedulers.Schedulers;
 public class HttpManager {
 
     private String headers = "";
-
+    LifecycleProvider lifecycleProvider;
     /*软引用對象*/
     private HttpOnNextListener onNextListener;
-    private SoftReference<RxAppCompatActivity> appCompatActivity;
+    private Context contextSoftReference;
 
-    public HttpManager(AppCompatActivity appCompatActivity, HttpOnNextListener onNextListener, String headers) {
+    public HttpManager(Context context, LifecycleProvider lifecycleProvider, HttpOnNextListener onNextListener, String headers) {
         this.onNextListener = onNextListener;
-        this.appCompatActivity = new SoftReference(appCompatActivity);
+        this.contextSoftReference = context;
         this.headers = headers;
+        this.lifecycleProvider = lifecycleProvider;
     }
 
     /**
@@ -97,7 +100,7 @@ public class HttpManager {
                     .baseUrl(basePar.getBaseUrl())
                     .build();
             /*rx处理*/
-            ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity.get());
+            ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, contextSoftReference);
 
             Observable observable = basePar.getObservable(retrofit)
                     /*失败后的retry配置*/
@@ -105,9 +108,9 @@ public class HttpManager {
                     /*异常处理*/
                     .onErrorResumeNext(funcException)
                     /*生命周期管理*/
-                    .compose(appCompatActivity.get().bindToLifecycle())
+                    .compose(lifecycleProvider.bindToLifecycle())
                     //Note:手动设置在activity onDestroy的时候取消订阅
-                    .compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY))
+                    .compose(lifecycleProvider.bindUntilEvent(ActivityEvent.DESTROY))
                     /*http请求线程*/
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

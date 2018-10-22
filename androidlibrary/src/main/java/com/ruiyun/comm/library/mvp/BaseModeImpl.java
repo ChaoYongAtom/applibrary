@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.api.entitys.BaseResult;
+import com.ruiyun.comm.library.ui.BaseActivity;
 import com.ruiyun.comm.library.utils.HttpUtil;
+import com.trello.rxlifecycle.LifecycleProvider;
 
 import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.utils.RxKeyboardTool;
@@ -16,12 +18,14 @@ import org.wcy.android.utils.RxKeyboardTool;
 
 public class BaseModeImpl implements BaseView {
     private BaseView onListener;
-    private AppCompatActivity appCompatActivity;
+    private BaseActivity appCompatActivity;
+    LifecycleProvider lifecycleProvider;
     HttpUtil httpUtil;
 
-    public void attachPresenter(BaseView view, AppCompatActivity activity) {
+    public void attachPresenter(BaseView view, BaseActivity activity, LifecycleProvider lifecycleProvider) {
         onListener = view;
         appCompatActivity = activity;
+        this.lifecycleProvider = lifecycleProvider;
     }
 
 
@@ -42,19 +46,19 @@ public class BaseModeImpl implements BaseView {
     }
 
     public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String toast, int connectionTime) {
-        httpUtil = new HttpUtil(appCompatActivity, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
         RxKeyboardTool.hideSoftInput(appCompatActivity);
         if (connectionTime > 0) httpUtil.setConnectionTime(connectionTime);
         httpUtil.send(method, parameters, cl, isList, isShowProgress, toast);
     }
 
     public void upload(String path) {
-        httpUtil = new HttpUtil(appCompatActivity, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
         httpUtil.upload(path);
     }
 
     public void upload(byte[] path) {
-        httpUtil = new HttpUtil(appCompatActivity, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
         httpUtil.upload(path);
     }
 
