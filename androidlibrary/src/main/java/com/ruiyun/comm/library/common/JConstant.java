@@ -26,7 +26,10 @@ public class JConstant {
     public final static String isWaterMark="isWaterMark";
     /* retry次数*/
     private static int retry = 2;
-
+    public static int waterMarkAlpha=80;
+    public static  String waterMarkColor="#e8e8e8e8";
+    public static int waterMarkfontSize=12;
+    public static int waterMarkdegress=-15;
     public static boolean isEncrypt() {
         return JConstant.encrypt;
     }

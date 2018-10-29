@@ -50,7 +50,7 @@ public class ParameterizedTypeUtil {
         return null;
 
     }
-    public static <T extends BasePresenter, M extends BaseModel, V extends BaseView> T init(Object o, V pView, BaseActivity appCompatActivity,LifecycleProvider lifecycleProvider) {
+    public static <T extends BasePresenter, M extends BaseModel, V extends BaseView> T init(Object o, V pView, BaseActivity appCompatActivity,LifecycleProvider lifecycleProvider,boolean isActivity) {
         M mModel = null;
         T presenter;
         try {
@@ -66,7 +66,7 @@ public class ParameterizedTypeUtil {
             presenter = (T) new BasePresenter();
         }
         //使得P层绑定M层和V层，持有M和V的引用
-        presenter.attachModelView(pView, mModel, appCompatActivity, lifecycleProvider);
+        presenter.attachModelView(pView, mModel, appCompatActivity, lifecycleProvider,isActivity);
         return presenter;
     }
 }

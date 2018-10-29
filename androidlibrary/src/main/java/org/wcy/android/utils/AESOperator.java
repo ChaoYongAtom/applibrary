@@ -42,19 +42,21 @@ public class AESOperator {
     }
 
     // 解密
-    public static String decrypt(String sSrc) throws Exception {
-        if (sSrc == null || sSrc.equals("")) {
+
+    // 解密
+    public static String decrypt(String content) {
+        if (RxDataTool.isNullString(content)) {
             return null;
         }
-        sSrc = sSrc.toUpperCase();
-        int length = sSrc.length() / 2;
-        char[] hexChars = sSrc.toCharArray();
-        byte[] encrypted1 = new byte[length];
-        for (int i = 0; i < length; i++) {
-            int pos = i * 2;
-            encrypted1[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-        }
         try {
+            String sSrc = content.toUpperCase();
+            int length = sSrc.length() / 2;
+            char[] hexChars = sSrc.toCharArray();
+            byte[] encrypted1 = new byte[length];
+            for (int i = 0; i < length; i++) {
+                int pos = i * 2;
+                encrypted1[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+            }
             byte[] raw = sKey.getBytes("ASCII");
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -64,7 +66,7 @@ public class AESOperator {
             String originalString = new String(original, "utf-8");
             return originalString;
         } catch (Exception ex) {
-            return sSrc;
+            return content;
         }
     }
 

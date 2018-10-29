@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.trello.rxlifecycle.LifecycleProvider;
 import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.android.FragmentEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import org.wcy.android.retrofit.Api.BaseApi;
@@ -101,7 +102,6 @@ public class HttpManager {
                     .build();
             /*rx处理*/
             ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, contextSoftReference);
-
             Observable observable = basePar.getObservable(retrofit)
                     /*失败后的retry配置*/
                     .retryWhen(new RetryWhenNetworkException(basePar.getCount(), basePar.getConnectionTime()))
@@ -110,7 +110,8 @@ public class HttpManager {
                     /*生命周期管理*/
                     .compose(lifecycleProvider.bindToLifecycle())
                     //Note:手动设置在activity onDestroy的时候取消订阅
-                    .compose(lifecycleProvider.bindUntilEvent(ActivityEvent.DESTROY))
+
+                    .compose(lifecycleProvider.bindUntilEvent(basePar.isActivity() ? ActivityEvent.DESTROY : FragmentEvent.DESTROY))
                     /*http请求线程*/
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())

@@ -18,7 +18,7 @@ public abstract class BaseMVPFragment<P extends BasePresenter, M extends BaseMod
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = ParameterizedTypeUtil.init(this, this, getThisActivity());
+        presenter = ParameterizedTypeUtil.init(this, this, getThisActivity(),this,false);
     }
 
     @Override

@@ -23,14 +23,15 @@ public class BasePresenter<V extends BaseView, M extends BaseModel> {
     private BaseActivity appCompatActivity;
     private LifecycleProvider lifecycleProvider;
     BaseModeImpl baseMode;
-
-    public void attachModelView(V pView, M pModel, BaseActivity appCompatActivity, LifecycleProvider lifecycleProvider) {
+    private boolean isActivity;
+    public void attachModelView(V pView, M pModel, BaseActivity appCompatActivity, LifecycleProvider lifecycleProvider,boolean isActivity) {
         mViewRef = new WeakReference<>(pView);
         this.appCompatActivity = appCompatActivity;
         this.lifecycleProvider = lifecycleProvider;
+        this.isActivity=isActivity;
         this.mModel = pModel;
         if (pModel != null) {
-            ((BaseModeImpl) mModel).attachPresenter(getView(), appCompatActivity, lifecycleProvider);
+            ((BaseModeImpl) mModel).attachPresenter(getView(), appCompatActivity, lifecycleProvider,isActivity);
         }
     }
 
@@ -59,7 +60,7 @@ public class BasePresenter<V extends BaseView, M extends BaseModel> {
      */
     public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String toast, int connectionTime) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider,isActivity);
         baseMode.sendPost(method, parameters, cl, isList, isShowProgress, toast, connectionTime);
     }
 
@@ -83,13 +84,13 @@ public class BasePresenter<V extends BaseView, M extends BaseModel> {
      */
     public void upload(String path) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider,isActivity);
         baseMode.upload(path);
     }
 
     public void upload(byte[] path) {
         if (baseMode == null) baseMode = new BaseModeImpl();
-        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider);
+        baseMode.attachPresenter(getView(), appCompatActivity, lifecycleProvider,isActivity);
         baseMode.upload(path);
     }
 

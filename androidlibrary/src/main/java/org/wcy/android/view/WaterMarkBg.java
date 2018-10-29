@@ -11,6 +11,8 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.ruiyun.comm.library.common.JConstant;
+
 import org.wcy.android.utils.ForPxTp;
 
 public class WaterMarkBg extends Drawable {
@@ -42,9 +44,9 @@ public class WaterMarkBg extends Drawable {
 
         int width = getBounds().right;
         int height = getBounds().bottom;
-        paint.setColor(Color.parseColor("#e8e8e8e8"));
+        paint.setColor(Color.parseColor(JConstant.waterMarkColor));
         paint.setAntiAlias(true);
-        paint.setAlpha(100);
+        paint.setAlpha(JConstant.waterMarkAlpha);
         paint.setTextSize(sp2px(context, fontSize));
         canvas.save();
         canvas.rotate(degress);
@@ -53,7 +55,7 @@ public class WaterMarkBg extends Drawable {
         for (int positionY = height / 10; positionY <= height; positionY += height / 10 + 400) {
             float fromX = -width + (index++ % 2) * textWidth;
             for (float positionX = fromX; positionX < width; positionX += textWidth * 2) {
-                canvas.drawText(labels, positionX, positionY+ ForPxTp.dip2px(context,80), paint);
+                canvas.drawText(labels, positionX, positionY + ForPxTp.dip2px(context, 80), paint);
             }
         }
         canvas.restore();

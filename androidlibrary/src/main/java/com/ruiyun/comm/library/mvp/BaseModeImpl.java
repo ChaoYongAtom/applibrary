@@ -21,10 +21,11 @@ public class BaseModeImpl implements BaseView {
     private BaseActivity appCompatActivity;
     LifecycleProvider lifecycleProvider;
     HttpUtil httpUtil;
-
-    public void attachPresenter(BaseView view, BaseActivity activity, LifecycleProvider lifecycleProvider) {
+    private boolean isActivity;
+    public void attachPresenter(BaseView view, BaseActivity activity, LifecycleProvider lifecycleProvider,boolean isActivity) {
         onListener = view;
         appCompatActivity = activity;
+        this.isActivity=isActivity;
         this.lifecycleProvider = lifecycleProvider;
     }
 
@@ -46,19 +47,19 @@ public class BaseModeImpl implements BaseView {
     }
 
     public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String toast, int connectionTime) {
-        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this,isActivity);
         RxKeyboardTool.hideSoftInput(appCompatActivity);
         if (connectionTime > 0) httpUtil.setConnectionTime(connectionTime);
         httpUtil.send(method, parameters, cl, isList, isShowProgress, toast);
     }
 
     public void upload(String path) {
-        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this,isActivity);
         httpUtil.upload(path);
     }
 
     public void upload(byte[] path) {
-        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this);
+        httpUtil = new HttpUtil(appCompatActivity.getThisContext(), lifecycleProvider, this,isActivity);
         httpUtil.upload(path);
     }
 

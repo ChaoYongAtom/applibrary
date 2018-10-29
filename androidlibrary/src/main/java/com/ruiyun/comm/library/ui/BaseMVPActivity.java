@@ -21,7 +21,7 @@ public abstract class BaseMVPActivity<T extends BasePresenter, M extends BaseMod
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //内部获取第一个类型参数的真实类型  ，反射new出对象
-        presenter = ParameterizedTypeUtil.init(this, this, this,this);
+        presenter = ParameterizedTypeUtil.init(this, this, this,this,true);
     }
     @Override
     protected void onDestroy() {

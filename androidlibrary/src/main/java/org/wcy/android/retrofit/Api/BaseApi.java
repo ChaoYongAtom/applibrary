@@ -31,6 +31,8 @@ public abstract class BaseApi {
     private ProgressDialogUtil progressDialog;//自定义提示
     /* retry次数*/
     private int count = 2;
+    private boolean isActivity=false;
+
     /**
      * 设置参数
      *
@@ -119,4 +121,11 @@ public abstract class BaseApi {
         this.count = count;
     }
 
+    public boolean isActivity() {
+        return isActivity;
+    }
+
+    public void setActivity(boolean activity) {
+        isActivity = activity;
+    }
 }

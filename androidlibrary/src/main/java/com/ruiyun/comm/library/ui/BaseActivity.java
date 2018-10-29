@@ -61,14 +61,14 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
      */
     @Override
     public void onStart() {
-        if (isShowWatermark()&&!isAdd && !RxDataTool.isNullString(JConstant.getWatermarkStr())) {
+        if (isShowWatermark() && !isAdd && !RxDataTool.isNullString(JConstant.getWatermarkStr())) {
             boolean isWaterMark = getIntent().getBooleanExtra(JConstant.isWaterMark, true);
             if (isWaterMark) {
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 waterLayout = new FrameLayout(getThisContext());
                 ViewGroup.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 waterLayout.setLayoutParams(layoutParams);
-                WaterMarkBg waterMarkBg = new WaterMarkBg(getThisContext(), JConstant.getWatermarkStr(), -15, 13);
+                WaterMarkBg waterMarkBg = new WaterMarkBg(getThisContext(), JConstant.getWatermarkStr(), JConstant.waterMarkdegress, JConstant.waterMarkfontSize);
                 waterLayout.setBackgroundDrawable(waterMarkBg);
                 viewGroup.addView(waterLayout);
             }
@@ -76,9 +76,11 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
         }
         super.onStart();
     }
-    public boolean isShowWatermark(){
+
+    public boolean isShowWatermark() {
         return true;
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,7 +225,7 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
     protected void onDestroy() {
         try {
             if (unbinder != null) unbinder.unbind();
-            if(mImmersionBar!=null) mImmersionBar.destroy();
+            if (mImmersionBar != null) mImmersionBar.destroy();
         } catch (Exception e) {
             e.printStackTrace();
         }

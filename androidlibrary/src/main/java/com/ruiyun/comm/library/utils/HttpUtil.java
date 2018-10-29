@@ -45,12 +45,14 @@ public class HttpUtil implements HttpOnNextListener {
     private BaseView httpOnListener;
     private static String heards = null;
     private UploadApi uplaodApi;
-
-    public HttpUtil(Context context, LifecycleProvider lifecycleProvider, BaseView onListener) {
+    private boolean isActivity;
+    public HttpUtil(Context context, LifecycleProvider lifecycleProvider, BaseView onListener,boolean isActivity) {
         this.application = context;
         this.httpOnListener = onListener;
+        this.isActivity=isActivity;
         manager = new HttpManager(context, lifecycleProvider, this, getHeaders());
         postEntity = new SubjectPostApi();
+        postEntity.setActivity(isActivity);
         postEntity.setBaseUrl(JConstant.getHttpUrl());
         postEntity.setConnectionTime(JConstant.getConnectionTime());
         progressDialogView = new ProgressDialogView(context);
@@ -119,14 +121,20 @@ public class HttpUtil implements HttpOnNextListener {
      * @param path 图片路径
      */
     public void upload(String path) {
-        if (uplaodApi == null) uplaodApi = new UploadApi();
+        if (uplaodApi == null) {
+            uplaodApi = new UploadApi();
+            uplaodApi.setActivity(isActivity);
+        }
         uplaodApi.setBaseUrl(JConstant.getHttpUrl());
         uplaodApi.setFile(path);
         manager.doHttpDeal(uplaodApi);
     }
 
     public void upload(byte[] path) {
-        if (uplaodApi == null) uplaodApi = new UploadApi();
+        if (uplaodApi == null){
+            uplaodApi = new UploadApi();
+            uplaodApi.setActivity(isActivity);
+        }
         uplaodApi.setBaseUrl(JConstant.getHttpUrl());
         uplaodApi.setByte(path);
         manager.doHttpDeal(uplaodApi);
