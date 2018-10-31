@@ -4,6 +4,7 @@
     <item type="id" name="header_navigation" />
     <item type="id" name="header_menuOne" />
     <item type="id" name="header_menuTwo" />
+    <item type="id" name="header_menu" />
     <color name="default_header_layout_title_textColor">#000</color>
     <dimen name="default_header_layout_title_textSize">20sp</dimen>
     <dimen name="default_header_layout_menu_textSize">15sp</dimen>

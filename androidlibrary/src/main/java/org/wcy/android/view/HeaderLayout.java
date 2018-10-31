@@ -28,7 +28,7 @@ public class HeaderLayout extends RelativeLayout {
     private float mSpitLineHeight;
 
     private TextView mNavigationView, mTitleTv;
-    private  RedTipTextView mMenuOne, mMenuTwo;
+    private RedTipTextView mMenuOne, mMenuTwo;
 
     private int mHedaderLayoutHeight = 0;
 
@@ -162,6 +162,7 @@ public class HeaderLayout extends RelativeLayout {
 //            }
 //        }
         mMenuLl = new LinearLayout(getContext());
+        mMenuLl.setId(R.id.header_menu);
         mMenuLl.setOrientation(LinearLayout.HORIZONTAL);
         addView(mMenuLl);
         params = (LayoutParams) mMenuLl.getLayoutParams();
@@ -175,7 +176,11 @@ public class HeaderLayout extends RelativeLayout {
         //标题栏
         mTitleTv = new TextView(getContext());
         mTitleTv.setId(R.id.header_title);
-        mTitleTv.setMaxLines(1);
+        mTitleTv.setSingleLine(true);
+        mTitleTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        mTitleTv.setMarqueeRepeatLimit(-1);
+        mTitleTv.setHorizontallyScrolling(true);
+        mTitleTv.setFocusableInTouchMode(true);
         addView(mTitleTv);
         mTitleTv.setGravity(Gravity.CENTER);  //实现文字居中效果  在setSupportTranslucentStatus中设置高度和HeaderLayout一样就好了
         params = (LayoutParams) mTitleTv.getLayoutParams();
@@ -183,9 +188,12 @@ public class HeaderLayout extends RelativeLayout {
         params.height = LayoutParams.MATCH_PARENT;
         if (!mTitleAlignLeft) {
             params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+            params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
+            params.addRule(RelativeLayout.LEFT_OF, mMenuLl.getId());  //基于左边按钮的显示
         } else {
             if (mNavigationView != null) {
                 params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
+                params.addRule(RelativeLayout.LEFT_OF, mMenuLl.getId());  //基于左边按钮的显示
             } else {
                 params.leftMargin = (int) (mTitleTextSize / 2);  //基于左边的显示
                 params.addRule(RelativeLayout.ALIGN_LEFT);
@@ -318,7 +326,7 @@ public class HeaderLayout extends RelativeLayout {
     public void setmMenuTwoText(String str) {
         if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
             mMenuTwo.setText(str);
-            mMenuOne.setVisibility(VISIBLE);
+            mMenuTwo.setVisibility(VISIBLE);
         }
     }
 
@@ -326,7 +334,7 @@ public class HeaderLayout extends RelativeLayout {
         if (mMenuTwo != null && !RxDataTool.isNullString(str)) {
             mMenuTwo.setOnClickListener(onClickListener);
             mMenuTwo.setText(str);
-            mMenuOne.setVisibility(VISIBLE);
+            mMenuTwo.setVisibility(VISIBLE);
         }
     }
 
