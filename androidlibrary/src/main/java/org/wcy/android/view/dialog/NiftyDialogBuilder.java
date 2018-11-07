@@ -6,15 +6,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.gyf.barlibrary.ImmersionBar;
 
 import org.wcy.android.R;
-import org.wcy.android.view.dialog.effects.BaseEffects;
 import org.wcy.android.view.dialog.effects.Effectstype;
 
 /**
@@ -22,7 +19,6 @@ import org.wcy.android.view.dialog.effects.Effectstype;
  */
 public class NiftyDialogBuilder extends Dialog implements DialogInterface {
 
-    private Effectstype type = null;
     private View mDialogView;
     private int mDuration = -1;
     ImmersionBar mImmersionBarDialog;
@@ -59,16 +55,6 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     public NiftyDialogBuilder setView(View view) {
         mDialogView = ((ViewGroup) view).getChildAt(0);
         setContentView(view);
-        this.setOnShowListener(new OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                if (type == null) {
-                    type = Effectstype.Slidetop;
-                }
-                start(type);
-
-            }
-        });
         return this;
     }
 
@@ -79,7 +65,6 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     }
 
     public NiftyDialogBuilder withEffect(Effectstype type) {
-        this.type = type;
         return this;
     }
 
@@ -97,14 +82,6 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     public void show() {
         if (!isShowing())
             super.show();
-    }
-
-    private void start(Effectstype type) {
-        BaseEffects animator = type.getAnimator();
-        if (mDuration != -1) {
-            animator.setDuration(Math.abs(mDuration));
-        }
-        animator.start(mDialogView);
     }
 
     @Override

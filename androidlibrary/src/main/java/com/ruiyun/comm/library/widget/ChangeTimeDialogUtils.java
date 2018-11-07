@@ -62,8 +62,6 @@ public abstract class ChangeTimeDialogUtils {
             year = format(DateUtil.getDateYear(data));
             month = format(DateUtil.getDateMonedh(data) + 1);
             day = format(DateUtil.getDateDay(showData));
-
-
         } else {
             data = DateUtil.getCurrentDate(DateUtil.DF_YYYY_MM_DD);
             year = format(DateUtil.getDateYear(data));
@@ -71,7 +69,7 @@ public abstract class ChangeTimeDialogUtils {
             day = format(DateUtil.getDateDay(data) - 1);
         }
         alertDialog = NiftyDialogBuilder.getInstance(context);
-        alertDialog.withEffect(Effectstype.SlideBottom).setCancelable(false);
+        alertDialog.setCancelable(false);
         View window = View.inflate(context, R.layout.dialog_change_time, null);
         alertDialog.setView(window);
 
@@ -123,9 +121,13 @@ public abstract class ChangeTimeDialogUtils {
         numPicker_month.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
                 month = format(newVal);
-                numPicker_day.setMaxValue(getDaysOfCurMonth(year + "-" + month));
+                int dm = getDaysOfCurMonth(year + "-" + month);
+                numPicker_day.setMaxValue(dm);
+                int d = Integer.parseInt(day);
+                if (d > dm) {
+                    day = String.valueOf(dm);
+                }
             }
         });
         //日
@@ -133,7 +135,7 @@ public abstract class ChangeTimeDialogUtils {
         numPicker_day.setNumberPickerDividerColor(numPicker_day);
         numPicker_day.setWrapSelectorWheel(false);
         numPicker_day.setMinValue(1);
-        numPicker_day.setMaxValue(getDaysOfCurMonth());
+        numPicker_day.setMaxValue(getDaysOfCurMonth(year + "-" + month));
         int day1 = DateUtil.getDateDay(data);
         if (RxDataTool.isNullString(showData) && day1 > 1) {
             day1--;
