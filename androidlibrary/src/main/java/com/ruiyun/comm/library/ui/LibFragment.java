@@ -6,21 +6,15 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
 import com.ruiyun.comm.library.mvp.BaseView;
-import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.wcy.android.R;
 import org.wcy.android.retrofit.exception.ApiException;
-import org.wcy.android.utils.DateUtil;
 import org.wcy.android.utils.RxActivityTool;
-import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.view.HeaderLayout;
-import org.wcy.android.view.WaterMarkBg;
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -153,10 +147,6 @@ public abstract class LibFragment extends SupportFragment implements BaseView {
     public void onError(ApiException e, String mothead) {
         toastError(e.getDisplayMessage());
 
-    }
-
-    public <T> LifecycleTransformer<T> bindToLife() {
-        return this.<T>bindToLifecycle();
     }
 
     public void toastError(Object obj) {

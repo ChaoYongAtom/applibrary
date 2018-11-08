@@ -184,12 +184,14 @@ public class HeaderLayout extends RelativeLayout {
         addView(mTitleTv);
         mTitleTv.setGravity(Gravity.CENTER);  //实现文字居中效果  在setSupportTranslucentStatus中设置高度和HeaderLayout一样就好了
         params = (LayoutParams) mTitleTv.getLayoutParams();
-        params.width = LayoutParams.WRAP_CONTENT;
+        params.width = LayoutParams.MATCH_PARENT;
         params.height = LayoutParams.MATCH_PARENT;
         if (!mTitleAlignLeft) {
-            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-            params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
-            params.addRule(RelativeLayout.LEFT_OF, mMenuLl.getId());  //基于左边按钮的显示
+//            params.rightMargin=mNavigationView.getWidth();
+////            params.leftMargin=mNavigationView.getWidth();
+//            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//            params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
+//           params.rightMargin=mNavigationView.getWidth();
         } else {
             if (mNavigationView != null) {
                 params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
@@ -200,8 +202,8 @@ public class HeaderLayout extends RelativeLayout {
             }
         }
         mTitleTv.setLayoutParams(params);
-
         mTitleTv.setText(titleText);
+        mTitleTv.setPadding(mNavigationView.getWidth(),0,mNavigationView.getWidth(),0);
         mTitleTv.setTextColor(mTitleTextColor);
         mTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
 
@@ -295,6 +297,12 @@ public class HeaderLayout extends RelativeLayout {
      */
     public void setTitleText(String title) {
         if (mTitleTv != null) {
+            if(title.length()>11){
+                LayoutParams  params = (LayoutParams) mTitleTv.getLayoutParams();
+                params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
+                params.addRule(RelativeLayout.LEFT_OF, mMenuLl.getId());  //基于左边按钮的显示
+                mTitleTv.setLayoutParams(params);
+            }
             mTitleTv.setText(title);
         }
     }

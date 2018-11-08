@@ -40,6 +40,8 @@ ext {
     fastjsonVersion= "1.1.70.android"
     photoViewVersion="2.1.4"
     zloadingVersion="1.0.11"
+    archLifecycle="1.1.0"
+    crashreportVersion="1.3.5"
 }
 task clean(type: Delete) {
     delete rootProject.buildDir

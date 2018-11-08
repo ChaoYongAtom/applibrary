@@ -556,4 +556,11 @@ public class MaterialRefreshLayout extends FrameLayout {
         this.refreshListener = refreshListener;
     }
 
+    public boolean isRefreshing() {
+        return isRefreshing;
+    }
+
+    public boolean isLoadMoreing() {
+        return isLoadMoreing;
+    }
 }
