@@ -45,7 +45,7 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
 
     public void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.statusBarDarkFont(true, 0.2f).init();
+        mImmersionBar.init();
     }
 
     @Override
@@ -140,8 +140,8 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
     }
 
     private void init() {
-        initImmersionBar();
         unbinder = ButterKnife.bind(this);
+        initImmersionBar();
     }
 
     /**

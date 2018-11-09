@@ -46,6 +46,7 @@ public class ParameterizedTypeUtil {
     public static <T> T getInstance(Object object, int i) {
         if (object != null) {
             try {
+                object.getClass().getGenericSuperclass();
                 return (T) ((ParameterizedType) object.getClass()
                         .getGenericSuperclass())
                         .getActualTypeArguments()[i];
@@ -77,13 +78,16 @@ public class ParameterizedTypeUtil {
     }
 
     public static <T extends ViewModel> T VMProviders(Object object) {
-        Class<T> tClass = ParameterizedTypeUtil.getInstance(object, 0);
-        if (tClass != null) {
-            if (object instanceof AppCompatActivity) {
-                return ViewModelProviders.of((AppCompatActivity) object).get(tClass);
-            } else if (object instanceof Fragment) {
-                return ViewModelProviders.of((Fragment) object).get(tClass);
+        try {
+            Class<T> tClass = ParameterizedTypeUtil.getInstance(object, 0);
+            if (tClass != null) {
+                if (object instanceof AppCompatActivity) {
+                    return ViewModelProviders.of((AppCompatActivity) object).get(tClass);
+                } else if (object instanceof Fragment) {
+                    return ViewModelProviders.of((Fragment) object).get(tClass);
+                }
             }
+        }catch (Exception e){
         }
         return null;
 
