@@ -296,7 +296,6 @@ public class NumberUtil implements Serializable {
     public static int[] maxBisection(int max){
         return maxBisection(max,5);
     }
-
     /**
      * 格式化报表显示数值
      *

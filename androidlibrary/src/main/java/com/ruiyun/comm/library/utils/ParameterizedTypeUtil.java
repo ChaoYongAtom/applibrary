@@ -37,7 +37,6 @@ public class ParameterizedTypeUtil {
                         .getGenericSuperclass())).getActualTypeArguments()[i])
                         .newInstance();
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return null;

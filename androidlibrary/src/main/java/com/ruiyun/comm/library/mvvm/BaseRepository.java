@@ -12,6 +12,7 @@ import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxKeyboardTool;
+import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
 import java.io.File;
@@ -68,23 +69,28 @@ public abstract class BaseRepository extends AbsRepository {
      */
     public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String msg, boolean isCancel, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
-        if (null == apiService) {
-            apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
+        if(RxNetTool.isNetworkAvailable(RxTool.getContext())){
+            if (null == apiService) {
+                apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
+            }
+            Observable obs = getOverride(method, parameters);
+            if (obs != null) {
+                /*rx处理*/
+                RxSubscriber subscriber = new RxSubscriber(listener, getmContext(), method, isShowProgress);
+                subscriber.setData(cl);
+                subscriber.setList(isList);
+                subscriber.setMsg(msg);
+                subscriber.setCancel(isCancel);
+                addSubscribe(obs
+                        .compose(RxSchedulers.io_main())
+                        .subscribe(subscriber));
+            } else {
+                listener.onError(new ApiException(null, CodeException.UNKNOWN_ERROR, "接口信息不存在", method));
+            }
+        }else{
+            listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", method));
         }
-        Observable obs = getOverride(method, parameters);
-        if (obs != null) {
-            /*rx处理*/
-            RxSubscriber subscriber = new RxSubscriber(listener, getmContext(), method, isShowProgress);
-            subscriber.setData(cl);
-            subscriber.setList(isList);
-            subscriber.setMsg(msg);
-            subscriber.setCancel(isCancel);
-            addSubscribe(obs
-                    .compose(RxSchedulers.io_main())
-                    .subscribe(subscriber));
-        } else {
-            listener.onError(new ApiException(null, CodeException.UNKNOWN_ERROR, "接口信息不存在", method));
-        }
+
 
     }
 

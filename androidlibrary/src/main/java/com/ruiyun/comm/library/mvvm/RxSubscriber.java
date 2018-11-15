@@ -128,7 +128,6 @@ public class RxSubscriber extends Subscriber<String> {
      * @param e
      */
     private void errorDo(Throwable e) {
-        dismissProgressDialog();
         if (mSubscriberOnNextListener == null) return;
         if (e instanceof HttpTimeException) {
             HttpTimeException exception = (HttpTimeException) e;
@@ -137,6 +136,7 @@ public class RxSubscriber extends Subscriber<String> {
             RxLogTool.d("ProgressSubscriber", "网络连接错误：");
             mSubscriberOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, "网络连接错误", method));
         }
+        dismissProgressDialog();
     }
 
 
