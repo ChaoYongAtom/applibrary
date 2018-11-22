@@ -128,6 +128,7 @@ public class RxSubscriber extends Subscriber<String> {
      * @param e
      */
     private void errorDo(Throwable e) {
+        RxLogTool.d("errorDo" + method, e.getMessage());
         if (mSubscriberOnNextListener == null) return;
         if (e instanceof HttpTimeException) {
             HttpTimeException exception = (HttpTimeException) e;
@@ -147,14 +148,13 @@ public class RxSubscriber extends Subscriber<String> {
      */
     @Override
     public void onNext(String t) {
-
+        RxLogTool.d("onNext" + method, t);
         if (mSubscriberOnNextListener != null) {
             try {
                 if (!RxDataTool.isNullString(t)) {
                     RxResult baseResult = JSONObject.parseObject(t, RxResult.class);
                     if (baseResult == null) {
-                        baseResult = new RxResult();
-                        baseResult.setResult(getData().newInstance());
+                        RxLogTool.d("JSONObject.parseObject" + method, "数据解析错误");
                         mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误"));
                     } else {
                         if (baseResult.getCode() == 200) {
@@ -184,6 +184,7 @@ public class RxSubscriber extends Subscriber<String> {
                                         } else if (getData() == Integer.class) {
                                             baseResult.setResult(Integer.parseInt(dataJson));
                                         } else if (getData() != null) {
+                                            RxLogTool.d("onNext" + method, getData().getName());
                                             baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
                                         }
                                     }
@@ -195,10 +196,12 @@ public class RxSubscriber extends Subscriber<String> {
                                 JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
                             }
                         } else {
+                            RxLogTool.d("onNext" + method, t+"编码错误");
                             mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg()));
                         }
                     }
                 } else {
+                    RxLogTool.d("onNext" + method, t+"返回数据为null");
                     mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误"));
                 }
             } catch (Exception e) {
@@ -208,6 +211,8 @@ public class RxSubscriber extends Subscriber<String> {
             } finally {
                 dismissProgressDialog();
             }
+        }else{
+            RxLogTool.d("mSubscriberOnNextListener" + method, "没有mSubscriberOnNextListener");
         }
     }
 
@@ -228,6 +233,7 @@ public class RxSubscriber extends Subscriber<String> {
                 dataValue = json;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             dataValue = json;
         }
         return dataValue;

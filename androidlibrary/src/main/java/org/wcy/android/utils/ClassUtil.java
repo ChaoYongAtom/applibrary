@@ -24,7 +24,7 @@ public class ClassUtil {
 	 * @return 父类泛型参数对应实际类
 	 * @author wangchaoyong
 	 */
-	public static Class getGenericClassTpye(Class clazz) {
+	public static Class getGenericClassTpye(Class clazz,int i) {
 		// 得到泛型父类,包含泛型参数信息,如:Class<User>
 		Type genericClassType = clazz.getGenericSuperclass();
 		// 所有泛型必须实现ParameterizedType接口，如没实现则不是泛型，直接返回Object.class
@@ -37,13 +37,15 @@ public class ClassUtil {
 		if (!(params.length > 0 && params != null)) {
 			return Object.class;
 		}
-		if (!(params[0] instanceof Class)) {
+		if (!(params[i] instanceof Class)) {
 			return Object.class;
 		}
-		return (Class) params[0];
+		return (Class) params[i];
 
 	}
-
+	public static Class getGenericClassTpye(Class clazz){
+		return getGenericClassTpye(clazz,0);
+	}
 	public static <T> T getT(Object o, int i) {
 		try {
 			// 得到泛型父类,包含泛型参数信息,如:Class<User>

@@ -97,7 +97,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<View
     //获取数据的数量
     @Override
     public int getItemCount() {
-        return getHeaderView() != null && this.getFooterView() != null ? this.mDatas.size() + 2 : (getHeaderView() == null && this.getFooterView() == null ? this.mDatas.size() : this.mDatas.size() + 1);
+        return  getHeaderView() != null && this.getFooterView() != null && this.mDatas!=null ? this.mDatas.size() + 2 : (getHeaderView() == null && this.getFooterView() == null ? this.mDatas.size() : this.mDatas.size() + 1);
     }
 
     protected int position;

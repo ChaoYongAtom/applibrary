@@ -149,7 +149,11 @@ public class HttpHelper {
     }
 
     public <T> T create(Class<T> clz) {
-        return mRetrofit.create(clz);
+        if (clz != null) {
+            return mRetrofit.create(clz);
+        }
+        return null;
+
     }
 
 }

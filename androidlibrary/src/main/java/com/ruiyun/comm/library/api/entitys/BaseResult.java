@@ -17,7 +17,7 @@ public class BaseResult<T>{
     private String data;
 
     private int tag;
-
+    private String businessType;
     public int getTag() {
         return tag;
     }
@@ -64,5 +64,13 @@ public class BaseResult<T>{
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 }

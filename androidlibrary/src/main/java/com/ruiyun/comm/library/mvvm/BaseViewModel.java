@@ -42,7 +42,7 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
      */
     public String getStateError(int state, String msg) {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(StateConstants.ERROR_STATE).append(",").append(state).append(",").append(msg == null ? "-" : msg);
+        stringBuffer.append(StateConstants.ERROR_STATE).append(",").append(state).append(",").append(msg == null ? "操作失败" : msg);
         return stringBuffer.toString();
     }
 

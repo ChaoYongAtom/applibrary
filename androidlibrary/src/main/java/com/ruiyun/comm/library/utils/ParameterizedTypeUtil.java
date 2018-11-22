@@ -45,7 +45,6 @@ public class ParameterizedTypeUtil {
     public static <T> T getInstance(Object object, int i) {
         if (object != null) {
             try {
-                object.getClass().getGenericSuperclass();
                 return (T) ((ParameterizedType) object.getClass()
                         .getGenericSuperclass())
                         .getActualTypeArguments()[i];
@@ -87,6 +86,7 @@ public class ParameterizedTypeUtil {
                 }
             }
         }catch (Exception e){
+            e.printStackTrace();
         }
         return null;
 
