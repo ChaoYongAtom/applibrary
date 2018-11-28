@@ -72,26 +72,6 @@ public class HttpHelper {
             if (mBuilder == null) {
                 synchronized (HttpHelper.class) {
                     if (mBuilder == null) {
-                        JSONObject object = new JSONObject();
-                        String http = JConstant.getHttpUrl();
-                        object.put("systemType", "1");
-                        object.put("appVersion", RxActivityTool.getAppVersionName(RxTool.getContext()));
-                        object.put("mobileCode", ExampleUtil.getImei(RxTool.getContext()));
-                        if (!RxDataTool.isNullString(http))
-                            object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));
-                        object.put("registrationID", JConstant.getRegistrationID());
-                        String heards = object.toJSONString();
-                        if (JConstant.isEncrypt()) {
-                            try {
-                                heards = AESOperator.encrypt(heards);
-                            } catch (Exception e) {
-
-                            } finally {
-                                heards = object.toJSONString();
-                            }
-
-                        }
-                        final String finalHeards = heards;
                         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
                             @Override
                             public void log(String message) {
@@ -102,18 +82,20 @@ public class HttpHelper {
                         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                         mBuilder = new OkHttpClient.Builder()
                                 .addInterceptor(loggingInterceptor)
-                                .addInterceptor(new Interceptor() {
-                                    @Override
-                                    public Response intercept(Chain chain) throws IOException {
-                                        Request newRequest = chain.request().newBuilder()
-                                                .addHeader("headers", finalHeards)
-                                                .build();
-                                        return chain.proceed(newRequest);
-                                    }
-                                })
-                                .connectTimeout(30, TimeUnit.SECONDS)
-                                .writeTimeout(30, TimeUnit.SECONDS)
-                                .readTimeout(30, TimeUnit.SECONDS);
+                                .connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
+                                .writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
+                                .readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
+                        if (JConstant.isIsHeaders()) {
+                            mBuilder.addInterceptor(new Interceptor() {
+                                @Override
+                                public Response intercept(Chain chain) throws IOException {
+                                    Request newRequest = chain.request().newBuilder()
+                                            .addHeader("headers", JConstant.getHeardsVal())
+                                            .build();
+                                    return chain.proceed(newRequest);
+                                }
+                            });
+                        }
                     }
                 }
             }

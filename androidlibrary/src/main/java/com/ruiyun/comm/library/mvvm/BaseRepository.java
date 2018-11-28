@@ -11,6 +11,7 @@ import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.RxActivityTool;
+import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxKeyboardTool;
 import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
@@ -28,7 +29,11 @@ public abstract class BaseRepository extends AbsRepository {
     private Object apiService;
 
     public void uplaod(CallBack listener, String path) {
-        RxSubscriber subscriber = new RxSubscriber(listener, getmContext(), "uploadimage", true);
+        RxSubscriber subscriber = new RxSubscriber();
+        subscriber.setmSubscriberOnNextListener(listener);
+        subscriber.setContext(getmContext());
+        subscriber.setMethod("uploadimage");
+        subscriber.setShowProgress(true);
         subscriber.setUpload(true);
         Observable observable = getOverrideUpload(path);
         /*rx处理*/
@@ -45,15 +50,15 @@ public abstract class BaseRepository extends AbsRepository {
         sendPost(method, null, null, false, false, null, false, listener);
     }
 
-    public void sendPost(String method, JSONObject parameters, Class<?> cl, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class<?> cl, CallBack listener) {
         sendPost(method, parameters, cl, false, false, null, false, listener);
     }
 
-    public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isShowProgress, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class<?> cl, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, false, isShowProgress, null, false, listener);
     }
 
-    public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class<?> cl, boolean isList, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, isList, isShowProgress, null, false, listener);
     }
 
@@ -67,27 +72,42 @@ public abstract class BaseRepository extends AbsRepository {
      * @param isCancel       弹框是否可以取消
      * @param listener       回调接口
      */
-    public void sendPost(String method, JSONObject parameters, Class<?> cl, boolean isList, boolean isShowProgress, String msg, boolean isCancel, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class<?> cl, boolean isList, boolean isShowProgress, String msg, boolean isCancel, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             if (null == apiService) {
                 apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
             }
             if (apiService != null) {
-                Observable obs = getOverride(method, parameters);
-                if (obs != null) {
-                    /*rx处理*/
-                    RxSubscriber subscriber = new RxSubscriber(listener, getmContext(), method, isShowProgress);
-                    subscriber.setData(cl);
-                    subscriber.setList(isList);
-                    subscriber.setMsg(msg);
-                    subscriber.setCancel(isCancel);
-                    addSubscribe(obs
-                            .compose(RxSchedulers.io_main())
-                            .subscribe(subscriber));
-                } else {
-                    listener.onError(new ApiException(null, CodeException.UNKNOWN_ERROR, "接口信息不存在", method));
+                try {
+                    Observable obs = getOverride(method, parameters);
+                    if (obs != null) {
+                        /*rx处理*/
+                        RxSubscriber subscriber;
+                        if (JConstant.getRxsubscriber() != null) {
+                            subscriber = JConstant.getRxsubscriber().newInstance();
+                        } else {
+                            subscriber = new RxSubscriber();
+                        }
+                        subscriber.setmSubscriberOnNextListener(listener);
+                        subscriber.setContext(getmContext());
+                        subscriber.setMethod(method);
+                        subscriber.setShowProgress(isShowProgress);
+                        subscriber.setData(cl);
+                        subscriber.setList(isList);
+                        subscriber.setMsg(msg);
+                        subscriber.setCancel(isCancel);
+                        addSubscribe(obs
+                                .compose(RxSchedulers.io_main())
+                                .subscribe(subscriber));
+                    } else {
+                        listener.onError(new ApiException(null, CodeException.UNKNOWN_ERROR, "接口信息不存在", method));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    listener.onError(new ApiException(null, CodeException.ERROR, "网络请求处理失败", method));
                 }
+
             }
         } else {
             listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", method));
@@ -103,33 +123,50 @@ public abstract class BaseRepository extends AbsRepository {
      * @param parameters
      * @return
      */
-    public Observable getOverride(String method, JSONObject parameters) {
+    public Observable getOverride(String method, Object parameters) {
         try {
             Class cl = apiService.getClass();
-            int count = mapMethods.get(method);
             Observable observable = null;
-            String token = JConstant.getToken();
             String params = "";
-            if (parameters != null && !parameters.toJSONString().equals("{}")) {
-                if (JConstant.isEncrypt()) {
-                    params = AESOperator.encrypt(parameters.toJSONString());
-                } else {
-                    params = parameters.toJSONString();
+            if (parameters != null) {
+                if (parameters instanceof JSONObject) {
+                    JSONObject jsonObject = (JSONObject) parameters;
+                    if (!jsonObject.toJSONString().equals("{}")) {
+                        if (JConstant.isEncrypt()) {
+                            params = AESOperator.encrypt(jsonObject.toJSONString());
+                        } else {
+                            params = jsonObject.toJSONString();
+                        }
+                    }
+                } else if (parameters instanceof String) {
+                    if (JConstant.isEncrypt() && !RxDataTool.isNullString(parameters.toString())) {
+                        params = AESOperator.encrypt(parameters.toString());
+                    }
                 }
             }
-            if (count == 0) {
-                observable = (Observable) cl.getMethod(method).invoke(apiService);
-            } else if (count == 1) {
-                if (parameters == null) {
-                    observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
-                } else {
-                    observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
+            if (mapMethods.size() > 0) {
+                int count = mapMethods.get(method);
+                String token = JConstant.getToken();
+                if (count == 0) {
+                    observable = (Observable) cl.getMethod(method).invoke(apiService);
+                } else if (count == 1) {
+                    if (parameters == null) {
+                        observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
+                    } else {
+                        observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
+                    }
+                } else if (count == 2) {
+                    observable = (Observable) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
                 }
-            } else if (count == 2) {
-                observable = (Observable) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
+            } else {
+                if (!RxDataTool.isNullString(params)) {
+                    observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
+                } else {
+                    observable = (Observable) cl.getMethod(method).invoke(apiService);
+                }
             }
             if (parameters != null && RxActivityTool.isAppDebug(RxTool.getContext())) {
-                LogUtils.json(parameters.toJSONString());
+                LogUtils.json(params);
             }
             return observable;
         } catch (Exception e) {

@@ -37,32 +37,44 @@ public class RxSubscriber extends Subscriber<String> {
     private CallBack mSubscriberOnNextListener;
     //    加载框可自己定义
     /*是否能取消加载框*/
-    private boolean            cancel = false;
+    private boolean cancel = false;
     /*是否显示加载框*/
-    private boolean            showProgress = false;
+    private boolean showProgress = false;
     //    加载框可自己定义
     private ProgressDialogUtil progressDialog;
     /*是否弹框*/
-    private Class<?>           data;
-    private boolean            isList = false;
-    private String             msg;
-    private boolean            isUpload;
-    private String             method;
+    private Class<?> data;
+    private boolean isList = false;
+    private String msg;
+    private boolean isUpload;
+    private String method;
 
     private Context context;
 
     /**
      * 构造
      */
-    public RxSubscriber(CallBack listenerSoftReference, Context context, String method, boolean showProgress) {
-        this.method = method;
-        this.mSubscriberOnNextListener = listenerSoftReference;
-        this.context = context;
+    public RxSubscriber() {
+    }
+
+    public void setmSubscriberOnNextListener(CallBack mSubscriberOnNextListener) {
+        this.mSubscriberOnNextListener = mSubscriberOnNextListener;
+    }
+
+    public void setShowProgress(boolean showProgress) {
+        this.showProgress = showProgress;
         if (showProgress) {
-            this.showProgress = showProgress;
             progressDialog = new ProgressDialogUtil(context);
             progressDialog.setCanselable(isCancel());
         }
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public boolean isUpload() {
@@ -150,77 +162,83 @@ public class RxSubscriber extends Subscriber<String> {
     public void onNext(String t) {
         RxLogTool.d("onNext" + method, t);
         if (mSubscriberOnNextListener != null) {
-            try {
-                if (!RxDataTool.isNullString(t)) {
-                    RxResult baseResult = JSONObject.parseObject(t, RxResult.class);
-                    if (baseResult == null) {
-                        RxLogTool.d("JSONObject.parseObject" + method, "数据解析错误");
-                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误"));
-                    } else {
-                        if (baseResult.getCode() == 200) {
-                            if (getData() != null) {
-                                String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                if (JConstant.isEncrypt()) {
-                                    dataJson = AESOperator.decrypt(dataJson);
-                                    if (RxDataTool.isNullString(dataJson)) {
-                                        dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                    }
-                                }
-                                baseResult.setData(dataJson);
-                                RxLogTool.dJson(dataJson);
-                                if (isList()) {
-                                    baseResult.setResult(JSONObject.parseArray(dataJson, getData()));
-                                } else {
-                                    if (isUpload) {
-                                        baseResult.setResult(JSONObject.parseObject(dataJson, UpdateImage.class));
-                                    } else {
-                                        if (getData() == BigDecimal.class || getData() == String.class || getData() == Integer.class) {
-                                            dataJson = getDataResult(dataJson);
-                                        }
-                                        if (getData() == BigDecimal.class) {
-                                            baseResult.setResult(new BigDecimal(dataJson));
-                                        } else if (getData() == String.class) {
-                                            baseResult.setResult(dataJson);
-                                        } else if (getData() == Integer.class) {
-                                            baseResult.setResult(Integer.parseInt(dataJson));
-                                        } else if (getData() != null) {
-                                            RxLogTool.d("onNext" + method, getData().getName());
-                                            baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
-                                        }
-                                    }
-                                }
-                            }
-                            mSubscriberOnNextListener.onNext(baseResult);
-                        } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
-                            if (JConstant.getLoinOutInterface() != null) {
-                                JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
-                            }
-                        } else {
-                            RxLogTool.d("onNext" + method, t+"编码错误");
-                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg()));
-                        }
-                    }
-                } else {
-                    RxLogTool.d("onNext" + method, t+"返回数据为null");
-                    mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误"));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                RxLogTool.d("RxSubscriberException" + method, e.getMessage());
-                mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误"));
-            } finally {
+            if (JConstant.getRxsubscriber() != null) {
+                handleResult(t);
                 dismissProgressDialog();
+            } else {
+                try {
+                    if (!RxDataTool.isNullString(t)) {
+                        RxResult baseResult = JSONObject.parseObject(t, RxResult.class);
+                        if (baseResult == null) {
+                            RxLogTool.d("JSONObject.parseObject" + method, "数据解析错误");
+                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误"));
+                        } else {
+                            if (baseResult.getCode() == 200) {
+                                if (getData() != null) {
+                                    String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
+                                    if (JConstant.isEncrypt()) {
+                                        dataJson = AESOperator.decrypt(dataJson);
+                                        if (RxDataTool.isNullString(dataJson)) {
+                                            dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
+                                        }
+                                    }
+                                    baseResult.setData(dataJson);
+                                    RxLogTool.dJson(dataJson);
+                                    if (isList()) {
+                                        baseResult.setResult(JSONObject.parseArray(dataJson, getData()));
+                                    } else {
+                                        if (isUpload) {
+                                            baseResult.setResult(JSONObject.parseObject(dataJson, UpdateImage.class));
+                                        } else {
+                                            if (getData() == BigDecimal.class || getData() == String.class || getData() == Integer.class) {
+                                                dataJson = getDataResult(dataJson);
+                                            }
+                                            if (getData() == BigDecimal.class) {
+                                                baseResult.setResult(new BigDecimal(dataJson));
+                                            } else if (getData() == String.class) {
+                                                baseResult.setResult(dataJson);
+                                            } else if (getData() == Integer.class) {
+                                                baseResult.setResult(Integer.parseInt(dataJson));
+                                            } else if (getData() != null) {
+                                                RxLogTool.d("onNext" + method, getData().getName());
+                                                baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
+                                            }
+                                        }
+                                    }
+                                }
+                                mSubscriberOnNextListener.onNext(baseResult);
+                            } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
+                                if (JConstant.getLoinOutInterface() != null) {
+                                    JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
+                                }
+                            } else {
+                                RxLogTool.d("onNext" + method, t + "编码错误");
+                                mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg()));
+                            }
+                        }
+                    } else {
+                        RxLogTool.d("onNext" + method, t + "返回数据为null");
+                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误"));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    RxLogTool.d("RxSubscriberException" + method, e.getMessage());
+                    mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误"));
+                } finally {
+                    dismissProgressDialog();
+                }
             }
-        }else{
+        } else {
             RxLogTool.d("mSubscriberOnNextListener" + method, "没有mSubscriberOnNextListener");
         }
+
     }
 
-    private ApiException getApiException(Exception e, int JSON_ERROR, String msg) {
+    public ApiException getApiException(Exception e, int JSON_ERROR, String msg) {
         return new ApiException(e, JSON_ERROR, msg, method);
     }
 
-    private String getDataResult(String json) {
+    public String getDataResult(String json) {
         String dataValue = "";
         try {
             JSONObject dataObj = JSON.parseObject(json);
@@ -288,4 +306,21 @@ public class RxSubscriber extends Subscriber<String> {
     public void setMsg(String msg) {
         if (!RxDataTool.isNullString(msg)) this.msg = msg;
     }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public CallBack getmSubscriberOnNextListener() {
+        return mSubscriberOnNextListener;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void handleResult(String result) {
+    }
+
+    ;
 }

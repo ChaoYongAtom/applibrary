@@ -5,6 +5,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.alibaba.fastjson.JSONObject;
+import com.ruiyun.comm.library.mvvm.RxSubscriber;
+
+import org.wcy.android.utils.AESOperator;
+import org.wcy.android.utils.ExampleUtil;
+import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxTool;
 
@@ -23,13 +29,25 @@ public class JConstant {
     private static String registrationID;
     private static int connectionTime = 6;
     private static String watermarkStr;
-    public final static String isWaterMark="isWaterMark";
+    public final static String isWaterMark = "isWaterMark";
     /* retry次数*/
     private static int retry = 2;
-    public static int waterMarkAlpha=80;
-    public static  String waterMarkColor="#e8e8e8e8";
-    public static int waterMarkfontSize=12;
-    public static int waterMarkdegress=-15;
+    public static int waterMarkAlpha = 80;
+    public static String waterMarkColor = "#e8e8e8e8";
+    public static int waterMarkfontSize = 12;
+    public static int waterMarkdegress = -15;
+    private static boolean isHeaders = true;
+    private static String heardsVal = "";
+    private static Class<? extends RxSubscriber> rxsubscriber;
+
+    public static Class<? extends RxSubscriber> getRxsubscriber() {
+        return rxsubscriber;
+    }
+
+    public static void setRxsubscriber(Class<? extends RxSubscriber> rxsubscriber) {
+        JConstant.rxsubscriber = rxsubscriber;
+    }
+
     public static boolean isEncrypt() {
         return JConstant.encrypt;
     }
@@ -69,7 +87,9 @@ public class JConstant {
                 ApplicationInfo appInfo = RxTool.getContext().getPackageManager().getApplicationInfo(RxTool.getContext().getPackageName(), PackageManager.GET_META_DATA);
                 Bundle bundle = appInfo.metaData;
                 httpUrl = bundle.getString("HTTP_URL");
-            } catch (PackageManager.NameNotFoundException e) {
+
+
+            } catch (Exception e) {
             }
         }
         return httpUrl;
@@ -80,7 +100,7 @@ public class JConstant {
     }
 
     public static int getConnectionTime() {
-        System.out.println(connectionTime+"..................................");
+        System.out.println(connectionTime + "..................................");
         return connectionTime;
     }
 
@@ -118,5 +138,39 @@ public class JConstant {
 
     public static void setHttpPostService(Class httpPostService) {
         JConstant.httpPostService = httpPostService;
+    }
+
+    public static boolean isIsHeaders() {
+        return isHeaders;
+    }
+
+    public static void setIsHeaders(boolean isHeaders) {
+        JConstant.isHeaders = isHeaders;
+    }
+
+    public static String getHeardsVal() {
+        if (RxDataTool.isNullString(heardsVal)) {
+            String http = JConstant.getHttpUrl();
+            JSONObject object = new JSONObject();
+            object.put("systemType", "1");
+            object.put("appVersion", RxActivityTool.getAppVersionName(RxTool.getContext()));
+            object.put("mobileCode", ExampleUtil.getImei(RxTool.getContext()));
+            if (!RxDataTool.isNullString(http))
+                object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));
+            object.put("registrationID", JConstant.getRegistrationID());
+            String h = object.toJSONString();
+            if (JConstant.isEncrypt()) {
+                try {
+                    heardsVal = AESOperator.encrypt(h);
+                } catch (Exception e) {
+                    heardsVal = h;
+                }
+            }
+        }
+        return heardsVal;
+    }
+
+    public static void setHeardsVal(String heardsVal) {
+        JConstant.heardsVal = heardsVal;
     }
 }
