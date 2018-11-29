@@ -153,7 +153,7 @@ public class JConstant {
             String http = JConstant.getHttpUrl();
             JSONObject object = new JSONObject();
             object.put("systemType", "1");
-            object.put("appVersion", RxActivityTool.getAppVersionName(RxTool.getContext()));
+            object.put("appVersion", RxActivityTool.getAppVersionName());
             object.put("mobileCode", ExampleUtil.getImei(RxTool.getContext()));
             if (!RxDataTool.isNullString(http))
                 object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));

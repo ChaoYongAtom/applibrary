@@ -46,18 +46,17 @@ public class RxActivityTool {
         }
     }
 
-    public static String getAppVersionName(Context context) {
-        return getAppVersionName(context, context.getPackageName());
+    public static String getAppVersionName() {
+        return getAppVersionName(RxTool.getContext(), RxTool.getContext().getPackageName());
     }
 
     /**
      * 获取App版本码
      *
-     * @param context 上下文
      * @return App版本码
      */
-    public static int getAppVersionCode(Context context) {
-        return getAppVersionCode(context, context.getPackageName());
+    public static int getAppVersionCode() {
+        return getAppVersionCode(RxTool.getContext(), RxTool.getContext().getPackageName());
     }
 
     /**

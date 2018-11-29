@@ -74,7 +74,7 @@ public class HttpUtil implements HttpOnNextListener {
                     JSONObject object = new JSONObject();
                     String http = JConstant.getHttpUrl();
                     object.put("systemType", "1");
-                    object.put("appVersion", RxActivityTool.getAppVersionName(application));
+                    object.put("appVersion", RxActivityTool.getAppVersionName());
                     object.put("mobileCode", ExampleUtil.getImei(application));
                     if (!RxDataTool.isNullString(http))
                         object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));

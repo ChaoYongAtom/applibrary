@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     /*rx-android-java*/
     compile "com.trello:rxlifecycle:1.0"
     compile "com.trello:rxlifecycle-components:1.0"
@@ -56,5 +56,6 @@ dependencies {
     api "com.tencent.bugly:crashreport_upgrade:$rootProject.crashreportVersion"
     api "android.arch.lifecycle:extensions:$rootProject.archLifecycle"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycle"
+    compile 'com.android.support:multidex:1.0.2'
     //compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }
