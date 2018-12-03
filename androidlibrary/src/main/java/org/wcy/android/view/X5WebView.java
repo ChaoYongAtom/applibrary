@@ -3,10 +3,19 @@ package org.wcy.android.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.AbsoluteLayout;
 import android.widget.ProgressBar;
+
+import com.ruiyun.comm.library.common.JConstant;
+import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
+import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
 import com.tencent.smtt.sdk.WebView;
@@ -69,7 +78,34 @@ public class X5WebView extends WebView {
         initWebViewSettings();
         this.getView().setClickable(true);
     }
-
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        boolean ret = super.drawChild(canvas, child, drawingTime);
+        if(JConstant.getWatermarkStr().equals("X5")){
+            canvas.save();
+            Paint paint = new Paint();
+            paint.setColor(0x7fff0000);
+            paint.setTextSize(24.f);
+            paint.setAntiAlias(true);
+            if (getX5WebViewExtension() != null) {
+                canvas.drawText(this.getContext().getPackageName() + "-pid:"
+                        + android.os.Process.myPid(), 10, 50, paint);
+                canvas.drawText(
+                        "X5  Core:" + QbSdk.getTbsVersion(this.getContext()), 10,
+                        100, paint);
+            } else {
+                String x5CrashInfo = com.tencent.smtt.sdk.WebView.getCrashExtraMessage(getContext());
+                Log.i("x5CrashInfo",x5CrashInfo);
+                canvas.drawText(this.getContext().getPackageName() + "-pid:"
+                        + android.os.Process.myPid(), 10, 50, paint);
+                canvas.drawText("Sys Core"+x5CrashInfo, 10, 100, paint);
+            }
+            canvas.drawText(Build.MANUFACTURER, 10, 150, paint);
+            canvas.drawText(Build.MODEL, 10, 200, paint);
+            canvas.restore();
+        }
+        return ret;
+    }
     private void initWebViewSettings() {
         WebSettings webSetting = this.getSettings();
         webSetting.setJavaScriptEnabled(true);
