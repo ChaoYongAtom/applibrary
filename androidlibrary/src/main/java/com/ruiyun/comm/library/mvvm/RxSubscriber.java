@@ -171,7 +171,7 @@ public class RxSubscriber extends Subscriber<String> {
                         RxResult baseResult = JSONObject.parseObject(t, RxResult.class);
                         if (baseResult == null) {
                             RxLogTool.d("JSONObject.parseObject" + method, "数据解析错误");
-                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误"));
+                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误",t));
                         } else {
                             if (baseResult.getCode() == 200) {
                                 if (getData() != null) {
@@ -213,17 +213,17 @@ public class RxSubscriber extends Subscriber<String> {
                                 }
                             } else {
                                 RxLogTool.d("onNext" + method, t + "编码错误");
-                                mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg()));
+                                mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg(),t));
                             }
                         }
                     } else {
                         RxLogTool.d("onNext" + method, t + "返回数据为null");
-                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误"));
+                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误",t));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     RxLogTool.d("RxSubscriberException" + method, e.getMessage());
-                    mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误"));
+                    mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误",t));
                 } finally {
                     dismissProgressDialog();
                 }
@@ -234,8 +234,10 @@ public class RxSubscriber extends Subscriber<String> {
 
     }
 
-    public ApiException getApiException(Exception e, int JSON_ERROR, String msg) {
-        return new ApiException(e, JSON_ERROR, msg, method);
+    public ApiException getApiException(Exception e, int JSON_ERROR, String msg, String result) {
+        ApiException apiException = new ApiException(e, JSON_ERROR, msg, method);
+        apiException.setData(result);
+        return apiException;
     }
 
     public String getDataResult(String json) {

@@ -16,7 +16,8 @@ public class ApiException extends Exception {
     private String displayMessage;
     private boolean isExecute = true;
     private String method;
-
+    private String data;
+    private String businessType;
     public ApiException(Throwable e) {
         super(e);
     }
@@ -65,5 +66,21 @@ public class ApiException extends Exception {
 
     public void setExecute(boolean execute) {
         isExecute = execute;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 }

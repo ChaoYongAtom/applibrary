@@ -149,7 +149,7 @@ public class HttpUtil implements HttpOnNextListener {
             if (baseResult == null) {
                 baseResult = new BaseResult();
                 baseResult.setResult(api.getData().newInstance());
-                httpOnListener.onError(new ApiException(null, CodeException.JSON_ERROR, "数据解析错误"), api.getMethod());
+                httpOnListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误",result), api.getMethod());
             } else {
                 if (baseResult.getCode() == 200) {
                     if (api.getData() != null) {
@@ -199,7 +199,10 @@ public class HttpUtil implements HttpOnNextListener {
                         JConstant.getLoinOutInterface().loginOut(application, baseResult.getCode(), baseResult.getMsg());
                     }
                 } else {
-                    httpOnListener.onError(new ApiException(null, CodeException.ERROR, baseResult.getMsg()), api.getMethod());
+                    ApiException apiException=new ApiException(null, CodeException.ERROR, baseResult.getMsg());
+                    apiException.setBusinessType(baseResult.getBusinessType());
+                    apiException.setData(result);
+                    httpOnListener.onError(apiException, api.getMethod());
                 }
             }
         } catch (Exception e) {
@@ -211,10 +214,14 @@ public class HttpUtil implements HttpOnNextListener {
                 }
             }
 
-            httpOnListener.onError(new ApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试"), api.getMethod());
+            httpOnListener.onError(getApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试",result), api.getMethod());
         }
     }
-
+    public ApiException getApiException(Exception e, int JSON_ERROR, String msg, String result) {
+        ApiException apiException = new ApiException(e, JSON_ERROR, msg);
+        apiException.setData(result);
+        return apiException;
+    }
     private String getData(String json) {
         String dataValue = "";
         try {

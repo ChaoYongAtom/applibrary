@@ -165,8 +165,8 @@ public abstract class BaseRepository extends AbsRepository {
                     observable = (Observable) cl.getMethod(method).invoke(apiService);
                 }
             }
-            if (parameters != null && RxActivityTool.isAppDebug(RxTool.getContext())) {
-                LogUtils.json(params);
+            if (parameters != null && RxTool.isApkInDebug()) {
+                LogUtils.json(parameters.toString());
             }
             return observable;
         } catch (Exception e) {
