@@ -160,7 +160,7 @@ public class RxSubscriber extends Subscriber<String> {
      */
     @Override
     public void onNext(String t) {
-        RxLogTool.d("onNext" + method, t);
+        RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
             if (JConstant.getRxsubscriber() != null) {
                 handleResult(t);
@@ -323,6 +323,4 @@ public class RxSubscriber extends Subscriber<String> {
 
     public void handleResult(String result) {
     }
-
-    ;
 }

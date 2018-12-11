@@ -271,3 +271,5 @@ formatCardEndFour           : 获取银行卡后四位
 format2Decimals             : 将字符串格式化为带两位小数的字符串
 自定义控件介绍
 RxToast                     : Toast的封装
+
+https://github.com/JavaNoober/BackgroundLibrary  A framework for directly generating shape through Tags, no need to write shape.xml again（通过标签直接生成shape，无需再写shape.xml）

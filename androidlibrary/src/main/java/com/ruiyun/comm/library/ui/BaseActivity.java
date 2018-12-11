@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.noober.background.BackgroundLibrary;
 import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
@@ -83,6 +84,7 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        BackgroundLibrary.inject(this);
         super.onCreate(savedInstanceState);
         finishInputWindow();//隐藏输入法
         RxActivityTool.addActivity(this);

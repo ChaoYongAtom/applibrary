@@ -20,42 +20,43 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     /*rx-android-java*/
-    compile "com.trello:rxlifecycle:1.0"
-    compile "com.trello:rxlifecycle-components:1.0"
+    api "com.trello:rxlifecycle:1.0"
+    api "com.trello:rxlifecycle-components:1.0"
     /*rotrofit*/
-    compile "com.squareup.retrofit2:retrofit:2.4.0"
-    compile "com.squareup.retrofit2:adapter-rxjava:2.4.0"
-    compile "com.squareup.retrofit2:converter-scalars:2.4.0"
-    compile "com.squareup.okhttp3:logging-interceptor:3.10.0"
+    api "com.squareup.retrofit2:retrofit:2.4.0"
+    api "com.squareup.retrofit2:adapter-rxjava:2.4.0"
+    api "com.squareup.retrofit2:converter-scalars:2.4.0"
+    api "com.squareup.okhttp3:logging-interceptor:3.10.0"
     /* recyclerview**/
     //noinspection GradleCompatible
-    compile "com.android.support:appcompat-v7:$rootProject.v4Version"
-    compile "com.android.support:design:$rootProject.v4Version"
-    compile "com.android.support:recyclerview-v7:$rootProject.v4Version"
+    api "com.android.support:appcompat-v7:$rootProject.v4Version"
+    api "com.android.support:design:$rootProject.v4Version"
+    api "com.android.support:recyclerview-v7:$rootProject.v4Version"
     //debug版本编译日志库
-    compile "com.apkfuns.logutils:library:1.5.1.1"
+    api "com.apkfuns.logutils:library:1.5.1.1"
     /* json*/
-    compile "com.alibaba:fastjson:$rootProject.fastjsonVersion"
+    api "com.alibaba:fastjson:$rootProject.fastjsonVersion"
     /*注解*/
-    compile "com.jakewharton:butterknife:8.5.1"
+    api "com.jakewharton:butterknife:8.5.1"
     //权限
-    compile "com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar"
+    api "com.tbruyelle.rxpermissions:rxpermissions:0.7.0@aar"
     //图片加载
-    compile "com.github.bumptech.glide:glide:$rootProject.glideVersion"
+    api "com.github.bumptech.glide:glide:$rootProject.glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
 
-    compile "com.nineoldandroids:library:2.4.0"
-    compile "com.github.chrisbanes:PhotoView:$rootProject.photoViewVersion"
-    compile "com.zyao89:zloading:$rootProject.zloadingVersion"
-    compile "com.jakewharton.rxrelay2:rxrelay:2.0.0"
+    api "com.nineoldandroids:library:2.4.0"
+    api "com.github.chrisbanes:PhotoView:$rootProject.photoViewVersion"
+    api "com.zyao89:zloading:$rootProject.zloadingVersion"
+    api "com.jakewharton.rxrelay2:rxrelay:2.0.0"
     api "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
     api "me.yokeyword:fragmentation-swipeback:$rootProject.fragmentationVersion"
     api "com.gyf.immersionbar:immersionbar:2.3.2-beta01"
     api "com.tencent.bugly:crashreport_upgrade:$rootProject.crashreportVersion"
     api "android.arch.lifecycle:extensions:$rootProject.archLifecycle"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycle"
-    compile 'com.android.support:multidex:1.0.2'
+    api 'com.android.support:multidex:1.0.2'
+    api "com.noober.background:$rootProject.backgroundVersion"
     //compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }

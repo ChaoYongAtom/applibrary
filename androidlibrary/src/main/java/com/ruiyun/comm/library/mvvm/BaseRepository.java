@@ -13,6 +13,7 @@ import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxKeyboardTool;
+import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
@@ -166,7 +167,7 @@ public abstract class BaseRepository extends AbsRepository {
                 }
             }
             if (parameters != null && RxTool.isApkInDebug()) {
-                LogUtils.json(parameters.toString());
+                RxLogTool.d("postParameters = ----------------->"+method,parameters.toString());
             }
             return observable;
         } catch (Exception e) {
