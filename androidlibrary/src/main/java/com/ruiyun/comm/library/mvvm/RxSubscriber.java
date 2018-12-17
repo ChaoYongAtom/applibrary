@@ -130,6 +130,7 @@ public class RxSubscriber extends Subscriber<String> {
      */
     @Override
     public void onError(Throwable e) {
+        e.printStackTrace();
         errorDo(e);
     }
 

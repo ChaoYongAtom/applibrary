@@ -167,6 +167,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     public void onCancelProgress() {
         if (!this.isUnsubscribed()) {
             mSubscriberOnNextListener = null;
+            RxLogTool.d("onCancelProgress" + api.getMethod(), "请求取消--------------------------------");
             this.unsubscribe();
         }
     }
@@ -188,4 +189,5 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
     public void setProgressDialog(ProgressDialogUtil progressDialog) {
         this.progressDialog = progressDialog;
     }
+
 }

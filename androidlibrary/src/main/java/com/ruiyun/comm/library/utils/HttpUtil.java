@@ -143,8 +143,7 @@ public class HttpUtil implements HttpOnNextListener {
     @Override
     public void onNext(BaseApi api, String result) {
         try {
-            RxLogTool.d("HttpMethod", api.getMethod());
-            RxLogTool.d("result------------->", result);
+            RxLogTool.d("result------------->"+api.getMethod(), result);
             BaseResult baseResult = JSONObject.parseObject(result, BaseResult.class);
             if (baseResult == null) {
                 baseResult = new BaseResult();

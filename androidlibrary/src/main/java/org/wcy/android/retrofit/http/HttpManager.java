@@ -107,10 +107,7 @@ public class HttpManager {
                     .retryWhen(new RetryWhenNetworkException(basePar.getCount(), basePar.getConnectionTime()))
                     /*异常处理*/
                     .onErrorResumeNext(funcException)
-                    /*生命周期管理*/
-                    .compose(lifecycleProvider.bindToLifecycle())
                     //Note:手动设置在activity onDestroy的时候取消订阅
-
                     .compose(lifecycleProvider.bindUntilEvent(basePar.isActivity() ? ActivityEvent.DESTROY : FragmentEvent.DESTROY))
                     /*http请求线程*/
                     .subscribeOn(Schedulers.io())

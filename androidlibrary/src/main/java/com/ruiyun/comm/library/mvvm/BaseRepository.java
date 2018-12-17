@@ -2,6 +2,8 @@ package com.ruiyun.comm.library.mvvm;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apkfuns.logutils.LogUtils;
+import com.ruiyun.comm.library.api.HttpUploadService;
+import com.ruiyun.comm.library.api.entitys.UpdateImage;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
 import com.ruiyun.comm.library.mvvm.rx.HttpHelper;
@@ -18,7 +20,9 @@ import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -30,17 +34,25 @@ public abstract class BaseRepository extends AbsRepository {
     private Object apiService;
 
     public void uplaod(CallBack listener, String path) {
-        RxSubscriber subscriber = new RxSubscriber();
-        subscriber.setmSubscriberOnNextListener(listener);
-        subscriber.setContext(getmContext());
-        subscriber.setMethod("uploadimage");
-        subscriber.setShowProgress(true);
-        subscriber.setUpload(true);
-        Observable observable = getOverrideUpload(path);
-        /*rx处理*/
-        addSubscribe(observable
-                .compose(RxSchedulers.io_main())
-                .subscribe(subscriber));
+        RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
+        if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
+            RxSubscriber subscriber = new RxSubscriber();
+            subscriber.setmSubscriberOnNextListener(listener);
+            subscriber.setContext(getmContext());
+            subscriber.setMethod("uploadimage");
+            subscriber.setShowProgress(false);
+            subscriber.setData(UpdateImage.class);
+            subscriber.setUpload(true);
+            Observable observable = getOverrideUpload(path);
+            if (observable != null) {
+                /*rx处理*/
+                addSubscribe(observable
+                        .compose(RxSchedulers.io_main())
+                        .subscribe(subscriber));
+            }
+        } else {
+            listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", "uploadimage"));
+        }
     }
 
     public static void setMapMethods(HashMap<String, Integer> mapMethods) {
@@ -132,14 +144,31 @@ public abstract class BaseRepository extends AbsRepository {
             if (parameters != null) {
                 if (parameters instanceof JSONObject) {
                     JSONObject jsonObject = (JSONObject) parameters;
-                    if (!jsonObject.toJSONString().equals("{}")) {
-                        if (JConstant.isEncrypt()) {
-                            params = AESOperator.encrypt(jsonObject.toJSONString());
-                        } else {
-                            params = jsonObject.toJSONString();
+                    if (jsonObject.size() > 0) {
+                        List<String> keys = new ArrayList<>();
+                        for (String str : jsonObject.keySet()) {
+                            if (RxDataTool.isEmpty(jsonObject.get(str))) {
+                                keys.add(str);
+                            }
+                        }
+                        for (String key : keys) {
+                            jsonObject.remove(key);
+                        }
+                        if (jsonObject.size() > 0) {
+                            if (RxActivityTool.isAppDebug(RxTool.getContext())) {
+                                RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
+                                LogUtils.json(jsonObject.toJSONString());
+                            }
+                            if (JConstant.isEncrypt()) {
+                                params = AESOperator.encrypt(jsonObject.toJSONString());
+                            } else {
+                                params = jsonObject.toJSONString();
+                            }
                         }
                     }
+
                 } else if (parameters instanceof String) {
+                    RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
                     if (JConstant.isEncrypt() && !RxDataTool.isNullString(parameters.toString())) {
                         params = AESOperator.encrypt(parameters.toString());
                     }
@@ -166,9 +195,6 @@ public abstract class BaseRepository extends AbsRepository {
                     observable = (Observable) cl.getMethod(method).invoke(apiService);
                 }
             }
-            if (parameters != null && RxTool.isApkInDebug()) {
-                RxLogTool.d("postParameters = ----------------->"+method,parameters.toString());
-            }
             return observable;
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,14 +210,13 @@ public abstract class BaseRepository extends AbsRepository {
      */
     public Observable getOverrideUpload(String path) {
         try {
-            String method = "uploadimage";
             Class cl = apiService.getClass();
             File file = new File(path);
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
             String token = JConstant.getToken();
             RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), token);
-            Observable observable = (Observable) cl.getMethod(method, new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
+            Observable observable = (Observable) cl.getMethod("uploadimage", new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
             return observable;
         } catch (Exception e) {
             return null;

@@ -8,9 +8,13 @@ import com.ruiyun.comm.library.common.JConstant;
 import org.wcy.android.retrofit.Api.BaseApi;
 import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.RxActivityTool;
+import org.wcy.android.utils.RxDataTool;
+import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxTool;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Retrofit;
 import rx.Observable;
@@ -45,14 +49,26 @@ public class SubjectPostApi extends BaseApi {
         try {
             String params = "";
             String token = JConstant.getToken();
-            if (parameters != null) {
-                if(RxActivityTool.isAppDebug(RxTool.getContext())){
+            if (parameters != null && parameters.size() > 0) {
+                List<String> keys = new ArrayList<>();
+                for (String str : parameters.keySet()) {
+                    if (RxDataTool.isEmpty(parameters.get(str))) {
+                        keys.add(str);
+                    }
+                }
+                for (String key : keys) {
+                    parameters.remove(key);
+                }
+                if (RxActivityTool.isAppDebug(RxTool.getContext())) {
+                    RxLogTool.d("postParameters = ----------------->" + getMethod(), parameters.toString());
                     LogUtils.json(parameters.toJSONString());
                 }
-                if (JConstant.isEncrypt()) {
-                    params = AESOperator.encrypt(parameters.toJSONString());
-                } else {
-                    params = parameters.toJSONString();
+                if (parameters.size() > 0) {
+                    if (JConstant.isEncrypt()) {
+                        params = AESOperator.encrypt(parameters.toJSONString());
+                    } else {
+                        params = parameters.toJSONString();
+                    }
                 }
             }
             int count = mapMethods.get(getMethod());

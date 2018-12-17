@@ -114,7 +114,7 @@ public class GuideBaseActivity<T extends BaseViewModel> extends BaseMActivity<T>
 
             }
         });
-        Observable.timer(5000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).compose(this.<Long>bindToLifecycle()).subscribe(new Action1<Long>() {
+        Observable.timer(5000, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<Long>() {
             @Override
             public void call(Long aLong) {
                 finishActivity();
