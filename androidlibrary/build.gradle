@@ -53,10 +53,9 @@ dependencies {
     api "me.yokeyword:fragmentation:$rootProject.fragmentationVersion"
     api "me.yokeyword:fragmentation-swipeback:$rootProject.fragmentationVersion"
     api "com.gyf.immersionbar:immersionbar:2.3.2-beta01"
-    api "com.tencent.bugly:crashreport_upgrade:$rootProject.crashreportVersion"
     api "android.arch.lifecycle:extensions:$rootProject.archLifecycle"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycle"
-    api 'com.android.support:multidex:1.0.2'
+    api "com.android.support:multidex:1.0.2"
     api "com.noober.background:$rootProject.backgroundVersion"
-    //compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    api "com.allenliu.versionchecklib:library:$rootProject.versionchecklibVersion"
 }

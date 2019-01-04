@@ -13,7 +13,6 @@ import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxTool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Retrofit;
@@ -30,7 +29,6 @@ public class SubjectPostApi extends BaseApi {
         return parameters;
     }
 
-    public static HashMap<String, Integer> mapMethods = new HashMap<>();
 
     /**
      * 参数设置
@@ -71,16 +69,20 @@ public class SubjectPostApi extends BaseApi {
                     }
                 }
             }
-            int count = mapMethods.get(getMethod());
-            if (count == 0) {
-                return (Observable) httpService.getClass().getMethod(getMethod()).invoke(httpService);
-            } else if (count == 1) {
-                if (parameters == null) {
-                    params = token;
+
+            Class cl = httpService.getClass();
+            if (parameters != null || !RxDataTool.isNullString(token)) {
+                if (parameters != null) {
+                    return (Observable) cl.getMethod(getMethod(), new Class[]{String.class, String.class}).invoke(httpService, params, token);
+                } else {
+                    return (Observable) cl.getMethod(getMethod(), new Class[]{String.class}).invoke(httpService, token);
                 }
-                return (Observable) httpService.getClass().getMethod(getMethod(), new Class[]{String.class}).invoke(httpService, params);
             } else {
-                return (Observable) httpService.getClass().getMethod(getMethod(), new Class[]{String.class, String.class}).invoke(httpService, params, token);
+                if (!RxDataTool.isNullString(params)) {
+                    return (Observable) cl.getMethod(getMethod(), new Class[]{String.class}).invoke(httpService, params);
+                } else {
+                    return (Observable) cl.getMethod(getMethod()).invoke(httpService);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

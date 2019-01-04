@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.mvvm.RxSubscriber;
+import com.ruiyun.comm.library.mvvm.rx.HttpHelper;
 
 import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.ExampleUtil;
@@ -79,6 +80,10 @@ public class JConstant {
 
     public static void setHttpUrl(String httpUrl) {
         JConstant.httpUrl = httpUrl;
+        new HttpHelper.Builder()
+                .initOkHttp()
+                .createRetrofit(httpUrl)
+                .build();
     }
 
     public static String getHttpUrl() {

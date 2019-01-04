@@ -10,7 +10,6 @@ import com.ruiyun.comm.library.api.entitys.UpdateImage;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvp.BaseView;
 import com.ruiyun.comm.library.widget.ProgressDialogView;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.trello.rxlifecycle.LifecycleProvider;
 
 import org.wcy.android.retrofit.Api.BaseApi;
@@ -206,13 +205,6 @@ public class HttpUtil implements HttpOnNextListener {
             }
         } catch (Exception e) {
             RxLogTool.e("HttpUtilonNext", api.getMethod());
-            if (!RxTool.isApkInDebug()) {
-                try {
-                    CrashReport.postCatchedException(e);
-                } catch (Exception e1) {
-                }
-            }
-
             httpOnListener.onError(getApiException(null, CodeException.ERROR, "数据处理异常，请稍后再试",result), api.getMethod());
         }
     }

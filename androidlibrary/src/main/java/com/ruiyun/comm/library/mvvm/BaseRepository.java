@@ -30,7 +30,6 @@ import okhttp3.RequestBody;
 import rx.Observable;
 
 public abstract class BaseRepository extends AbsRepository {
-    public static HashMap<String, Integer> mapMethods = new HashMap<>();
     private Object apiService;
 
     public void uplaod(CallBack listener, String path) {
@@ -53,10 +52,6 @@ public abstract class BaseRepository extends AbsRepository {
         } else {
             listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", "uploadimage"));
         }
-    }
-
-    public static void setMapMethods(HashMap<String, Integer> mapMethods) {
-        BaseRepository.mapMethods = mapMethods;
     }
 
     public void sendPost(String method, CallBack listener) {
@@ -174,19 +169,12 @@ public abstract class BaseRepository extends AbsRepository {
                     }
                 }
             }
-            if (mapMethods.size() > 0) {
-                int count = mapMethods.get(method);
-                String token = JConstant.getToken();
-                if (count == 0) {
-                    observable = (Observable) cl.getMethod(method).invoke(apiService);
-                } else if (count == 1) {
-                    if (parameters == null) {
-                        observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
-                    } else {
-                        observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
-                    }
-                } else if (count == 2) {
+            String token = JConstant.getToken();
+            if (parameters != null || !RxDataTool.isNullString(token)) {
+                if (parameters != null) {
                     observable = (Observable) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
+                } else {
+                    observable = (Observable) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
                 }
             } else {
                 if (!RxDataTool.isNullString(params)) {

@@ -1,15 +1,10 @@
 package com.ruiyun.comm.library.mvvm.rx;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.common.JConstant;
+import com.ruiyun.comm.library.utils.HttpLogInterceptor;
 
-import org.wcy.android.utils.AESOperator;
-import org.wcy.android.utils.ExampleUtil;
-import org.wcy.android.utils.RxActivityTool;
-import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
-import org.wcy.android.utils.RxTool;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -72,16 +67,8 @@ public class HttpHelper {
             if (mBuilder == null) {
                 synchronized (HttpHelper.class) {
                     if (mBuilder == null) {
-                        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                            @Override
-                            public void log(String message) {
-                                //打印retrofit日志
-                                RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
-                            }
-                        });
-                        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
                         mBuilder = new OkHttpClient.Builder()
-                                .addInterceptor(loggingInterceptor)
+                                .addInterceptor(HttpLogInterceptor.getHttpLoggingInterceptor())
                                 .connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
                                 .writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
                                 .readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);

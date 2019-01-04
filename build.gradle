@@ -41,8 +41,8 @@ ext {
     photoViewVersion="2.1.4"
     zloadingVersion="1.0.11"
     archLifecycle="1.1.0"
-    crashreportVersion="1.3.5"
     backgroundVersion="core:1.3.4"
+    versionchecklibVersion="2.1.8"
 }
 task clean(type: Delete) {
     delete rootProject.buildDir
