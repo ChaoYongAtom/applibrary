@@ -1,7 +1,5 @@
 package com.ruiyun.comm.library.utils;
 
-import android.content.Context;
-import android.net.Uri;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -9,7 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
-import com.allenliu.versionchecklib.v2.callback.CustomInstallListener;
 import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.RxResult;
