@@ -28,7 +28,7 @@ public class JConstant {
     private static String token;
     private static Class httpPostService;
     private static String registrationID;
-    private static int connectionTime = 6;
+    private static int connectionTime = 15;
     private static String watermarkStr;
     public final static String isWaterMark = "isWaterMark";
     /* retry次数*/
@@ -80,10 +80,7 @@ public class JConstant {
 
     public static void setHttpUrl(String httpUrl) {
         JConstant.httpUrl = httpUrl;
-        new HttpHelper.Builder()
-                .initOkHttp()
-                .createRetrofit(httpUrl)
-                .build();
+
     }
 
     public static String getHttpUrl() {
@@ -92,7 +89,7 @@ public class JConstant {
                 ApplicationInfo appInfo = RxTool.getContext().getPackageManager().getApplicationInfo(RxTool.getContext().getPackageName(), PackageManager.GET_META_DATA);
                 Bundle bundle = appInfo.metaData;
                 httpUrl = bundle.getString("HTTP_URL");
-
+                encrypt = !bundle.getBoolean("ENABLE_DEBUG");
 
             } catch (Exception e) {
             }
@@ -105,7 +102,6 @@ public class JConstant {
     }
 
     public static int getConnectionTime() {
-        System.out.println(connectionTime + "..................................");
         return connectionTime;
     }
 
@@ -142,7 +138,12 @@ public class JConstant {
     }
 
     public static void setHttpPostService(Class httpPostService) {
+        getHttpUrl();
         JConstant.httpPostService = httpPostService;
+        new HttpHelper.Builder()
+                .initOkHttp()
+                .createRetrofit(httpUrl)
+                .build();
     }
 
     public static boolean isIsHeaders() {
@@ -163,13 +164,9 @@ public class JConstant {
             if (!RxDataTool.isNullString(http))
                 object.put("version", http.substring(http.indexOf("version"), http.lastIndexOf("/")));
             object.put("registrationID", JConstant.getRegistrationID());
-            String h = object.toJSONString();
+            heardsVal = object.toJSONString();
             if (JConstant.isEncrypt()) {
-                try {
-                    heardsVal = AESOperator.encrypt(h);
-                } catch (Exception e) {
-                    heardsVal = h;
-                }
+                heardsVal = AESOperator.encrypt(heardsVal);
             }
         }
         return heardsVal;
