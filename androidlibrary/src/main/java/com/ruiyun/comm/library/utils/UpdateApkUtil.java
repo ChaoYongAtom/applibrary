@@ -1,5 +1,8 @@
 package com.ruiyun.comm.library.utils;
 
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +38,9 @@ import okhttp3.Response;
  * @author wcy
  */
 public class UpdateApkUtil {
-    public static void Update(CallBack callBack) {
+    public static void Update(Context context, CallBack callBack) {
         if (callBack == null) {
-            Toast.makeText(RxTool.getContext(), "正在检查，请稍候...", Toast.LENGTH_LONG).show();
+           toastTest(context, "正在检查，请稍候...");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(6, TimeUnit.SECONDS)
@@ -50,7 +53,7 @@ public class UpdateApkUtil {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                updateError(callBack);
+                updateError(callBack, context);
             }
 
             @Override
@@ -64,7 +67,7 @@ public class UpdateApkUtil {
                         if (baseResult.getCode() == 200) {
                             if (JConstant.isEncrypt()) {
                                 baseResult.setResult(AESOperator.decrypt(baseResult.getResult()));
-                            }else{
+                            } else {
                                 JSONObject jsonObject = baseResult.getResult();
                                 baseResult.setResult(jsonObject.toJSONString());
                             }
@@ -113,31 +116,48 @@ public class UpdateApkUtil {
                                 builder.executeMission(RxTool.getContext());
                             } else {
                                 if (callBack == null) {
-                                    Toast.makeText(RxTool.getContext(), "你已经是最新版了", Toast.LENGTH_LONG).show();
+                                    toastTest(context, "你已经是最新版了");
                                 } else {
                                     callBack.onNext(baseResult);
                                 }
                             }
                         } else {
-                            updateError(callBack);
+                            updateError(callBack, context);
                         }
                     } else {
-                        updateError(callBack);
+                        updateError(callBack, context);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    updateError(callBack);
+                    updateError(callBack, context);
                 }
 
             }
         });
     }
 
-    private static void updateError(CallBack callBack) {
+    private static void updateError(CallBack callBack, Context context) {
         if (callBack == null) {
-            Toast.makeText(RxTool.getContext(), "检查新版本失败，请稍后重试", Toast.LENGTH_LONG).show();
+            toastTest(context, "检查新版本失败，请稍后重试");
         } else {
             callBack.onError(null);
         }
+    }
+
+    private static void toastTest(Context context, String msg) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //放在UI线程弹Toast
+                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        }).start();
     }
 }
