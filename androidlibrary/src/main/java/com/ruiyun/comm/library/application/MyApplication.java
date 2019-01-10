@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
+import com.baidu.mobstat.StatService;
 import com.tencent.smtt.sdk.QbSdk;
 
 import org.wcy.android.utils.RxTool;
@@ -20,6 +21,8 @@ public class MyApplication extends MultiDexApplication {
         mContext = getApplicationContext();
         instance = this;
         RxTool.init(mContext);
+        StatService.autoTrace(this);
+        StatService.setOn(this, StatService.JAVA_EXCEPTION_LOG);
         if (isX5Web()) {
             try{
                 QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {

@@ -58,4 +58,5 @@ dependencies {
     api "com.android.support:multidex:1.0.2"
     api "com.noober.background:$rootProject.backgroundVersion"
     api "com.allenliu.versionchecklib:library:$rootProject.versionchecklibVersion"
+    api "com.baidu.mobstat:mtj-sdk-circle:latest.integration"
 }
