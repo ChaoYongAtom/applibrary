@@ -19,8 +19,7 @@ import org.wcy.android.utils.RxLogTool;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import rx.Subscriber;
-
+import io.reactivex.subscribers.DisposableSubscriber;
 
 /**
  * 用于在Http请求开始时，自动显示一个ProgressDialog
@@ -32,7 +31,7 @@ import rx.Subscriber;
  * @auth wcy
  * @company 重庆锐云科技有限公司
  */
-public class RxSubscriber extends Subscriber<String> {
+public class RxSubscriber<T> extends DisposableSubscriber<T> {
     //    回调接口
     private CallBack mSubscriberOnNextListener;
     //    加载框可自己定义
@@ -55,6 +54,7 @@ public class RxSubscriber extends Subscriber<String> {
      * 构造
      */
     public RxSubscriber() {
+        super();
     }
 
     public void setmSubscriberOnNextListener(CallBack mSubscriberOnNextListener) {
@@ -112,14 +112,8 @@ public class RxSubscriber extends Subscriber<String> {
      */
     @Override
     public void onStart() {
+        super.onStart();
         showProgressDialog();
-    }
-
-    /**
-     * 完成，隐藏ProgressDialog
-     */
-    @Override
-    public void onCompleted() {
     }
 
     /**
@@ -131,6 +125,10 @@ public class RxSubscriber extends Subscriber<String> {
     @Override
     public void onError(Throwable e) {
         errorDo(e);
+    }
+
+    @Override
+    public void onComplete() {
     }
 
 
@@ -156,10 +154,11 @@ public class RxSubscriber extends Subscriber<String> {
     /**
      * 将onNext方法中的返回结果交给Activity或Fragment自己处理
      *
-     * @param t 创建Subscriber时的泛型类型
+     * @param result 创建Subscriber时的泛型类型
      */
     @Override
-    public void onNext(String t) {
+    public void onNext(T result) {
+        String t = result.toString();
         RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
             if (JConstant.getRxsubscriber() != null) {
@@ -167,63 +166,56 @@ public class RxSubscriber extends Subscriber<String> {
                 dismissProgressDialog();
             } else {
                 try {
-                    if (!RxDataTool.isNullString(t)) {
-                        RxResult baseResult = JSONObject.parseObject(t, RxResult.class);
-                        if (baseResult == null) {
-                            RxLogTool.d("JSONObject.parseObject" + method, "数据解析错误");
-                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.JSON_ERROR, "数据解析错误",t));
-                        } else {
-                            if (baseResult.getCode() == 200) {
-                                if (getData() != null) {
-                                    String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                    if (JConstant.isEncrypt()) {
-                                        dataJson = AESOperator.decrypt(dataJson);
-                                        if (RxDataTool.isNullString(dataJson)) {
-                                            dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                        }
+                    if (result instanceof RxResult) {
+                        RxResult baseResult = (RxResult) result;
+                        if (baseResult.getCode() == 200) {
+                            if (getData() != null) {
+                                String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
+                                if (JConstant.isEncrypt()) {
+                                    dataJson = AESOperator.decrypt(dataJson);
+                                    if (RxDataTool.isNullString(dataJson)) {
+                                        dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
                                     }
-                                    baseResult.setData(dataJson);
-                                    RxLogTool.dJson(dataJson);
-                                    if (isList()) {
-                                        baseResult.setResult(JSONObject.parseArray(dataJson, getData()));
+                                }
+                                baseResult.setData(dataJson);
+                                RxLogTool.dJson(dataJson);
+                                if (isList()) {
+                                    baseResult.setResult(JSONObject.parseArray(dataJson, getData()));
+                                } else {
+                                    if (isUpload) {
+                                        baseResult.setResult(JSONObject.parseObject(dataJson, UpdateImage.class));
                                     } else {
-                                        if (isUpload) {
-                                            baseResult.setResult(JSONObject.parseObject(dataJson, UpdateImage.class));
-                                        } else {
-                                            if (getData() == BigDecimal.class || getData() == String.class || getData() == Integer.class) {
-                                                dataJson = getDataResult(dataJson);
-                                            }
-                                            if (getData() == BigDecimal.class) {
-                                                baseResult.setResult(new BigDecimal(dataJson));
-                                            } else if (getData() == String.class) {
-                                                baseResult.setResult(dataJson);
-                                            } else if (getData() == Integer.class) {
-                                                baseResult.setResult(Integer.parseInt(dataJson));
-                                            } else if (getData() != null) {
-                                                RxLogTool.d("onNext" + method, getData().getName());
-                                                baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
-                                            }
+                                        if (getData() == BigDecimal.class || getData() == String.class || getData() == Integer.class) {
+                                            dataJson = getDataResult(dataJson);
+                                        }
+                                        if (getData() == BigDecimal.class) {
+                                            baseResult.setResult(new BigDecimal(dataJson));
+                                        } else if (getData() == String.class) {
+                                            baseResult.setResult(dataJson);
+                                        } else if (getData() == Integer.class) {
+                                            baseResult.setResult(Integer.parseInt(dataJson));
+                                        } else if (getData() != null) {
+                                            RxLogTool.d("onNext" + method, getData().getName());
+                                            baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
                                         }
                                     }
                                 }
-                                mSubscriberOnNextListener.onNext(baseResult);
-                            } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
-                                if (JConstant.getLoinOutInterface() != null) {
-                                    JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
-                                }
-                            } else {
-                                RxLogTool.d("onNext" + method, t + "编码错误");
-                                mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg(),t));
                             }
+                            mSubscriberOnNextListener.onNext(baseResult);
+                        } else if (baseResult.getCode() == 101 || baseResult.getCode() == 102 || baseResult.getCode() == 103) {
+                            if (JConstant.getLoinOutInterface() != null) {
+                                JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
+                            }
+                        } else {
+                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg(), t));
                         }
                     } else {
                         RxLogTool.d("onNext" + method, t + "返回数据为null");
-                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误",t));
+                        mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误", t));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                     RxLogTool.d("RxSubscriberException" + method, e.getMessage());
-                    mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误",t));
+                    mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误", t));
                 } finally {
                     dismissProgressDialog();
                 }
@@ -263,9 +255,9 @@ public class RxSubscriber extends Subscriber<String> {
      * 取消ProgressDialog的时候，取消对observable的订阅，同时也取消了http请求
      */
     public void onCancelProgress() {
-        if (!this.isUnsubscribed()) {
+        if (!this.isDisposed()) {
             mSubscriberOnNextListener = null;
-            this.unsubscribe();
+            cancel();
         }
     }
 

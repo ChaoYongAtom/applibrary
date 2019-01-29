@@ -7,12 +7,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 public class HttpLogInterceptor {
 
     public static HttpLoggingInterceptor getHttpLoggingInterceptor(){
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                //打印retrofit日志
-                RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
-            }
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> {
+            //打印retrofit日志
+            RxLogTool.d("RetrofitLog", "retrofitBack = " + message);
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return loggingInterceptor;

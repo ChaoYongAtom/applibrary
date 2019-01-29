@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
-
-
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportActivity;
@@ -22,7 +20,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * author: wcy
  * date: 2018/8/6 .
  */
-public class SupportActivity extends RxAppCompatActivity implements ISupportActivity {
+public class SupportActivity extends AppCompatActivity implements ISupportActivity {
     final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
 
     @Override

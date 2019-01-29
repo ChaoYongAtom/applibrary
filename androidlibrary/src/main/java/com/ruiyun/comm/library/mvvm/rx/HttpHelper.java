@@ -4,19 +4,13 @@ package com.ruiyun.comm.library.mvvm.rx;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.utils.HttpLogInterceptor;
 
-import org.wcy.android.utils.RxLogTool;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * @author：wcy
@@ -73,14 +67,11 @@ public class HttpHelper {
                                 .writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
                                 .readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
                         if (JConstant.isIsHeaders()) {
-                            mBuilder.addInterceptor(new Interceptor() {
-                                @Override
-                                public Response intercept(Chain chain) throws IOException {
-                                    Request newRequest = chain.request().newBuilder()
-                                            .addHeader("headers", JConstant.getHeardsVal())
-                                            .build();
-                                    return chain.proceed(newRequest);
-                                }
+                            mBuilder.addInterceptor(chain -> {
+                                Request newRequest = chain.request().newBuilder()
+                                        .addHeader("headers", JConstant.getHeardsVal())
+                                        .build();
+                                return chain.proceed(newRequest);
                             });
                         }
                     }
@@ -98,8 +89,9 @@ public class HttpHelper {
          */
         public Builder createRetrofit(String baseUrl) {
             Retrofit.Builder builder = new Retrofit.Builder()
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                   .addConverterFactory(FastJsonConverterFactory.create())
+                   // .addConverterFactory(ScalarsConverterFactory.create())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .baseUrl(baseUrl);
             this.mOkHttpClient = mBuilder.build();
             this.mRetrofit = builder.client(mOkHttpClient)

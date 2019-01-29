@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.animation.Animation;
 
-import com.trello.rxlifecycle.components.support.RxFragment;
+
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragmentDelegate;
-import me.yokeyword.fragmentation.SupportHelper;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 /**
@@ -21,7 +20,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * author: wcy
  * date: 2018/8/6 .
  */
-public class SupportFragment extends RxFragment implements ISupportFragment {
+public class SupportFragment extends Fragment implements ISupportFragment {
 
     final SupportFragmentDelegate mDelegate = new SupportFragmentDelegate(this);
     protected FragmentActivity _mActivity;
@@ -51,11 +50,6 @@ public class SupportFragment extends RxFragment implements ISupportFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        return mDelegate.onCreateAnimation(transit, enter, nextAnim);
     }
 
     @Override
@@ -411,35 +405,4 @@ public class SupportFragment extends RxFragment implements ISupportFragment {
         mDelegate.popToChild(targetFragmentClass, includeTargetFragment, afterPopTransactionRunnable, popAnim);
     }
 
-    /**
-     * 得到位于栈顶Fragment
-     */
-    public ISupportFragment getTopFragment() {
-        return SupportHelper.getTopFragment(getFragmentManager());
-    }
-
-    public ISupportFragment getTopChildFragment() {
-        return SupportHelper.getTopFragment(getChildFragmentManager());
-    }
-
-    /**
-     * @return 位于当前Fragment的前一个Fragment
-     */
-    public ISupportFragment getPreFragment() {
-        return SupportHelper.getPreFragment(this);
-    }
-
-    /**
-     * 获取栈内的fragment对象
-     */
-    public <T extends ISupportFragment> T findFragment(Class<T> fragmentClass) {
-        return SupportHelper.findFragment(getFragmentManager(), fragmentClass);
-    }
-
-    /**
-     * 获取栈内的fragment对象
-     */
-    public <T extends ISupportFragment> T findChildFragment(Class<T> fragmentClass) {
-        return SupportHelper.findFragment(getChildFragmentManager(), fragmentClass);
-    }
 }

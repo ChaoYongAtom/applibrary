@@ -10,11 +10,8 @@ import com.tencent.smtt.sdk.QbSdk;
 import org.wcy.android.utils.RxTool;
 
 public class MyApplication extends MultiDexApplication {
-
     private static Context mContext;
-    public static MyApplication instance;
-
-
+    private static MyApplication instance;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -51,5 +48,9 @@ public class MyApplication extends MultiDexApplication {
     }
     protected boolean isX5Web() {
         return true;
+    }
+
+    public static MyApplication getThisApplication() {
+        return instance;
     }
 }

@@ -13,14 +13,10 @@ import android.widget.FrameLayout;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.noober.background.BackgroundLibrary;
-import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
-import com.ruiyun.comm.library.mvp.BaseView;
-import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.wcy.android.R;
-import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxKeyboardTool;
@@ -38,7 +34,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class BaseActivity extends SupportActivity implements BaseView, BackHandledInterface {
+public abstract class BaseActivity extends SupportActivity implements  BackHandledInterface {
     Unbinder unbinder;
     private HeaderLayout headerLayout;
     protected ImmersionBar mImmersionBar;
@@ -161,17 +157,6 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
         RxKeyboardTool.hideSoftInput(this);
     }
 
-
-    @Override
-    public void onNext(BaseResult result) {
-
-    }
-
-    @Override
-    public void onError(ApiException e, String mothead) {
-        toastError(e.getDisplayMessage());
-    }
-
     private void showToast(Object obj, int type) {
         if (obj != null && !RxDataTool.isEmpty(obj)) {
             ToastUtils.show(this, obj.toString(), type);
@@ -199,7 +184,6 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
         showToast(obj, ToastUtils.NO);
     }
 
-    @Override
     public Context getThisContext() {
         return this;
     }
@@ -244,10 +228,6 @@ public abstract class BaseActivity extends SupportActivity implements BaseView, 
         if (isclose) {
             finishActivity();
         }
-    }
-
-    public <T> LifecycleTransformer<T> bindToLife() {
-        return this.<T>bindToLifecycle();
     }
 
     public BaseActivity getThisActivity() {

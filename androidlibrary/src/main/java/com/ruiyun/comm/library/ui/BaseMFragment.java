@@ -1,6 +1,9 @@
 package com.ruiyun.comm.library.ui;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
@@ -19,7 +22,11 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
             dataObserver();
         }
     }
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return setView(inflater, setCreatedLayoutViewId());
+    }
     @Override
     public int setCreatedLayoutViewId() {
         return 0;

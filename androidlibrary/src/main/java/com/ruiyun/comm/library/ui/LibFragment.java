@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
-import com.ruiyun.comm.library.mvp.BaseView;
 
 import org.wcy.android.R;
-import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.utils.RxActivityTool;
+import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.view.HeaderLayout;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -22,7 +20,7 @@ import butterknife.Unbinder;
  * Created by wcy on 2018/1/18.
  */
 
-public abstract class LibFragment extends SupportFragment implements BaseView {
+public abstract class LibFragment extends SupportFragment  {
     private BaseActivity activity;
     private HeaderLayout headerLayout;
     private Unbinder unbinder;
@@ -110,6 +108,7 @@ public abstract class LibFragment extends SupportFragment implements BaseView {
             headerLayout = rootView.findViewById(R.id.headerlayout);
             if (headerLayout != null) headerLayout.setTitleText(setTitle());
             unbinder = ButterKnife.bind(this, rootView);
+            RxLogTool.d("ButterKnife","初始化了");
             initTitle(title);
         }
         return rootView;
@@ -137,18 +136,6 @@ public abstract class LibFragment extends SupportFragment implements BaseView {
         super.onDestroy();
         if (unbinder != null) unbinder.unbind();
     }
-
-    @Override
-    public void onNext(BaseResult result) {
-        toastSuccess(result.getMsg());
-    }
-
-    @Override
-    public void onError(ApiException e, String mothead) {
-        toastError(e.getDisplayMessage());
-
-    }
-
     public void toastError(Object obj) {
         activity.toastError(obj);
     }
@@ -157,7 +144,6 @@ public abstract class LibFragment extends SupportFragment implements BaseView {
         activity.toastSuccess(obj);
     }
 
-    @Override
     public Context getThisContext() {
         return getThisActivity().getThisContext();
     }

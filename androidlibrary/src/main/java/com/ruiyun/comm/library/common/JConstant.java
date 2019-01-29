@@ -13,6 +13,7 @@ import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.ExampleUtil;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
+import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxTool;
 
 /**
@@ -90,8 +91,10 @@ public class JConstant {
                 Bundle bundle = appInfo.metaData;
                 httpUrl = bundle.getString("HTTP_URL");
                 encrypt = !bundle.getBoolean("ENABLE_DEBUG");
-
+                RxLogTool.d("httpUrl","地址初始化成功");
             } catch (Exception e) {
+                e.printStackTrace();
+                RxLogTool.e("httpUrl","地址初始化失败");
             }
         }
         return httpUrl;
@@ -140,10 +143,12 @@ public class JConstant {
     public static void setHttpPostService(Class httpPostService) {
         getHttpUrl();
         JConstant.httpPostService = httpPostService;
-        new HttpHelper.Builder()
-                .initOkHttp()
-                .createRetrofit(httpUrl)
-                .build();
+        if(!RxDataTool.isNullString(httpUrl)){
+            new HttpHelper.Builder()
+                    .initOkHttp()
+                    .createRetrofit(httpUrl)
+                    .build();
+        }
     }
 
     public static boolean isIsHeaders() {
