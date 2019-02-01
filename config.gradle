@@ -1,0 +1,23 @@
+ext {
+    configs=[
+        compileSdkVersion: 27,
+        buildToolsVersion :"27.1.1",
+        minSdkVersion : 19,
+        targetSdkVersion:27,
+        v4Version : "27.1.1",
+        glideVersion:"4.7.1",
+        fragmentationVersion:"1.3.5",
+        rxlifecycleVersion:"2.1.0",
+        retrofitVersion:"2.4.0",
+        rxjavaVersion: "2.2.2",
+        rxandroidVersion: "2.1.0",
+        fastjsonVersion: "1.1.70.android",
+        photoViewVersion:"2.1.4",
+        zloadingVersion:"1.0.11",
+        archLifecycle:"1.1.0",
+        backgroundVersion:"core:1.3.4",
+        versionchecklibVersion:"2.1.8",
+        retrofitVersion:"2.4.0"
+    ]
+
+}

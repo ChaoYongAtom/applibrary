@@ -1,5 +1,6 @@
 package com.ruiyun.comm.library.ui;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,12 +10,17 @@ import android.view.ViewGroup;
 import com.gyf.barlibrary.ImmersionBar;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
+import com.ruiyun.comm.library.mvvm.event.LiveBus;
 import com.ruiyun.comm.library.mvvm.interfaces.LoadInterface;
 import com.ruiyun.comm.library.utils.ParameterizedTypeUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseMFragment<T extends BaseViewModel> extends LibFragment implements LoadInterface {
     protected T mViewModel;
     protected ImmersionBar mImmersionBar;
+    private List<Object> eventKeys = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +41,11 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         super.onLazyInitView(savedInstanceState);
         initImmersionBar();
 
+    }
+    protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
+        String event = getClassName().concat(tClass.getName());
+        eventKeys.add(event);
+        return LiveBus.getDefault().subscribe(event, tClass);
     }
     /**
      * 初始化沉浸式
@@ -147,6 +158,11 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         try {
             if (mImmersionBar != null) mImmersionBar.destroy();
         } catch (Exception e) {
+        }
+        if (eventKeys != null && eventKeys.size() > 0) {
+            for (int i = 0; i < eventKeys.size(); i++) {
+                LiveBus.getDefault().clear(eventKeys.get(i));
+            }
         }
         super.onDestroy();
     }
