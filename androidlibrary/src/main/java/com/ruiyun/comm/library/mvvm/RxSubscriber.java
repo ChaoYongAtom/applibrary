@@ -168,6 +168,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                 try {
                     if (result instanceof RxResult) {
                         RxResult baseResult = (RxResult) result;
+                        ((RxResult) result).setClassName(getData().getName());
                         if (baseResult.getCode() == 200) {
                             if (getData() != null) {
                                 String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();

@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.ruiyun.comm.library.mvvm.event.LiveBus;
 import com.ruiyun.comm.library.mvvm.interfaces.StateConstants;
 import com.ruiyun.comm.library.utils.ParameterizedTypeUtil;
 
@@ -16,7 +17,7 @@ import org.wcy.android.utils.RxActivityTool;
 public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
 
     public MutableLiveData<String> loadState;
-
+    private String fragmentName;
     public T mRepository;
 
     public BaseViewModel(@NonNull Application application) {
@@ -34,6 +35,14 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         }
     }
 
+    protected void sendData(RxResult rxResult) {
+        sendData(rxResult.getResult(), rxResult.getClassName());
+    }
+
+    protected void sendData(Object object, String tag) {
+        LiveBus.getDefault().postEvent(fragmentName.concat(tag), object);
+    }
+
     /**
      * 封装错误返回信息
      *
@@ -45,11 +54,13 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         stringBuffer.append(StateConstants.ERROR_STATE).append(",").append(state).append(",").append(msg == null ? "操作失败" : msg);
         return stringBuffer.toString();
     }
+
     public String getStateError() {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(StateConstants.ERROR_STATE).append(",").append("1").append(",").append("操作失败");
         return stringBuffer.toString();
     }
+
     public String getStateSuccess() {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append(StateConstants.SUCCESS_STATE).append(",").append(StateConstants.SUCCESS_STATE);
@@ -61,4 +72,9 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         stringBuffer.append(StateConstants.SUCCESS_STATE).append(",").append(state).append(",").append(msg == null ? "-" : msg);
         return stringBuffer.toString();
     }
+
+    public void setFragmentName(String fragmentName) {
+        this.fragmentName = fragmentName;
+    }
+
 }

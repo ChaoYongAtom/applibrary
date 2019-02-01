@@ -18,6 +18,9 @@ public class RxResult {
 
     private int tag;
     private String businessType;
+
+    private String className;
+
     public int getTag() {
         return tag;
     }
@@ -71,5 +74,13 @@ public class RxResult {
 
     public void setBusinessType(String businessType) {
         this.businessType = businessType;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }

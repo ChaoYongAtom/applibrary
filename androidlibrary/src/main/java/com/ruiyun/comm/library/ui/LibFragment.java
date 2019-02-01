@@ -108,7 +108,6 @@ public abstract class LibFragment extends SupportFragment  {
             headerLayout = rootView.findViewById(R.id.headerlayout);
             if (headerLayout != null) headerLayout.setTitleText(setTitle());
             unbinder = ButterKnife.bind(this, rootView);
-            RxLogTool.d("ButterKnife","初始化了");
             initTitle(title);
         }
         return rootView;
