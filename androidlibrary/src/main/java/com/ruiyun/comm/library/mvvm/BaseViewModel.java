@@ -35,11 +35,11 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         }
     }
 
-    protected void sendData(RxResult rxResult) {
-        sendData(rxResult.getResult(), rxResult.getClassName());
+    protected void postData(RxResult rxResult) {
+        postData(rxResult.getResult(), rxResult.getClassName());
     }
 
-    protected void sendData(Object object, String tag) {
+    protected void postData(Object object, String tag) {
         LiveBus.getDefault().postEvent(fragmentName.concat(tag), object);
     }
 
