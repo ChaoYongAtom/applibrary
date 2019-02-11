@@ -6,15 +6,17 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.ruiyun.comm.library.mvvm.event.LiveBus;
+import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
 import com.ruiyun.comm.library.mvvm.interfaces.StateConstants;
 import com.ruiyun.comm.library.utils.ParameterizedTypeUtil;
 
+import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.utils.RxActivityTool;
 
 /**
  * @author：wcy on 18/7/26 16:15
  */
-public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
+public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel implements CallBack {
 
     public MutableLiveData<String> loadState;
     private String fragmentName;
@@ -24,7 +26,10 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         super(application);
         loadState = new MutableLiveData<>();
         mRepository = ParameterizedTypeUtil.getNewInstance(this, 0);
-        if (mRepository != null) mRepository.setmContext(RxActivityTool.currentActivity());
+        if (mRepository != null){
+            mRepository.setmContext(RxActivityTool.currentActivity());
+            mRepository.setCallBack(this);
+        }
     }
 
     @Override
@@ -77,4 +82,18 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel {
         this.fragmentName = fragmentName;
     }
 
+    @Override
+    public void onNext(RxResult result) {
+        if(result.getResult()==null){
+            loadState.postValue(getStateSuccess(1,result.getMsg()));
+        }else{
+            postData(result);
+        }
+
+    }
+
+    @Override
+    public void onError(ApiException e) {
+        loadState.postValue(getStateError(1, e.getDisplayMessage()));
+    }
 }

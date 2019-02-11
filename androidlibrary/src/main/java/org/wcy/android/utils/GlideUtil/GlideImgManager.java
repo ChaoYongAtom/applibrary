@@ -111,8 +111,7 @@ public class GlideImgManager {
 
     }
 
-    public static void loadLockImage(Context context, Uri imagePath, final ImageView imageView, int width,
-                                     int height) {
+    public static void loadLockImage(Context context, Uri imagePath, final ImageView imageView) {
         Glide.with(context)
                 .load("file://" + imagePath)
                 .into(imageView);

@@ -39,15 +39,16 @@ public abstract class AbsRepository<T> {
 
     private CompositeDisposable mCompositeSubscription;
     private Context mContext;
-
+    private CallBack callBack;
     public AbsRepository() {
 
     }
 
     private Object apiService;
 
-    public void uplaod(CallBack listener, String path) {
+    public void uplaod(String path,CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
+        if(listener==null)listener=callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             RxSubscriber<T> subscriber = new RxSubscriber();
             subscriber.setmSubscriberOnNextListener(listener);
@@ -98,6 +99,7 @@ public abstract class AbsRepository<T> {
      */
     public void sendPost(String method, Object parameters, Class<?> cl, boolean isList, boolean isShowProgress, String msg, boolean isCancel, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
+        if(listener==null)listener=callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             if (null == apiService) {
                 apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
@@ -243,5 +245,9 @@ public abstract class AbsRepository<T> {
         if (mCompositeSubscription != null && mCompositeSubscription.isDisposed()) {
             mCompositeSubscription.clear();
         }
+    }
+
+    public void setCallBack(CallBack callBack) {
+        this.callBack = callBack;
     }
 }
