@@ -28,7 +28,7 @@ public class LiveBus {
 
     private static volatile LiveBus instance;
 
-    private final ConcurrentHashMap<Object, LiveBusData<Object>> mLiveBus;
+    private final ConcurrentHashMap<String, LiveBusData<Object>> mLiveBus;
 
     private LiveBus() {
         mLiveBus = new ConcurrentHashMap<>();
@@ -46,20 +46,7 @@ public class LiveBus {
     }
 
 
-    public <T> MutableLiveData<T> subscribe(Object eventKey) {
-        return subscribe(eventKey, "");
-    }
-
-    public <T> MutableLiveData<T> subscribe(Object eventKey, String tag) {
-        return (MutableLiveData<T>) subscribe(eventKey, tag, Object.class);
-    }
-
-    public <T> MutableLiveData<T> subscribe(Object eventKey, Class<T> tClass) {
-        return subscribe(eventKey, null, tClass);
-    }
-
-    public <T> MutableLiveData<T> subscribe(Object eventKey, String tag, Class<T> tClass) {
-        String key = mergeEventKey(eventKey, tag);
+    public <T> MutableLiveData<T> subscribe(String key) {
         if (!mLiveBus.containsKey(key)) {
             mLiveBus.put(key, new LiveBusData<>(true));
         } else {
@@ -70,12 +57,9 @@ public class LiveBus {
         return (MutableLiveData<T>) mLiveBus.get(key);
     }
 
-    public <T> MutableLiveData<T> postEvent(Object eventKey, T value) {
-        return postEvent(eventKey, null, value);
-    }
-
-    public <T> MutableLiveData<T> postEvent(Object eventKey, String tag, T value) {
-        MutableLiveData<T> mutableLiveData = subscribe(mergeEventKey(eventKey, tag));
+    public <T> MutableLiveData<T> postEvent(String eventKey, T value) {
+        System.out.println("发送key:"+eventKey);
+        MutableLiveData<T> mutableLiveData = subscribe(eventKey);
         mutableLiveData.postValue(value);
         return mutableLiveData;
     }
@@ -120,25 +104,14 @@ public class LiveBus {
     }
 
 
-    private String mergeEventKey(Object eventKey, String tag) {
-        String mEventkey;
-        if (!TextUtils.isEmpty(tag)) {
-            mEventkey = eventKey + tag;
-        } else {
-            mEventkey = (String) eventKey;
-        }
-        return mEventkey;
-    }
 
-
-    public void clear(Object eventKey) {
+    public void clear(String eventKey) {
         clear(eventKey, null);
     }
 
-    public void clear(Object eventKey, String tag) {
+    public void clear(String eventKey, String tag) {
         if (mLiveBus.size() > 0) {
-            String mEventkey = mergeEventKey(eventKey, tag);
-            mLiveBus.remove(mEventkey);
+            mLiveBus.remove(eventKey);
         }
 
     }

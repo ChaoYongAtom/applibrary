@@ -13,8 +13,10 @@ import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.retrofit.exception.HttpTimeException;
 import org.wcy.android.retrofit.subscribers.ProgressDialogUtil;
 import org.wcy.android.utils.AESOperator;
+import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
+import org.wcy.android.utils.RxTool;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -168,7 +170,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                 try {
                     if (result instanceof RxResult) {
                         RxResult baseResult = (RxResult) result;
-                        ((RxResult) result).setClassName(getData().getName());
+                        ((RxResult) result).setClassName(getData().getSimpleName());
                         if (baseResult.getCode() == 200) {
                             if (getData() != null) {
                                 String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
@@ -215,6 +217,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                         mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, "服务器返回数据错误", t));
                     }
                 } catch (Exception e) {
+                    if (RxActivityTool.isAppDebug(RxTool.getContext())) {
+                        e.printStackTrace();
+                    }
                     RxLogTool.d("RxSubscriberException" + method, e.getMessage());
                     mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误", t));
                 } finally {

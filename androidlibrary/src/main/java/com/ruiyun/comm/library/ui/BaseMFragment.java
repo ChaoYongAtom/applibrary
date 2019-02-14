@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.ruiyun.comm.library.mvvm.BaseListVo;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
 import com.ruiyun.comm.library.mvvm.event.LiveBus;
@@ -20,7 +21,7 @@ import java.util.List;
 public class BaseMFragment<T extends BaseViewModel> extends LibFragment implements LoadInterface {
     protected T mViewModel;
     protected ImmersionBar mImmersionBar;
-    private List<Object> eventKeys = new ArrayList<>();
+    private List<String> eventKeys = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +44,15 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
 
     }
     protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
-        String event = getClassName().concat(tClass.getName());
+        String event = getClassName().concat(tClass.getSimpleName());
         eventKeys.add(event);
-        return LiveBus.getDefault().subscribe(event, tClass);
+        System.out.println("创建key:"+event);
+        return LiveBus.getDefault().subscribe(event);
+    }
+    protected <T> MutableLiveData<BaseListVo<T>> registerObservers(Class<T> tClass) {
+        String event = getClassName().concat(tClass.getSimpleName()).concat("list");
+        eventKeys.add(event);
+        return LiveBus.getDefault().subscribe(event);
     }
     /**
      * 初始化沉浸式
@@ -127,7 +134,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
 
     @Override
     public void showError(int state, String msg) {
-
+        toast(msg);
     }
 
     /**
@@ -167,6 +174,6 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         super.onDestroy();
     }
     protected String getClassName() {
-        return getClass().getName();
+        return getClass().getSimpleName();
     }
 }

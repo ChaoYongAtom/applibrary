@@ -1,5 +1,9 @@
 package com.ruiyun.comm.library.mvvm;
 
-public abstract class BaseRepository extends AbsRepository<RxResult> {
+import com.alibaba.fastjson.JSONObject;
 
+public abstract class BaseRepository extends AbsRepository<RxResult> {
+    public JSONObject getJsonObject(){
+        return new JSONObject();
+    }
 }

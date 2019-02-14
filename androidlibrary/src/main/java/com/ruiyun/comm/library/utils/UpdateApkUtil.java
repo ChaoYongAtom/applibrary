@@ -47,7 +47,7 @@ public class UpdateApkUtil {
                 .writeTimeout(6, TimeUnit.SECONDS).readTimeout(6, TimeUnit.SECONDS);
         OkHttpClient okHttpClient = builder.build();
         RequestBody body = RequestBody.create(JSON, "");
-        final Request request = new Request.Builder().url(JConstant.getHttpUrl() + "newestversion").addHeader("headers", JConstant.getHeardsVal()).post(body)
+        final Request request = new Request.Builder().url(JConstant.getHttpUrl() + JConstant.VersionName).addHeader("headers", JConstant.getHeardsVal()).post(body)
                 .build();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {

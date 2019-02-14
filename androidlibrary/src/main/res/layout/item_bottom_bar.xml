@@ -52,8 +52,8 @@
 
         <TextView
             android:id="@+id/tv_point"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:gravity="center"

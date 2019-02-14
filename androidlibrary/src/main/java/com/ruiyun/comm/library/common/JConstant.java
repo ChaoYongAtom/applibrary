@@ -21,9 +21,9 @@ import org.wcy.android.utils.RxTool;
  */
 public class JConstant {
     public final static int MIN_PAGE_ROWS = 20;
-    public final static String bundleListName = "baseListData";
     private static boolean encrypt = true;
     public final static String heards = "heards";
+    public static String VersionName="newestversion";
     private static LoinOutInterface loinOutInterface;
     private static String httpUrl;
     private static String token;
@@ -32,14 +32,13 @@ public class JConstant {
     private static int connectionTime = 15;
     private static String watermarkStr;
     public final static String isWaterMark = "isWaterMark";
-    /* retry次数*/
-    private static int retry = 2;
     public static int waterMarkAlpha = 80;
     public static String waterMarkColor = "#e8e8e8e8";
     public static int waterMarkfontSize = 12;
     public static int waterMarkdegress = -15;
     private static boolean isHeaders = true;
     private static String heardsVal = "";
+
     private static Class<? extends RxSubscriber> rxsubscriber;
 
     public static Class<? extends RxSubscriber> getRxsubscriber() {
@@ -110,14 +109,6 @@ public class JConstant {
 
     public static void setConnectionTime(int connectionTime) {
         JConstant.connectionTime = connectionTime;
-    }
-
-    public static int getRetry() {
-        return retry;
-    }
-
-    public static void setRetry(int retry) {
-        JConstant.retry = retry;
     }
 
     public static String getRegistrationID() {

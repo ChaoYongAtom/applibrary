@@ -1,7 +1,9 @@
 package com.ruiyun.comm.library.ui;
+
 import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
 import com.ruiyun.comm.library.mvvm.event.LiveBus;
@@ -13,7 +15,8 @@ import java.util.List;
 
 public class BaseMActivity<T extends BaseViewModel> extends BaseActivity implements LoadInterface {
     protected T mViewModel;
-    private List<Object> eventKeys = new ArrayList<>();
+    private List<String> eventKeys = new ArrayList<>();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +32,14 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
     public void dataObserver() {
 
     }
+
     protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
         String event = getClassName().concat(tClass.getName());
         eventKeys.add(event);
-        return LiveBus.getDefault().subscribe(event, tClass);
+        return LiveBus.getDefault().subscribe(event);
     }
+
+
     @Override
     public void showSuccess(int state, String msg) {
 
@@ -53,9 +59,11 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
     public void showLoading() {
 
     }
+
     protected String getClassName() {
         return getClass().getName();
     }
+
     @Override
     public void showError(int state, String msg) {
         toastError(msg);

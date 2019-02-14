@@ -13,6 +13,9 @@ import com.ruiyun.comm.library.utils.ParameterizedTypeUtil;
 import org.wcy.android.retrofit.exception.ApiException;
 import org.wcy.android.utils.RxActivityTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author：wcy on 18/7/26 16:15
  */
@@ -26,7 +29,7 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel imp
         super(application);
         loadState = new MutableLiveData<>();
         mRepository = ParameterizedTypeUtil.getNewInstance(this, 0);
-        if (mRepository != null){
+        if (mRepository != null) {
             mRepository.setmContext(RxActivityTool.currentActivity());
             mRepository.setCallBack(this);
         }
@@ -45,7 +48,13 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel imp
     }
 
     protected void postData(Object object, String tag) {
-        LiveBus.getDefault().postEvent(fragmentName.concat(tag), object);
+        if (object instanceof List) {
+            BaseListVo baseListVo = new BaseListVo();
+            baseListVo.data = (List) object;
+            LiveBus.getDefault().postEvent(fragmentName.concat(tag).concat("list"), baseListVo);
+        } else {
+            LiveBus.getDefault().postEvent(fragmentName.concat(tag), object);
+        }
     }
 
     /**
@@ -84,9 +93,9 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel imp
 
     @Override
     public void onNext(RxResult result) {
-        if(result.getResult()==null){
-            loadState.postValue(getStateSuccess(1,result.getMsg()));
-        }else{
+        if (result.getResult() == null) {
+            loadState.postValue(getStateSuccess(1, result.getMsg()));
+        } else {
             postData(result);
         }
 
