@@ -22,6 +22,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     protected T mViewModel;
     protected ImmersionBar mImmersionBar;
     private List<String> eventKeys = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,28 +33,36 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
             dataObserver();
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return setView(inflater, setCreatedLayoutViewId());
     }
+
     @Override
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         initImmersionBar();
 
     }
+
     protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
+        return registerObserver(tClass, "");
+    }
+
+    protected <T> MutableLiveData<T> registerObserver(Class<T> tClass, String tag) {
         String event = getClassName().concat(tClass.getSimpleName());
         eventKeys.add(event);
-        System.out.println("创建key:"+event);
         return LiveBus.getDefault().subscribe(event);
     }
+
     protected <T> MutableLiveData<BaseListVo<T>> registerObservers(Class<T> tClass) {
         String event = getClassName().concat(tClass.getSimpleName()).concat("list");
         eventKeys.add(event);
         return LiveBus.getDefault().subscribe(event);
     }
+
     /**
      * 初始化沉浸式
      */
@@ -81,6 +90,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         } catch (Exception e) {
         }
     }
+
     /**
      * 设置状态栏沉浸式 返回内容只能是id和view
      *
@@ -89,6 +99,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     public Object getTitleId() {
         return null;
     }
+
     /**
      * 状态栏字体深色或亮色，判断设备支不支持状态栏变色来设置状态栏透明度
      *
@@ -97,6 +108,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     public boolean isStatusBarDarkFont() {
         return false;
     }
+
     @Override
     public int setCreatedLayoutViewId() {
         return 0;
@@ -154,12 +166,12 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     }
 
 
-
     @Override
     public void finishFramager() {
         setFragmentResult(0, null);
         super.finishFramager();
     }
+
     @Override
     public void onDestroy() {
         try {
@@ -173,6 +185,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         }
         super.onDestroy();
     }
+
     protected String getClassName() {
         return getClass().getSimpleName();
     }

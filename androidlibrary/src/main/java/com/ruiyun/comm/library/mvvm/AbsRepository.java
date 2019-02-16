@@ -75,15 +75,15 @@ public abstract class AbsRepository<T> {
         sendPost(method, null, null, false, false, null, false, listener);
     }
 
-    public void sendPost(String method, Object parameters, Class<?> cl, CallBack listener) {
+    public  void sendPost(String method, Object parameters, Class cl, CallBack listener) {
         sendPost(method, parameters, cl, false, false, null, false, listener);
     }
 
-    public void sendPost(String method, Object parameters, Class<?> cl, boolean isShowProgress, CallBack listener) {
+    public   void sendPost(String method, Object parameters, Class cl, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, false, isShowProgress, null, false, listener);
     }
 
-    public void sendPost(String method, Object parameters, Class<?> cl, boolean isList, boolean isShowProgress, CallBack listener) {
+    public  void sendPost(String method, Object parameters, Class cl, boolean isList, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, isList, isShowProgress, null, false, listener);
     }
 

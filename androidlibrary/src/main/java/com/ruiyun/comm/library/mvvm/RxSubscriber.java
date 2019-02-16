@@ -160,7 +160,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      */
     @Override
     public void onNext(T result) {
-        String t = result.toString();
+        String t = JSONObject.toJSONString(result);
         RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
             if (JConstant.getRxsubscriber() != null) {
@@ -170,7 +170,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                 try {
                     if (result instanceof RxResult) {
                         RxResult baseResult = (RxResult) result;
-                        ((RxResult) result).setClassName(getData().getSimpleName());
+                        if (getData() != null) baseResult.setClassName(getData().getSimpleName());
                         if (baseResult.getCode() == 200) {
                             if (getData() != null) {
                                 String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
@@ -210,7 +210,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                 JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
                             }
                         } else {
-                            mSubscriberOnNextListener.onError(getApiException(null, CodeException.ERROR, baseResult.getMsg(), t));
+                            ApiException apiException = getApiException(null, CodeException.ERROR, baseResult.getMsg(), t);
+                            apiException.setBusinessType(baseResult.getBusinessType());
+                            mSubscriberOnNextListener.onError(apiException);
                         }
                     } else {
                         RxLogTool.d("onNext" + method, t + "返回数据为null");
@@ -287,7 +289,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
         return data;
     }
 
-    public void setData(Class<?> data) {
+    public <T> void setData(Class<T> data) {
         this.data = data;
     }
 

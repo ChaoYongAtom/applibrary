@@ -58,7 +58,6 @@ public class LiveBus {
     }
 
     public <T> MutableLiveData<T> postEvent(String eventKey, T value) {
-        System.out.println("发送key:"+eventKey);
         MutableLiveData<T> mutableLiveData = subscribe(eventKey);
         mutableLiveData.postValue(value);
         return mutableLiveData;
@@ -103,13 +102,7 @@ public class LiveBus {
 
     }
 
-
-
     public void clear(String eventKey) {
-        clear(eventKey, null);
-    }
-
-    public void clear(String eventKey, String tag) {
         if (mLiveBus.size() > 0) {
             mLiveBus.remove(eventKey);
         }

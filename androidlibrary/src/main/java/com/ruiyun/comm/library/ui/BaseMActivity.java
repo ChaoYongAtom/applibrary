@@ -51,6 +51,7 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
             for (int i = 0; i < eventKeys.size(); i++) {
                 LiveBus.getDefault().clear(eventKeys.get(i));
             }
+            eventKeys=null;
         }
         super.onDestroy();
     }

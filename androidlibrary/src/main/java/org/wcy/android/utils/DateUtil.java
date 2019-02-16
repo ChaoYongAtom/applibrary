@@ -1,5 +1,6 @@
 package org.wcy.android.utils;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,6 +80,54 @@ public class DateUtil {
 			};
 	private static final String[] weeks = new String[]{"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 
+	// 获得本周一与当前日期相差的天数
+	public static int getMondayPlus() {
+		Calendar cd = Calendar.getInstance();
+		int dayOfWeek = cd.get(Calendar.DAY_OF_WEEK);
+		if (dayOfWeek == 1) {
+			return -6;
+		} else {
+			return 2 - dayOfWeek;
+		}
+	}
+
+
+	// 获得当前周- 周一的日期
+	public static String getCurrentMonday() {
+		int mondayPlus = getMondayPlus();
+		GregorianCalendar currentDate = new GregorianCalendar();
+		currentDate.add(GregorianCalendar.DATE, mondayPlus);
+		Date monday = currentDate.getTime();
+		DateFormat df = DateFormat.getDateInstance();
+		String preMonday = df.format(monday);
+		return preMonday;
+	}
+
+
+	// 获得当前周- 周日  的日期
+	public static String getPreviousSunday() {
+		int mondayPlus = getMondayPlus();
+		GregorianCalendar currentDate = new GregorianCalendar();
+		currentDate.add(GregorianCalendar.DATE, mondayPlus + 6);
+		Date monday = currentDate.getTime();
+		DateFormat df = DateFormat.getDateInstance();
+		String preMonday = df.format(monday);
+		return preMonday;
+	}
+
+	// 获得当前月--开始日期
+	public static String getMinMonthDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+		return dateFormat.get().format(calendar.getTime());
+	}
+
+	// 获得当前月--结束日期
+	public static String getMaxMonthDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		return dateFormat.get().format(calendar.getTime());
+	}
 	/**
 	 * 返回两个日期之间的详细日期数组(包括开始日期和结束日期)。 例如：2007-07-01 到2007-07-03 ,那么返回数组
 	 * {"2007-07-01","2007-07-02","2007-07-03"}
