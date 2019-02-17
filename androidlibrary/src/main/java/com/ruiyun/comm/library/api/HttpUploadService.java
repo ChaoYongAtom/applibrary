@@ -19,9 +19,6 @@ public interface HttpUploadService {
     @POST("uploadimage")
     @FormUrlEncoded
     Flowable<String> uploadImage(@Part("token") RequestBody uid, @Part MultipartBody.Part file);
-    @Multipart
-    @POST("bbb")
-    Flowable<String> aa();
 
 
 }

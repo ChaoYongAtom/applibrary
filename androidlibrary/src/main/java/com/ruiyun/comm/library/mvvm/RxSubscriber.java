@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ruiyun.comm.library.api.entitys.UpdateImage;
+import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
 
@@ -186,7 +186,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                     baseResult.setResult(JSONObject.parseArray(dataJson, getData()));
                                 } else {
                                     if (isUpload) {
-                                        baseResult.setResult(JSONObject.parseObject(dataJson, UpdateImage.class));
+                                        baseResult.setResult(JSONObject.parseObject(dataJson, UploadBean.class));
                                     } else {
                                         if (getData() == BigDecimal.class || getData() == String.class || getData() == Integer.class) {
                                             dataJson = getDataResult(dataJson);

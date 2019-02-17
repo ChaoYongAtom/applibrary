@@ -11,6 +11,7 @@ import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.ruiyun.comm.library.api.entitys.UploadBean;
+import com.ruiyun.comm.library.api.entitys.VersionBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.RxResult;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
@@ -40,7 +41,7 @@ import okhttp3.Response;
 public class UpdateApkUtil {
     public static void Update(Context context, CallBack callBack) {
         if (callBack == null) {
-           toastTest(context, "正在检查，请稍候...");
+            toastTest(context, "正在检查，请稍候...");
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(6, TimeUnit.SECONDS)
@@ -71,7 +72,7 @@ public class UpdateApkUtil {
                                 JSONObject jsonObject = baseResult.getResult();
                                 baseResult.setResult(jsonObject.toJSONString());
                             }
-                            UploadBean uploadBean = JSONObject.parseObject(baseResult.getResult(), UploadBean.class);
+                            VersionBean uploadBean = JSONObject.parseObject(baseResult.getResult(), VersionBean.class);
                             baseResult.setResult(uploadBean);
                             //判断服务器是否有新版本
                             if (uploadBean.isUpdate()) {

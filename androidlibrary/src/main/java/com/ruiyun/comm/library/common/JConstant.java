@@ -38,7 +38,7 @@ public class JConstant {
     public static int waterMarkdegress = -15;
     private static boolean isHeaders = true;
     private static String heardsVal = "";
-
+    private static int uploadTime=5;
     private static Class<? extends RxSubscriber> rxsubscriber;
 
     public static Class<? extends RxSubscriber> getRxsubscriber() {
@@ -81,6 +81,14 @@ public class JConstant {
     public static void setHttpUrl(String httpUrl) {
         JConstant.httpUrl = httpUrl;
 
+    }
+
+    public static int getUploadTime() {
+        return uploadTime;
+    }
+
+    public static void setUploadTime(int uploadTime) {
+        JConstant.uploadTime = uploadTime;
     }
 
     public static String getHttpUrl() {

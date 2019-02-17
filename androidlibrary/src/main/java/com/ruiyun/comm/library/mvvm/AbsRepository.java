@@ -5,8 +5,9 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apkfuns.logutils.LogUtils;
-import com.ruiyun.comm.library.api.entitys.UpdateImage;
+import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
+import com.ruiyun.comm.library.emum.UploadType;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
 import com.ruiyun.comm.library.mvvm.rx.HttpHelper;
 import com.ruiyun.comm.library.mvvm.rx.RxSchedulers;
@@ -40,50 +41,113 @@ public abstract class AbsRepository<T> {
     private CompositeDisposable mCompositeSubscription;
     private Context mContext;
     private CallBack callBack;
+
     public AbsRepository() {
 
     }
 
     private Object apiService;
 
-    public void uplaod(String path,CallBack listener) {
+    public void uplaod(UploadType uploadType, List<String> paths, List<UploadBean> urls, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                urls.add(result.getResult());
+                paths.remove(s);
+                if (paths.size() == 0) {
+                    result.setResult(urls);
+                    listener.onNext(result);
+                } else {
+                    uplaod(uploadType, paths, urls, listener);
+                }
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
+
+    }
+
+    public void uplaod(UploadType uploadType, List<String> paths, StringBuffer sb, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                UploadBean uploadBean = result.getResult();
+                sb.append(uploadBean.fileUrl).append(",");
+                paths.remove(s);
+                if (paths.size() == 0) {
+                    sb.delete(sb.length() - 1, sb.length());
+                    result.setResult(sb.toString());
+                    listener.onNext(result);
+                } else {
+                    uplaod(uploadType, paths, sb, listener);
+                }
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
+
+    }
+
+    public void uplaod(UploadType uploadType, String path, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
-        if(listener==null)listener=callBack;
+        if (uploadType == null) uploadType = UploadType.IMAGE;
+        if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             RxSubscriber<T> subscriber = new RxSubscriber();
             subscriber.setmSubscriberOnNextListener(listener);
             subscriber.setContext(getmContext());
-            subscriber.setMethod("uploadimage");
+            subscriber.setMethod(uploadType.getEurl());
             subscriber.setShowProgress(false);
-            subscriber.setData(UpdateImage.class);
+            subscriber.setData(UploadBean.class);
             subscriber.setUpload(true);
-            Flowable observable = getOverrideUpload(path);
-            addSubscribe(observable, subscriber);
+            Flowable observable = getOverrideUpload(path, subscriber.getMethod());
+            if (observable != null) {
+                addSubscribe(observable, subscriber, true);
+            } else {
+                listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
+            }
         } else {
-            listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", "uploadimage"));
+            listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "无网络连接，请检查网络是否正常", uploadType.getEurl()));
         }
     }
 
     protected void addSubscribe(Flowable<T> flowable, RxSubscriber<T> subscriber) {
+        addSubscribe(flowable, subscriber, false);
+    }
+
+    protected void addSubscribe(Flowable<T> flowable, RxSubscriber<T> subscriber, boolean isUpload) {
         if (flowable != null && subscriber != null) {
+            if (isUpload) {
+                HttpHelper.getInstance().upload();
+            } else {
+                HttpHelper.getInstance().postHttp();
+            }
+
             addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(subscriber));
         }
     }
-
 
     public void sendPost(String method, CallBack listener) {
         sendPost(method, null, null, false, false, null, false, listener);
     }
 
-    public  void sendPost(String method, Object parameters, Class cl, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class cl, CallBack listener) {
         sendPost(method, parameters, cl, false, false, null, false, listener);
     }
 
-    public   void sendPost(String method, Object parameters, Class cl, boolean isShowProgress, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class cl, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, false, isShowProgress, null, false, listener);
     }
 
-    public  void sendPost(String method, Object parameters, Class cl, boolean isList, boolean isShowProgress, CallBack listener) {
+    public void sendPost(String method, Object parameters, Class cl, boolean isList, boolean isShowProgress, CallBack listener) {
         sendPost(method, parameters, cl, isList, isShowProgress, null, false, listener);
     }
 
@@ -99,10 +163,11 @@ public abstract class AbsRepository<T> {
      */
     public void sendPost(String method, Object parameters, Class<?> cl, boolean isList, boolean isShowProgress, String msg, boolean isCancel, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
-        if(listener==null)listener=callBack;
+        if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             if (null == apiService) {
                 apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
+
             }
             if (apiService != null) {
                 try {
@@ -146,7 +211,7 @@ public abstract class AbsRepository<T> {
      * @param parameters
      * @return
      */
-    public Flowable<T> getOverride(String method, Object parameters) {
+    private Flowable<T> getOverride(String method, Object parameters) {
         try {
             Class cl = apiService.getClass();
             String params = "";
@@ -211,15 +276,18 @@ public abstract class AbsRepository<T> {
      * @param path
      * @return
      */
-    public Flowable<T> getOverrideUpload(String path) {
+    private Flowable<T> getOverrideUpload(String path, String method) {
         try {
+            if (null == apiService) {
+                apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
+            }
             Class cl = apiService.getClass();
             File file = new File(path);
             RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
             String token = JConstant.getToken();
             RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), token);
-            Flowable<T> observable = (Flowable<T>) cl.getMethod("uploadimage", new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
+            Flowable<T> observable = (Flowable<T>) cl.getMethod(method, new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
             return observable;
         } catch (Exception e) {
             return null;

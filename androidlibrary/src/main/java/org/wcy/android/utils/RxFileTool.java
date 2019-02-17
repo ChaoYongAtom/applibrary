@@ -85,6 +85,17 @@ public class RxFileTool {
     }
 
     /**
+     * 得到DCIM目录.
+     */
+    public static File getDcimPath() {
+        File folder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "YH");
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+        return folder;
+    }
+
+    /**
      * 获取的目录默认没有最后的”/”,需要自己加上
      * 获取本应用图片缓存目录
      *
@@ -1783,6 +1794,7 @@ public class RxFileTool {
 
     /**
      * 将文件转换成uri(支持7.0)
+     *
      * @param mContext
      * @param file
      * @return
