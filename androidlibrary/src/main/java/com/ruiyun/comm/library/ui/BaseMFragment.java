@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.mobstat.StatService;
 import com.gyf.barlibrary.ImmersionBar;
 import com.ruiyun.comm.library.mvvm.BaseListVo;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
@@ -27,16 +28,16 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ParameterizedTypeUtil.VMProviders(this);
-        if (null != mViewModel) {
+        if (null != mViewModel && !mViewModel.getClass().getSimpleName().equals(BaseViewModel.class.getSimpleName())) {
             mViewModel.setFragmentName(getClassName());
             mViewModel.loadState.observe(this, new LoadObserver(this));
             dataObserver();
         }
+        StatService.onPageStart(getThisContext(), getClassName());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return setView(inflater, setCreatedLayoutViewId());
     }
 
@@ -47,17 +48,18 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
 
     }
 
-    protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
+    protected <M> MutableLiveData<M> registerObserver(Class<M> tClass) {
         return registerObserver(tClass, "");
     }
 
-    protected <T> MutableLiveData<T> registerObserver(Class<T> tClass, String tag) {
+    protected <M> MutableLiveData<M> registerObserver(Class<M> tClass, String tag) {
         String event = getClassName().concat(tClass.getSimpleName());
+        event = event.concat(tag);
         eventKeys.add(event);
         return LiveBus.getDefault().subscribe(event);
     }
 
-    protected <T> MutableLiveData<BaseListVo<T>> registerObservers(Class<T> tClass) {
+    protected <M> MutableLiveData<BaseListVo<M>> registerObservers(Class<M> tClass) {
         String event = getClassName().concat(tClass.getSimpleName()).concat("list");
         eventKeys.add(event);
         return LiveBus.getDefault().subscribe(event);
@@ -183,6 +185,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
                 LiveBus.getDefault().clear(eventKeys.get(i));
             }
         }
+        StatService.onPageEnd(getThisContext(), getClassName());
         super.onDestroy();
     }
 

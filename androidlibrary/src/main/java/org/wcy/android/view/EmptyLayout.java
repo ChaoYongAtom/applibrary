@@ -239,7 +239,12 @@ public class EmptyLayout extends RelativeLayout {
                     if (mLoadingView != null) {
                         mLoadingView.setVisibility(View.GONE);
                     }
-                    if (childView != null) childView.setVisibility(View.VISIBLE);
+                    if (childView != null) {
+                        childView.setVisibility(View.VISIBLE);
+                        if(listView==null){
+                            ((ViewGroup) childView).getChildAt(0).setVisibility(VISIBLE);
+                        }
+                    }
                     break;
                 case TYPE_NET:
                     if (childView != null) childView.setVisibility(View.GONE);
@@ -260,7 +265,7 @@ public class EmptyLayout extends RelativeLayout {
                 if (mErrorClickListener != null) {
                     textretry.setVisibility(View.VISIBLE);
                 } else {
-                    textretry.setVisibility(GONE);
+                    textretry.setVisibility(INVISIBLE);
                 }
             }
         }

@@ -48,6 +48,14 @@ public abstract class AbsRepository<T> {
 
     private Object apiService;
 
+    /**
+     * 多文件上传，返回list对象
+     *
+     * @param uploadType
+     * @param paths
+     * @param urls
+     * @param listener
+     */
     public void uplaod(UploadType uploadType, List<String> paths, List<UploadBean> urls, CallBack listener) {
         String s = paths.get(0);
         uplaod(uploadType, s, new CallBack() {
@@ -71,6 +79,37 @@ public abstract class AbsRepository<T> {
 
     }
 
+    /**
+     * 单文件上传返回UploadBean对象
+     *
+     * @param uploadType
+     * @param paths
+     * @param listener
+     */
+    public void uplaod(UploadType uploadType, List<String> paths, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                listener.onNext(result);
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
+
+    }
+
+    /**
+     * 多文件上传 最终返回string，通过，拼接
+     *
+     * @param uploadType
+     * @param paths
+     * @param sb
+     * @param listener
+     */
     public void uplaod(UploadType uploadType, List<String> paths, StringBuffer sb, CallBack listener) {
         String s = paths.get(0);
         uplaod(uploadType, s, new CallBack() {

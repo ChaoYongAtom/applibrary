@@ -20,11 +20,15 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ParameterizedTypeUtil.VMProviders(this);
-        if (null != mViewModel) {
-            mViewModel.setFragmentName(getClassName());
-            mViewModel.loadState.observe(this, new LoadObserver(this));
-            dataObserver();
+        try{
+            mViewModel = ParameterizedTypeUtil.VMProviders(this);
+            if (null != mViewModel && !mViewModel.getClass().getSimpleName().equals(BaseViewModel.class.getSimpleName())) {
+                mViewModel.setFragmentName(getClassName());
+                mViewModel.loadState.observe(this, new LoadObserver(this));
+                dataObserver();
+            }
+        }catch (Exception E){
+
         }
     }
 
@@ -33,7 +37,7 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
 
     }
 
-    protected <T> MutableLiveData<T> registerObserver(Class<T> tClass) {
+    protected <M> MutableLiveData<M> registerObserver(Class<M> tClass) {
         String event = getClassName().concat(tClass.getName());
         eventKeys.add(event);
         return LiveBus.getDefault().subscribe(event);
@@ -51,7 +55,7 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
             for (int i = 0; i < eventKeys.size(); i++) {
                 LiveBus.getDefault().clear(eventKeys.get(i));
             }
-            eventKeys=null;
+            eventKeys = null;
         }
         super.onDestroy();
     }
