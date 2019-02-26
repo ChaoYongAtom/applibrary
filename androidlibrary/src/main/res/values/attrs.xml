@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="guide_view_pager" />
+    <item type="id" name="list_view" />
     <!-- style for MaterialRefreshLayout  -->
     <declare-styleable name="MaterialRefreshLayout">
         <attr name="overlay" format="boolean" />

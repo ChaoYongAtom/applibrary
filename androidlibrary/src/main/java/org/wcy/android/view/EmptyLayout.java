@@ -28,7 +28,7 @@ public class EmptyLayout extends RelativeLayout {
     private ViewGroup mEmptyView;
     private ViewGroup mErrorView;
     private ViewGroup mNetView;
-    private RecyclerView listView;
+    private RecyclerView listView = null;
     private boolean mViewsAdded;
     boolean isRefresh = false;//是否支持刷新
     boolean isList = false;//是否是列表
@@ -88,6 +88,15 @@ public class EmptyLayout extends RelativeLayout {
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         if (isRefresh && !isList) {//需要刷新但是不是列表,内部需要childviewq且只有一个
             if (getChildCount() == 1) {
+                try {
+                    listView = findViewById(R.id.list_view);
+                    if (listView != null) {
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                        listView.setLayoutManager(mLayoutManager);
+                        listView.setHasFixedSize(true);
+                    }
+                } catch (Exception E) {
+                }
                 View viewGroup = getChildAt(0);
                 viewGroup.setFocusable(true);
                 viewGroup.setClickable(true);
@@ -241,7 +250,7 @@ public class EmptyLayout extends RelativeLayout {
                     }
                     if (childView != null) {
                         childView.setVisibility(View.VISIBLE);
-                        if(listView==null){
+                        if (!isList) {
                             ((ViewGroup) childView).getChildAt(0).setVisibility(VISIBLE);
                         }
                     }
