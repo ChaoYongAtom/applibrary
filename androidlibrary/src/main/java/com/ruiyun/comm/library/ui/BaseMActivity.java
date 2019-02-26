@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.ruiyun.comm.library.mvvm.BaseListVo;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
 import com.ruiyun.comm.library.mvvm.event.LiveBus;
@@ -38,12 +39,23 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
     }
 
     protected <M> MutableLiveData<M> registerObserver(Class<M> tClass) {
-        String event = getClassName().concat(tClass.getName());
+        String event = getClassName().concat(tClass.getSimpleName());
         eventKeys.add(event);
         return LiveBus.getDefault().subscribe(event);
     }
 
+    protected <M> MutableLiveData<M> registerObserver(Class<M> tClass, String tag) {
+        String event = getClassName().concat(tClass.getSimpleName());
+        event = event.concat(tag);
+        eventKeys.add(event);
+        return LiveBus.getDefault().subscribe(event);
+    }
 
+    protected <M> MutableLiveData<BaseListVo<M>> registerObservers(Class<M> tClass) {
+        String event = getClassName().concat(tClass.getSimpleName()).concat("list");
+        eventKeys.add(event);
+        return LiveBus.getDefault().subscribe(event);
+    }
     @Override
     public void showSuccess(int state, String msg) {
 
@@ -66,7 +78,7 @@ public class BaseMActivity<T extends BaseViewModel> extends BaseActivity impleme
     }
 
     protected String getClassName() {
-        return getClass().getName();
+        return getClass().getSimpleName();
     }
 
     @Override
