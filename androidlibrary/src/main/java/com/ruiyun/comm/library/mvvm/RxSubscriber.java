@@ -198,7 +198,6 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                         } else if (getData() == Integer.class) {
                                             baseResult.setResult(Integer.parseInt(dataJson));
                                         } else if (getData() != null) {
-                                            RxLogTool.d("onNext" + method, getData().getName());
                                             baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
                                         }
                                     }

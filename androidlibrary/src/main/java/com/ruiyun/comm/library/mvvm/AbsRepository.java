@@ -149,7 +149,7 @@ public abstract class AbsRepository<T> {
             subscriber.setUpload(true);
             Flowable observable = getOverrideUpload(path, subscriber.getMethod());
             if (observable != null) {
-                addSubscribe(observable, subscriber, true);
+                addSubscribe(observable, subscriber);
             } else {
                 listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
             }
@@ -159,17 +159,7 @@ public abstract class AbsRepository<T> {
     }
 
     protected void addSubscribe(Flowable<T> flowable, RxSubscriber<T> subscriber) {
-        addSubscribe(flowable, subscriber, false);
-    }
-
-    protected void addSubscribe(Flowable<T> flowable, RxSubscriber<T> subscriber, boolean isUpload) {
         if (flowable != null && subscriber != null) {
-            if (isUpload) {
-                HttpHelper.getInstance().upload();
-            } else {
-                HttpHelper.getInstance().postHttp();
-            }
-
             addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(subscriber));
         }
     }

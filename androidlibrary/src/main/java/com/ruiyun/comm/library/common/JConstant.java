@@ -23,7 +23,7 @@ public class JConstant {
     public final static int MIN_PAGE_ROWS = 20;
     private static boolean encrypt = true;
     public final static String heards = "heards";
-    public static String VersionName="newestversion";
+    public static String VersionName = "newestversion";
     private static LoinOutInterface loinOutInterface;
     private static String httpUrl;
     private static String token;
@@ -38,7 +38,7 @@ public class JConstant {
     public static int waterMarkdegress = -15;
     private static boolean isHeaders = true;
     private static String heardsVal = "";
-    private static int uploadTime=5;
+    private static int uploadTime = 120;
     private static Class<? extends RxSubscriber> rxsubscriber;
 
     public static Class<? extends RxSubscriber> getRxsubscriber() {
@@ -98,10 +98,10 @@ public class JConstant {
                 Bundle bundle = appInfo.metaData;
                 httpUrl = bundle.getString("HTTP_URL");
                 encrypt = !bundle.getBoolean("ENABLE_DEBUG");
-                RxLogTool.d("httpUrl","地址初始化成功");
+                RxLogTool.d("httpUrl", "地址初始化成功");
             } catch (Exception e) {
                 e.printStackTrace();
-                RxLogTool.e("httpUrl","地址初始化失败");
+                RxLogTool.e("httpUrl", "地址初始化失败");
             }
         }
         return httpUrl;
@@ -142,11 +142,8 @@ public class JConstant {
     public static void setHttpPostService(Class httpPostService) {
         getHttpUrl();
         JConstant.httpPostService = httpPostService;
-        if(!RxDataTool.isNullString(httpUrl)){
-            new HttpHelper.Builder()
-                    .initOkHttp()
-                    .createRetrofit(httpUrl)
-                    .build();
+        if (!RxDataTool.isNullString(httpUrl)) {
+            new HttpHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
         }
     }
 

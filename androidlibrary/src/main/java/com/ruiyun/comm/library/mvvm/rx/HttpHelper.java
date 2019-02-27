@@ -11,12 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.internal.Util;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-
-import static okhttp3.internal.Util.checkDuration;
 
 /**
  * @author：wcy
@@ -25,24 +22,8 @@ public class HttpHelper {
     private static volatile HttpHelper mHttpHelper = null;
 
     private static Retrofit mRetrofit;
-    private static OkHttpClient.Builder mBuilder;
-    private static OkHttpClient mOkHttpClient;
-
+    public static boolean isUpload=false;
     private HttpHelper() {
-    }
-
-    public  void postHttp() {
-        if (mOkHttpClient.connectTimeoutMillis() > checkDuration("timeout", 30, TimeUnit.SECONDS)) {
-            mBuilder.connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
-                    .writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
-                    .readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
-        }
-    }
-
-    public  void upload() {
-        mBuilder.connectTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES)
-                .writeTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES)
-                .readTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES);
     }
 
     public static HttpHelper getInstance() {
@@ -57,10 +38,7 @@ public class HttpHelper {
     }
 
     public static void init(String baseUrl) {
-        new HttpHelper.Builder()
-                .initOkHttp()
-                .createRetrofit(baseUrl)
-                .build();
+        new HttpHelper.Builder().initOkHttp().createRetrofit(baseUrl).build();
     }
 
 
@@ -84,18 +62,11 @@ public class HttpHelper {
                 synchronized (HttpHelper.class) {
                     if (mBuilder == null) {
                         HttpLoggingInterceptor loggingInterceptor = HttpLogInterceptor.getHttpLoggingInterceptor();
-                        mBuilder = new OkHttpClient.Builder()
-                                .addInterceptor(loggingInterceptor)
-                                .addNetworkInterceptor(loggingInterceptor)
-                                .connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
-                                .writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS)
-                                .readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
+                        mBuilder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).addInterceptor(new DynamicConnectTimeout()).addNetworkInterceptor(loggingInterceptor).connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS).writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS).readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
 
                         if (JConstant.isIsHeaders()) {
                             mBuilder.addInterceptor(chain -> {
-                                Request newRequest = chain.request().newBuilder()
-                                        .addHeader("headers", JConstant.getHeardsVal())
-                                        .build();
+                                Request newRequest = chain.request().newBuilder().addHeader("headers", JConstant.getHeardsVal()).build();
                                 return chain.proceed(newRequest);
                             });
                         }
@@ -113,14 +84,11 @@ public class HttpHelper {
          * @return Builder
          */
         public Builder createRetrofit(String baseUrl) {
-            Retrofit.Builder builder = new Retrofit.Builder()
-                    .addConverterFactory(FastJsonConverterFactory.create())
+            Retrofit.Builder builder = new Retrofit.Builder().addConverterFactory(FastJsonConverterFactory.create())
                     // .addConverterFactory(ScalarsConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .baseUrl(baseUrl);
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()).baseUrl(baseUrl);
             this.mOkHttpClient = mBuilder.build();
-            this.mRetrofit = builder.client(mOkHttpClient)
-                    .build();
+            this.mRetrofit = builder.client(mOkHttpClient).build();
             return this;
         }
 
@@ -136,12 +104,10 @@ public class HttpHelper {
         checkNotNull(builder.mOkHttpClient);
         checkNotNull(builder.mRetrofit);
         mRetrofit = builder.mRetrofit;
-        mBuilder = builder.mBuilder;
-        mOkHttpClient = builder.mOkHttpClient;
     }
 
-    public static OkHttpClient.Builder getmBuilder() {
-        return mBuilder;
+    public static Retrofit getmRetrofit() {
+        return mRetrofit;
     }
 
     public static @NonNull
