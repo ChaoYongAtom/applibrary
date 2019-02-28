@@ -65,6 +65,13 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         return LiveBus.getDefault().subscribe(event);
     }
 
+    protected <M> MutableLiveData<BaseListVo<M>> registerObservers(Class<M> tClass, String tag) {
+        String event = getClassName().concat(tClass.getSimpleName()).concat("list");
+        event = event.concat(tag);
+        eventKeys.add(event);
+        return LiveBus.getDefault().subscribe(event);
+    }
+
     /**
      * 初始化沉浸式
      */
@@ -190,6 +197,9 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     }
 
     protected String getClassName() {
-        return getClass().getSimpleName();
+        return getClass().getSimpleName()+getStateEventKey();
+    }
+    protected String getStateEventKey() {
+        return "";
     }
 }
