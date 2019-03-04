@@ -18,7 +18,7 @@ public class LoadObserver implements Observer<String> {
     @Override
     public void onChanged(@Nullable String result) {
         if (!TextUtils.isEmpty(result)) {
-            String[] str = result.split(",");
+            String[] str = result.split("@");
             if (str != null) {
                 int state = Integer.parseInt(str[0]);
 

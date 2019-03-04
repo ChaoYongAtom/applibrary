@@ -23,15 +23,24 @@ import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.subscribers.DisposableSubscriber;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * @author：wct on 18/7/26 16:15
@@ -137,6 +146,55 @@ public abstract class AbsRepository<T> {
 
     public void uplaod(UploadType uploadType, String path, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
+//        Flowable<RxResult> flowable = Flowable.create(emitter -> {
+//            OkHttpClient.Builder mOkHttpClient = new OkHttpClient.Builder().connectTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES).writeTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES).readTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES);
+//            MultipartBody.Builder builder = new MultipartBody.Builder();
+//            //设置类型
+//            builder.setType(MultipartBody.FORM);
+//            builder.addFormDataPart("token", JConstant.getToken());
+//            File file = new File(path);
+//            builder.addFormDataPart("file", file.getName(), RequestBody.create(null, file));
+//            RequestBody body = builder.build();
+//            final Request request = new Request.Builder().url("http://appadviser.hejuzg.cn/version1/platform/uploadimage").post(body).build();
+//            mOkHttpClient.build().newCall(request).enqueue(new Callback() {
+//                @Override
+//                public void onFailure(Call call, IOException e) {
+//                    emitter.onError(e);
+//                }
+//
+//                @Override
+//                public void onResponse(Call call, Response response) throws IOException {
+//                    String string = response.body().string();
+//                    RxLogTool.d("onResponse", string);
+//                    if (response.code() == 200) {
+//                        RxResult baseResult = JSONObject.parseObject(string, RxResult.class);
+//                        emitter.onNext(baseResult);
+//                    }else{
+//                        listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
+//                    }
+//
+//                }
+//            });
+//        }, BackpressureStrategy.BUFFER);
+//        DisposableSubscriber observer = new DisposableSubscriber<RxResult>() {
+//            @Override
+//            public void onNext(RxResult o) {
+//                listener.onNext(o);
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//                listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//
+//            }
+//        };
+//        addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(observer));
+
+
         if (uploadType == null) uploadType = UploadType.IMAGE;
         if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
@@ -312,10 +370,8 @@ public abstract class AbsRepository<T> {
             }
             Class cl = apiService.getClass();
             File file = new File(path);
-            RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-            String token = JConstant.getToken();
-            RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), token);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
+            RequestBody uid = RequestBody.create(MediaType.parse("multipart/form-data"), JConstant.getToken());
             Flowable<T> observable = (Flowable<T>) cl.getMethod(method, new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
             return observable;
         } catch (Exception e) {

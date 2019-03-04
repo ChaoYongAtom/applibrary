@@ -54,11 +54,19 @@ public class DynamicConnectTimeout implements Interceptor {
             //3、OkHttpClient(Builder builder)     OkHttpClient 的源码 构造方法中
             Field connectTimeoutField = client.getClass().getDeclaredField("connectTimeout");
             connectTimeoutField.setAccessible(true);
+            Field readTimeout = client.getClass().getDeclaredField("readTimeout");
+            readTimeout.setAccessible(true);
+            Field writeTimeout = client.getClass().getDeclaredField("writeTimeout");
+            writeTimeout.setAccessible(true);
             //4、根据所需要的时间进行动态设置超时时间
             if (isUpload) {
                 connectTimeoutField.setInt(client, JConstant.getUploadTime() * 1000);
+                readTimeout.setInt(client, JConstant.getUploadTime() * 1000);
+                writeTimeout.setInt(client, JConstant.getUploadTime() * 1000);
             } else {
                 connectTimeoutField.setInt(client, JConstant.getConnectionTime() * 1000);
+                readTimeout.setInt(client, JConstant.getConnectionTime() * 1000);
+                writeTimeout.setInt(client, JConstant.getConnectionTime() * 1000);
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();

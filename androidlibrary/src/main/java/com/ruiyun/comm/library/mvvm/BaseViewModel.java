@@ -65,25 +65,25 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel imp
      */
     public String getStateError(int state, String msg) {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(StateConstants.ERROR_STATE).append(",").append(state).append(",").append(msg == null ? "操作失败" : msg);
+        stringBuffer.append(StateConstants.ERROR_STATE).append("@").append(state).append("@").append(msg == null ? "操作失败" : msg);
         return stringBuffer.toString();
     }
 
     public String getStateError() {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(StateConstants.ERROR_STATE).append(",").append("1").append(",").append("操作失败");
+        stringBuffer.append(StateConstants.ERROR_STATE).append("@").append("1").append("@").append("操作失败");
         return stringBuffer.toString();
     }
 
     public String getStateSuccess() {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(StateConstants.SUCCESS_STATE).append(",").append(StateConstants.SUCCESS_STATE);
+        stringBuffer.append(StateConstants.SUCCESS_STATE).append("@").append(StateConstants.SUCCESS_STATE);
         return stringBuffer.toString();
     }
 
     public String getStateSuccess(int state, String msg) {
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(StateConstants.SUCCESS_STATE).append(",").append(state).append(",").append(msg == null ? "-" : msg);
+        stringBuffer.append(StateConstants.SUCCESS_STATE).append("@").append(state).append("@").append(msg == null ? "@" : msg);
         return stringBuffer.toString();
     }
 

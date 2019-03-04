@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.mvvm.RxSubscriber;
 import com.ruiyun.comm.library.mvvm.rx.HttpHelper;
+import com.ruiyun.comm.library.mvvm.rx.HttpUploadHelper;
 
 import org.wcy.android.utils.AESOperator;
 import org.wcy.android.utils.ExampleUtil;
@@ -22,7 +23,6 @@ import org.wcy.android.utils.RxTool;
 public class JConstant {
     public final static int MIN_PAGE_ROWS = 20;
     private static boolean encrypt = true;
-    public final static String heards = "heards";
     public static String VersionName = "newestversion";
     private static LoinOutInterface loinOutInterface;
     private static String httpUrl;
@@ -139,14 +139,18 @@ public class JConstant {
         JConstant.watermarkStr = watermarkStr;
     }
 
-    public static void setHttpPostService(Class httpPostService) {
+    public static void setHttpPostService(Class httpPostService, boolean isUpload) {
         getHttpUrl();
         JConstant.httpPostService = httpPostService;
         if (!RxDataTool.isNullString(httpUrl)) {
             new HttpHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
+            if (isUpload)
+                new HttpUploadHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
         }
     }
-
+    public static void setHttpPostService(Class httpPostService) {
+        setHttpPostService(httpPostService,false);
+    }
     public static boolean isIsHeaders() {
         return isHeaders;
     }
