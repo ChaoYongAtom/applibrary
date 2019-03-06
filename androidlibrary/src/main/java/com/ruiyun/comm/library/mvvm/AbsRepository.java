@@ -146,55 +146,6 @@ public abstract class AbsRepository<T> {
 
     public void uplaod(UploadType uploadType, String path, CallBack listener) {
         RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
-//        Flowable<RxResult> flowable = Flowable.create(emitter -> {
-//            OkHttpClient.Builder mOkHttpClient = new OkHttpClient.Builder().connectTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES).writeTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES).readTimeout(JConstant.getUploadTime(), TimeUnit.MINUTES);
-//            MultipartBody.Builder builder = new MultipartBody.Builder();
-//            //设置类型
-//            builder.setType(MultipartBody.FORM);
-//            builder.addFormDataPart("token", JConstant.getToken());
-//            File file = new File(path);
-//            builder.addFormDataPart("file", file.getName(), RequestBody.create(null, file));
-//            RequestBody body = builder.build();
-//            final Request request = new Request.Builder().url("http://appadviser.hejuzg.cn/version1/platform/uploadimage").post(body).build();
-//            mOkHttpClient.build().newCall(request).enqueue(new Callback() {
-//                @Override
-//                public void onFailure(Call call, IOException e) {
-//                    emitter.onError(e);
-//                }
-//
-//                @Override
-//                public void onResponse(Call call, Response response) throws IOException {
-//                    String string = response.body().string();
-//                    RxLogTool.d("onResponse", string);
-//                    if (response.code() == 200) {
-//                        RxResult baseResult = JSONObject.parseObject(string, RxResult.class);
-//                        emitter.onNext(baseResult);
-//                    }else{
-//                        listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
-//                    }
-//
-//                }
-//            });
-//        }, BackpressureStrategy.BUFFER);
-//        DisposableSubscriber observer = new DisposableSubscriber<RxResult>() {
-//            @Override
-//            public void onNext(RxResult o) {
-//                listener.onNext(o);
-//            }
-//
-//            @Override
-//            public void onError(Throwable t) {
-//                listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//
-//            }
-//        };
-//        addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(observer));
-
-
         if (uploadType == null) uploadType = UploadType.IMAGE;
         if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
@@ -335,21 +286,20 @@ public abstract class AbsRepository<T> {
                     }
                 }
             }
-            String token = JConstant.getToken();
-            Flowable<T> observable = null;
-            if (parameters != null || !RxDataTool.isNullString(token)) {
-                if (parameters != null) {
-                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
-                } else {
-                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
-                }
-            } else {
-                if (!RxDataTool.isNullString(params)) {
-                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
-                } else {
-                    observable = (Flowable<T>) cl.getMethod(method).invoke(apiService);
-                }
-            }
+            Flowable<T> observable = (Flowable<T>) cl.getMethod("sendPost", new Class[]{String.class, String.class, String.class}).invoke(apiService, method, params, JConstant.getToken());
+//            if (parameters != null || !RxDataTool.isNullString(token)) {
+//                if (parameters != null) {
+//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
+//                } else {
+//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
+//                }
+//            } else {
+//                if (!RxDataTool.isNullString(params)) {
+//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
+//                } else {
+//                    observable = (Flowable<T>) cl.getMethod(method).invoke(apiService);
+//                }
+//            }
             return observable;
         } catch (Exception e) {
             e.printStackTrace();
