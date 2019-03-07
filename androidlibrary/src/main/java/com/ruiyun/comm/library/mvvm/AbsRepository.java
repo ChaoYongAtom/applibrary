@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apkfuns.logutils.LogUtils;
+import com.ruiyun.comm.library.api.HttpUploadService;
 import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.emum.UploadType;
@@ -23,24 +24,15 @@ import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subscribers.DisposableSubscriber;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * @author：wct on 18/7/26 16:15
@@ -50,13 +42,9 @@ public abstract class AbsRepository<T> {
     private CompositeDisposable mCompositeSubscription;
     private Context mContext;
     private CallBack callBack;
-
+    private HttpUploadService apiService;
     public AbsRepository() {
-
     }
-
-    private Object apiService;
-
     /**
      * 多文件上传，返回list对象
      *
@@ -204,8 +192,7 @@ public abstract class AbsRepository<T> {
         if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             if (null == apiService) {
-                apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
-
+                apiService = HttpHelper.getInstance().create(HttpUploadService.class);
             }
             if (apiService != null) {
                 try {
@@ -249,62 +236,42 @@ public abstract class AbsRepository<T> {
      * @param parameters
      * @return
      */
-    private Flowable<T> getOverride(String method, Object parameters) {
-        try {
-            Class cl = apiService.getClass();
-            String params = "";
-            if (parameters != null) {
-                if (parameters instanceof JSONObject) {
-                    JSONObject jsonObject = (JSONObject) parameters;
-                    if (jsonObject.size() > 0) {
-                        List<String> keys = new ArrayList<>();
-                        for (String str : jsonObject.keySet()) {
-                            if (RxDataTool.isEmpty(jsonObject.get(str))) {
-                                keys.add(str);
-                            }
-                        }
-                        for (String key : keys) {
-                            jsonObject.remove(key);
-                        }
-                        if (jsonObject.size() > 0) {
-                            if (RxActivityTool.isAppDebug(RxTool.getContext())) {
-                                RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
-                                LogUtils.json(jsonObject.toJSONString());
-                            }
-                            if (JConstant.isEncrypt()) {
-                                params = AESOperator.encrypt(jsonObject.toJSONString());
-                            } else {
-                                params = jsonObject.toJSONString();
-                            }
+    private Flowable<RxResult> getOverride(String method, Object parameters) {
+        String params = "";
+        if (parameters != null) {
+            if (parameters instanceof JSONObject) {
+                JSONObject jsonObject = (JSONObject) parameters;
+                if (jsonObject.size() > 0) {
+                    List<String> keys = new ArrayList<>();
+                    for (String str : jsonObject.keySet()) {
+                        if (RxDataTool.isEmpty(jsonObject.get(str))) {
+                            keys.add(str);
                         }
                     }
-
-                } else if (parameters instanceof String) {
-                    RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
-                    if (JConstant.isEncrypt() && !RxDataTool.isNullString(parameters.toString())) {
-                        params = AESOperator.encrypt(parameters.toString());
+                    for (String key : keys) {
+                        jsonObject.remove(key);
+                    }
+                    if (jsonObject.size() > 0) {
+                        if (RxActivityTool.isAppDebug(RxTool.getContext())) {
+                            RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
+                            LogUtils.json(jsonObject.toJSONString());
+                        }
+                        if (JConstant.isEncrypt()) {
+                            params = AESOperator.encrypt(jsonObject.toJSONString());
+                        } else {
+                            params = jsonObject.toJSONString();
+                        }
                     }
                 }
+
+            } else if (parameters instanceof String) {
+                RxLogTool.d("postParameters = ----------------->" + method, parameters.toString());
+                if (JConstant.isEncrypt() && !RxDataTool.isNullString(parameters.toString())) {
+                    params = AESOperator.encrypt(parameters.toString());
+                }
             }
-            Flowable<T> observable = (Flowable<T>) cl.getMethod("sendPost", new Class[]{String.class, String.class, String.class}).invoke(apiService, method, params, JConstant.getToken());
-//            if (parameters != null || !RxDataTool.isNullString(token)) {
-//                if (parameters != null) {
-//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class, String.class}).invoke(apiService, params, token);
-//                } else {
-//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, token);
-//                }
-//            } else {
-//                if (!RxDataTool.isNullString(params)) {
-//                    observable = (Flowable<T>) cl.getMethod(method, new Class[]{String.class}).invoke(apiService, params);
-//                } else {
-//                    observable = (Flowable<T>) cl.getMethod(method).invoke(apiService);
-//                }
-//            }
-            return observable;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
+        return apiService.sendPost(method, params, JConstant.getToken());
     }
 
     /**
@@ -313,20 +280,11 @@ public abstract class AbsRepository<T> {
      * @param path
      * @return
      */
-    private Flowable<T> getOverrideUpload(String path, String method) {
-        try {
-            if (null == apiService) {
-                apiService = HttpHelper.getInstance().create(JConstant.getHttpPostService());
-            }
-            Class cl = apiService.getClass();
-            File file = new File(path);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
-            RequestBody uid = RequestBody.create(MediaType.parse("multipart/form-data"), JConstant.getToken());
-            Flowable<T> observable = (Flowable<T>) cl.getMethod(method, new Class[]{RequestBody.class, MultipartBody.Part.class}).invoke(apiService, uid, part);
-            return observable;
-        } catch (Exception e) {
-            return null;
-        }
+    private Flowable<RxResult> getOverrideUpload(String path, String method) {
+        File file = new File(path);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
+        RequestBody uid = RequestBody.create(MediaType.parse("multipart/form-data"), JConstant.getToken());
+        return apiService.upload(method, uid, part);
     }
 
     public void setmContext(Context mContext) {

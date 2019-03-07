@@ -27,7 +27,6 @@ public class JConstant {
     private static LoinOutInterface loinOutInterface;
     private static String httpUrl;
     private static String token;
-    private static Class httpPostService;
     private static String registrationID;
     private static int connectionTime = 15;
     private static String watermarkStr;
@@ -107,10 +106,6 @@ public class JConstant {
         return httpUrl;
     }
 
-    public static Class getHttpPostService() {
-        return httpPostService;
-    }
-
     public static int getConnectionTime() {
         return connectionTime;
     }
@@ -139,18 +134,13 @@ public class JConstant {
         JConstant.watermarkStr = watermarkStr;
     }
 
-    public static void setHttpPostService(Class httpPostService, boolean isUpload) {
+    public static void setHttpPostService() {
         getHttpUrl();
-        JConstant.httpPostService = httpPostService;
         if (!RxDataTool.isNullString(httpUrl)) {
             new HttpHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
-            if (isUpload)
-                new HttpUploadHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
         }
     }
-    public static void setHttpPostService(Class httpPostService) {
-        setHttpPostService(httpPostService,false);
-    }
+
     public static boolean isIsHeaders() {
         return isHeaders;
     }

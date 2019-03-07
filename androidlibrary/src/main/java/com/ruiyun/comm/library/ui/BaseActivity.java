@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -44,7 +45,22 @@ public abstract class BaseActivity extends SupportActivity implements  BackHandl
         mImmersionBar = ImmersionBar.with(this);
         mImmersionBar.init();
     }
-
+    private long lastClickTime;
+    public boolean isFastDoubleClick() {
+        long time = System.currentTimeMillis();
+        long timeD = time - lastClickTime;
+        lastClickTime = time;
+        return timeD <= 1000;
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            if (isFastDoubleClick()) {
+                return true;
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     @Override
     public void setSelectedFragment(Fragment selectedFragment) {
         this.mBackHandedFragment = selectedFragment;
