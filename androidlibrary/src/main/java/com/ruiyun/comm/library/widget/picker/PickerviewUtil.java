@@ -16,7 +16,6 @@ import com.ruiyun.comm.library.widget.picker.view.TimePickerView;
 import com.ruiyun.comm.library.widget.picker.view.WheelView;
 
 import org.wcy.android.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -79,6 +78,10 @@ public class PickerviewUtil {
         void onClick(View view, int postion, T iteam);
     }
 
+    public static void alertBottomWheelOption(Context context, int postion, final List<?> list, final OnWheelViewClick click) {
+        alertBottomWheelOption(context, "", postion, list, click);
+    }
+
     /**
      * 弹出底部滚轮选择
      *
@@ -86,43 +89,36 @@ public class PickerviewUtil {
      * @param list
      * @param click
      */
-    public static void alertBottomWheelOption(Context context, int postion, final List<?> list, final OnWheelViewClick click) {
+    public static void alertBottomWheelOption(Context context, String title, int postion, final List<?> list, final OnWheelViewClick click) {
 
         final PopupWindow popupWindow = new PopupWindow();
         View view = LayoutInflater.from(context).inflate(R.layout.layout_bottom_wheel_option, null);
-        TextView tv_confirm = (TextView) view.findViewById(R.id.btnSubmit);
-        final WheelView wv_option = (WheelView) view.findViewById(R.id.wv_option);
+        TextView tv_confirm = view.findViewById(R.id.btnSubmit);
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setText(title);
+        final WheelView wv_option = view.findViewById(R.id.wv_option);
         wv_option.setAdapter(new ArrayWheelAdapter(list));
         wv_option.setCyclic(false);
         wv_option.setTextSize(16);
         wv_option.setCurrentItem(postion);
-        tv_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
-                click.onClick(view, wv_option.getCurrentItem(), list.get(wv_option.getCurrentItem()));
-            }
+        tv_confirm.setOnClickListener(view1 -> {
+            popupWindow.dismiss();
+            click.onClick(view1, wv_option.getCurrentItem(), list.get(wv_option.getCurrentItem()));
         });
 
-        view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: 2016/8/11 0011 取消
-                popupWindow.dismiss();
-            }
+        view.findViewById(R.id.btnCancel).setOnClickListener(view12 -> {
+            // TODO: 2016/8/11 0011 取消
+            popupWindow.dismiss();
         });
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                int top = view.findViewById(R.id.ll_container).getTop();
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    int y = (int) motionEvent.getY();
-                    if (y < top) {
-                        popupWindow.dismiss();
-                    }
+        view.setOnTouchListener((view13, motionEvent) -> {
+            int top = view13.findViewById(R.id.ll_container).getTop();
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                int y = (int) motionEvent.getY();
+                if (y < top) {
+                    popupWindow.dismiss();
                 }
-                return true;
             }
+            return true;
         });
         popupWindow.setContentView(view);
         popupWindow.setOutsideTouchable(true);

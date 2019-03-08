@@ -284,6 +284,9 @@ public abstract class AbsRepository<T> {
         File file = new File(path);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file));
         RequestBody uid = RequestBody.create(MediaType.parse("multipart/form-data"), JConstant.getToken());
+        if (null == apiService) {
+            apiService = HttpHelper.getInstance().create(HttpUploadService.class);
+        }
         return apiService.upload(method, uid, part);
     }
 
