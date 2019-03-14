@@ -243,6 +243,7 @@ public abstract class AbsRepository<T> {
                 JSONObject jsonObject = (JSONObject) parameters;
                 if (jsonObject.size() > 0) {
                     List<String> keys = new ArrayList<>();
+                    //处理空参数
                     for (String str : jsonObject.keySet()) {
                         if (RxDataTool.isEmpty(jsonObject.get(str))) {
                             keys.add(str);

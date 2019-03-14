@@ -22,7 +22,7 @@ public class RxLogTool {
      * @param args
      */
     public static void d(String msg, String args) {
-        if (RxTool.isApkInDebug()) Log.d(msg, args);
+        if (RxTool.isApkInDebug()&&!RxDataTool.isNullString(msg)&&!RxDataTool.isNullString(args)) Log.d(msg, args);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RxLogTool {
      * @param json
      */
     public static void dJson(String json) {
-        if (RxTool.isApkInDebug()) {
+        if (RxTool.isApkInDebug()&&!RxDataTool.isNullString(json)) {
             LogUtils.json(json);
         }
     }

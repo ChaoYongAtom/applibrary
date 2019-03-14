@@ -1,5 +1,7 @@
 package com.ruiyun.comm.library.emum;
 
+import com.ruiyun.comm.library.common.JConstant;
+
 /**
  * UploadType
  * 上传类型
@@ -10,7 +12,7 @@ package com.ruiyun.comm.library.emum;
  * @description YjSales
  */
 public enum UploadType {
-    IMAGE(1, "platform/uploadimage", "图片"), VIDEO(2, "platform/uploadvideo", "视频");
+    IMAGE(1, JConstant.uploadName, "图片"), VIDEO(2, "platform/uploadvideo", "视频");
     private int ecode;
     private String ename;
     private String eurl;
