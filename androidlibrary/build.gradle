@@ -59,4 +59,5 @@ dependencies {
     api "com.noober.background:${configs.backgroundVersion}"
     api "com.allenliu.versionchecklib:library:${configs.versionchecklibVersion}"
     api "com.baidu.mobstat:mtj-sdk-circle:latest.integration"
+    api "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle:${configs.lifecycleVersion}"
 }

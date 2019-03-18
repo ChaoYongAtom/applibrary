@@ -51,7 +51,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
     private String method;
 
     private Context context;
-
+    private boolean isLoading=false;
     /**
      * 构造
      */
@@ -91,6 +91,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      * 显示加载框
      */
     private void showProgressDialog() {
+        isLoading=true;
         if (!showProgress) return;
         if (progressDialog != null)
             progressDialog.show();
@@ -140,6 +141,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      * @param e
      */
     private void errorDo(Throwable e) {
+        isLoading=false;
         RxLogTool.d("errorDo" + method, e.getMessage());
         if (mSubscriberOnNextListener == null) return;
         if (e instanceof HttpTimeException) {
@@ -160,6 +162,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      */
     @Override
     public void onNext(T result) {
+        isLoading=false;
         String t = JSONObject.toJSONString(result);
         RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
@@ -321,5 +324,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
     }
 
     public void handleResult(String result) {
+    }
+
+    public boolean isLoading() {
+        return isLoading;
     }
 }

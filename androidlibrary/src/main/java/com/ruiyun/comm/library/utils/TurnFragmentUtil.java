@@ -21,7 +21,6 @@ import org.wcy.android.utils.RxFragmentUtil;
  * @date 2017/3/14
  */
 public class TurnFragmentUtil extends RxFragmentUtil {
-    @Deprecated
     public static void startFragment(Context context, Class cl, Bundle bundle) {
         Intent intent = new Intent(context, CommonActivity.class);
         intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
@@ -29,7 +28,6 @@ public class TurnFragmentUtil extends RxFragmentUtil {
             intent.putExtras(bundle);
         context.startActivity(intent);
     }
-    @Deprecated
     public static void startFragmentForResult(AppCompatActivity activity, Class cl, Bundle bundle, Integer requestCode) {
 
         Intent intent = new Intent(activity, CommonActivity.class);

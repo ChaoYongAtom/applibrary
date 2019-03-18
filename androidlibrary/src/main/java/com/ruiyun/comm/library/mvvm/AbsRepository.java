@@ -2,6 +2,7 @@ package com.ruiyun.comm.library.mvvm;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.apkfuns.logutils.LogUtils;
@@ -43,8 +44,11 @@ public abstract class AbsRepository<T> {
     private Context mContext;
     private CallBack callBack;
     private HttpUploadService apiService;
+    private String fragmentName = "";
+
     public AbsRepository() {
     }
+
     /**
      * 多文件上传，返回list对象
      *
@@ -157,7 +161,7 @@ public abstract class AbsRepository<T> {
 
     protected void addSubscribe(Flowable<T> flowable, RxSubscriber<T> subscriber) {
         if (flowable != null && subscriber != null) {
-            addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(subscriber));
+            addSubscribe(flowable.compose(RxSchedulers.io_main()).subscribeWith(subscriber), subscriber.getMethod());
         }
     }
 
@@ -299,17 +303,33 @@ public abstract class AbsRepository<T> {
         return mContext;
     }
 
-    protected void addSubscribe(Disposable disposable) {
+    protected void addSubscribe(Disposable disposable, String method) {
+        String key = fragmentName.concat(method);
         if (mCompositeSubscription == null) {
             mCompositeSubscription = new CompositeDisposable();
         }
+        if (mCompositeSubscription != null && HttpHelper.disposableMap.containsKey(key)) {
+            RxLogTool.d("onNext", method + "请求存在");
+            Disposable disposable1 = HttpHelper.disposableMap.get(key);
+            if (disposable1 instanceof RxSubscriber && ((RxSubscriber) disposable1).isLoading()) {
+                RxLogTool.d("onNext", method + "取消请求");
+                mCompositeSubscription.remove(disposable1);
+            }
+        }
+        RxLogTool.d("onNext", method + "发送请求");
+        HttpHelper.disposableMap.put(key, disposable);
         mCompositeSubscription.add(disposable);
     }
 
     public void unSubscribe() {
         if (mCompositeSubscription != null && mCompositeSubscription.isDisposed()) {
             mCompositeSubscription.clear();
+            mCompositeSubscription = null;
         }
+    }
+
+    public void setFragmentName(String fragmentName) {
+        this.fragmentName = fragmentName;
     }
 
     public void setCallBack(CallBack callBack) {

@@ -22,7 +22,7 @@ import java.util.List;
 public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel implements CallBack {
 
     public MutableLiveData<String> loadState;
-    private String fragmentName;
+    private String fragmentName = "";
     public T mRepository;
 
     public BaseViewModel(@NonNull Application application) {
@@ -89,6 +89,7 @@ public class BaseViewModel<T extends AbsRepository> extends AndroidViewModel imp
 
     public void setFragmentName(String fragmentName) {
         this.fragmentName = fragmentName;
+        if (mRepository != null) mRepository.setFragmentName(fragmentName);
     }
 
     @Override

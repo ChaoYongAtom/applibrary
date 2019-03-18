@@ -7,8 +7,10 @@ import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.utils.HttpLogInterceptor;
 
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -20,9 +22,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  */
 public class HttpHelper {
     private static volatile HttpHelper mHttpHelper = null;
-
+    public static HashMap<String, Disposable> disposableMap = new HashMap<>();
     private static Retrofit mRetrofit;
-    public static boolean isUpload=false;
+    public static boolean isUpload = false;
+
     private HttpHelper() {
     }
 

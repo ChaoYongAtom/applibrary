@@ -3,6 +3,7 @@ package com.ruiyun.comm.library.ui;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import com.ruiyun.comm.library.mvvm.LoadObserver;
 import com.ruiyun.comm.library.mvvm.event.LiveBus;
 import com.ruiyun.comm.library.mvvm.interfaces.LoadInterface;
 import com.ruiyun.comm.library.utils.ParameterizedTypeUtil;
+import com.ruiyun.comm.library.utils.TurnFragmentUtil;
+
+import org.wcy.android.utils.RxDataTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +37,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
             mViewModel.loadState.observe(this, new LoadObserver(this));
             dataObserver();
         }
-        StatService.onPageStart(getThisContext(), getClassName());
+        StatService.onPageStart(getThisContext(), getClassName() + (RxDataTool.isNullString(setTitle()) ? "" : setTitle()));
     }
 
     @Override
@@ -125,7 +129,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
 
     @Override
     public String setTitle() {
-        return null;
+        return "";
     }
 
     @Override
@@ -174,13 +178,58 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         }
     }
 
+    /**
+     * 跳转到一个新的activiy的fragment
+     *
+     * @param cl
+     * @param bundle
+     */
+    public void startActivityToFragment(Class cl, Bundle bundle) {
+        TurnFragmentUtil.startFragment(getThisContext(), cl, bundle);
+    }
 
+
+
+    /**
+     * 跳转到一个新的activiy带返回的fragment
+     *
+     * @param cl
+     * @param bundle
+     * @param requestCode
+     */
+    public void startActivityToFragmentForResult(Class cl, Bundle bundle, Integer requestCode) {
+        TurnFragmentUtil.startFragmentForResult(getThisActivity(), cl, bundle, requestCode);
+    }
+
+    /**
+     * fragment切换
+     *
+     * @param toFragment 目标fragment
+     * @param bundle     参数
+     */
+    public void startFragment(BaseMFragment toFragment, Bundle bundle) {
+        toFragment.setArguments(bundle);
+        start(toFragment);
+    }
+
+    public void startFragmentForResult(BaseMFragment toFragment, Bundle bundle, int requestCode) {
+        toFragment.setArguments(bundle);
+        startForResult(toFragment, requestCode);
+    }
     @Override
     public void finishFramager() {
         setFragmentResult(0, null);
         super.finishFramager();
     }
 
+    /**
+     * 得到当前fragment对象
+     *
+     * @return
+     */
+    public Fragment getThisFragment() {
+        return this;
+    }
     @Override
     public void onDestroy() {
         try {
@@ -192,13 +241,14 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
                 LiveBus.getDefault().clear(eventKeys.get(i));
             }
         }
-        StatService.onPageEnd(getThisContext(), getClassName());
+        StatService.onPageEnd(getThisContext(), getClassName() + (RxDataTool.isNullString(setTitle()) ? "" : setTitle()));
         super.onDestroy();
     }
 
     protected String getClassName() {
-        return getClass().getSimpleName()+getStateEventKey();
+        return getClass().getSimpleName() + getStateEventKey();
     }
+
     protected String getStateEventKey() {
         return "";
     }
