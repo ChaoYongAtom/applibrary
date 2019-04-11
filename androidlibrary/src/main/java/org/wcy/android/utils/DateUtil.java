@@ -659,7 +659,7 @@ public class DateUtil {
         Date startDate = toDateTime(startTime);
         Date endDate = toDateTime(endTime);
         diff = startDate.getTime() - endDate.getTime();
-        return diff = diff / 1000;
+        return diff / 1000;
     }
 
     /**

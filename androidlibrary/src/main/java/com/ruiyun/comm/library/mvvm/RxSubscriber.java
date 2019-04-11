@@ -183,6 +183,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                         dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
                                     }
                                 }
+                                RxLogTool.d("onNext--" + method, dataJson);
                                 baseResult.setData(dataJson);
                                 RxLogTool.dJson(dataJson);
                                 if (isList()) {
@@ -255,7 +256,6 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                 dataValue = json;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             dataValue = json;
         }
         return dataValue;

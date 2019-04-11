@@ -235,7 +235,7 @@ public class NumberUtil implements Serializable {
                 sb.append(((BigDecimal) value).doubleValue());
                 int leng = sb.substring(sb.indexOf(".") + 1, sb.length()).length();
                 if (leng > scale) {
-                    sb.delete(sb.indexOf("."), sb.length());
+                    sb.delete(sb.indexOf(".")+scale+1, sb.length());
                 } else {
                     for (int i = 0; i < scale - leng; i++) {
                         sb.append("0");

@@ -14,7 +14,6 @@ import android.widget.AbsoluteLayout;
 import android.widget.ProgressBar;
 
 import com.ruiyun.comm.library.common.JConstant;
-import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;

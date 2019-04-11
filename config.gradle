@@ -11,7 +11,7 @@ ext {
         retrofitVersion:"2.4.0",
         rxjavaVersion: "2.2.2",
         rxandroidVersion: "2.1.0",
-        fastjsonVersion: "1.2.56",
+        fastjsonVersion: "1.1.70.android",
         photoViewVersion:"2.1.4",
         zloadingVersion:"1.0.11",
         archLifecycle:"1.1.1",
