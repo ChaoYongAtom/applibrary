@@ -123,6 +123,9 @@ public class HttpHelper {
 
     public <T> T create(Class<T> clz) {
         if (clz != null) {
+            if (mRetrofit == null) {
+                init(JConstant.getHttpUrl());
+            }
             return mRetrofit.create(clz);
         }
         return null;

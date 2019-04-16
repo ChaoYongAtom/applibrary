@@ -31,13 +31,25 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initViewModel();
+        StatService.onPageStart(getThisContext(), getClassName() + (RxDataTool.isNullString(setTitle()) ? "" : setTitle()));
+    }
+
+    private void initViewModel() {
         mViewModel = ParameterizedTypeUtil.VMProviders(this);
         if (null != mViewModel && !mViewModel.getClass().getSimpleName().equals(BaseViewModel.class.getSimpleName())) {
             mViewModel.setFragmentName(getClassName());
             mViewModel.loadState.observe(this, new LoadObserver(this));
             dataObserver();
         }
-        StatService.onPageStart(getThisContext(), getClassName() + (RxDataTool.isNullString(setTitle()) ? "" : setTitle()));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mViewModel == null) {
+            initViewModel();
+        }
     }
 
     @Override
@@ -189,7 +201,6 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     }
 
 
-
     /**
      * 跳转到一个新的activiy带返回的fragment
      *
@@ -216,6 +227,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
         toFragment.setArguments(bundle);
         startForResult(toFragment, requestCode);
     }
+
     @Override
     public void finishFramager() {
         setFragmentResult(0, null);
@@ -230,6 +242,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     public Fragment getThisFragment() {
         return this;
     }
+
     @Override
     public void onDestroy() {
         try {

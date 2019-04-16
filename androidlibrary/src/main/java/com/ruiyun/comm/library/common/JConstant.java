@@ -138,7 +138,7 @@ public class JConstant {
     public static void setHttpPostService() {
         getHttpUrl();
         if (!RxDataTool.isNullString(httpUrl)) {
-            new HttpHelper.Builder().initOkHttp().createRetrofit(httpUrl).build();
+            HttpHelper.init(httpUrl);
         }
     }
 
