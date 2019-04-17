@@ -146,7 +146,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
         if (mSubscriberOnNextListener == null) return;
         if (e instanceof HttpTimeException) {
             HttpTimeException exception = (HttpTimeException) e;
-            mSubscriberOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, exception.getMessage(), method));
+            mSubscriberOnNextListener.onError(new ApiException(exception, CodeException.RUNTIME_ERROR, "服务器连接超时，请稍后再试！", method));
         } else {
             RxLogTool.d("ProgressSubscriber", "网络连接错误：");
             mSubscriberOnNextListener.onError(new ApiException(e, CodeException.UNKNOWN_ERROR, "网络连接错误", method));

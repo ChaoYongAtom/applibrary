@@ -38,7 +38,7 @@ public class JConstant {
     private static boolean isHeaders = true;
     private static String heardsVal = "";
     private static int uploadTime = 120;
-    public static String uploadName="platform/uploadimage";
+    public static String uploadName = "platform/uploadimage";
     private static Class<? extends RxSubscriber> rxsubscriber;
 
     public static Class<? extends RxSubscriber> getRxsubscriber() {
@@ -128,6 +128,9 @@ public class JConstant {
     }
 
     public static String getWatermarkStr() {
+        if (watermarkStr == null) {
+            return "";
+        }
         return watermarkStr;
     }
 
