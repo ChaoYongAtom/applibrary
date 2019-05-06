@@ -3,6 +3,8 @@ package com.ruiyun.comm.library.application;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.jeremyliao.liveeventbus.LiveEventBus;
+
 import org.wcy.android.utils.RxTool;
 
 public class MyApplication extends MultiDexApplication {
@@ -11,6 +13,9 @@ public class MyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        LiveEventBus.get()
+                .config()
+                .lifecycleObserverAlwaysActive(false);
         mContext = getApplicationContext();
         instance = this;
         RxTool.init(mContext);
