@@ -49,6 +49,7 @@ import okhttp3.Response;
  */
 public class UpdateApkUtil {
     private static String TAG = "UpdateApkUtil";
+
     public static void Update(Context context, CallBack callBack) {
         RxLogTool.d(TAG, "获取版本信息开始..............................");
         if (callBack == null) {
@@ -56,11 +57,13 @@ public class UpdateApkUtil {
         }
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         OkHttpClient.Builder builder = new OkHttpClient.Builder().connectTimeout(6, TimeUnit.SECONDS).writeTimeout(6, TimeUnit.SECONDS).readTimeout(6, TimeUnit.SECONDS);
+        builder.addInterceptor(HttpLogInterceptor.getHttpLoggingInterceptor());
         OkHttpClient okHttpClient = builder.build();
         RequestBody body = RequestBody.create(JSON, "");
         final Request request = new Request.Builder().url(JConstant.getHttpUrl() + JConstant.VersionName).addHeader("headers", JConstant.getHeardsVal()).post(body).build();
         Call call = okHttpClient.newCall(request);
-        RxLogTool.d(TAG,  JConstant.getHttpUrl() + JConstant.VersionName);
+        RxLogTool.d(TAG, JConstant.getHttpUrl() + JConstant.VersionName);
+        RxLogTool.d(TAG, JConstant.getHeardsVal());
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -96,7 +99,7 @@ public class UpdateApkUtil {
 
                                 builder.setCustomVersionDialogListener((context, versionBundle) -> {
                                     BaseDialog baseDialog = new BaseDialog(context, R.style.BaseDialog, R.layout.update_version_layout);
-                                    TextView versionchecklib_version_dialog_cancel=baseDialog.findViewById(R.id.versionchecklib_version_dialog_cancel);
+                                    TextView versionchecklib_version_dialog_cancel = baseDialog.findViewById(R.id.versionchecklib_version_dialog_cancel);
                                     //versionBundle 就是UIData，之前开发者传入的，在这里可以拿出UI数据并展示
                                     android.view.View viewline = baseDialog.findViewById(R.id.view_line);
                                     TextView tvTitle = baseDialog.findViewById(R.id.tv_title);

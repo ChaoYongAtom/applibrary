@@ -27,7 +27,8 @@ public class HeaderLayout extends RelativeLayout {
     private int mSpitLineColor;
     private float mSpitLineHeight;
 
-    private TextView mNavigationView, mTitleTv;
+    private TextView mNavigationView;
+    private MarqueeTextView mTitleTv;
     private RedTipTextView mMenuOne, mMenuTwo;
 
     private int mHedaderLayoutHeight = 0;
@@ -174,13 +175,13 @@ public class HeaderLayout extends RelativeLayout {
         mMenuOne = createMenuTextButton(menuText, menuIcon, R.id.header_menuOne);
         mMenuTwo = createMenuTextButton(menu2Text, menu2Icon, R.id.header_menuTwo);
         //标题栏
-        mTitleTv = new TextView(getContext());
+        mTitleTv = new MarqueeTextView(getContext());
         mTitleTv.setId(R.id.header_title);
         mTitleTv.setSingleLine(true);
         mTitleTv.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-        mTitleTv.setMarqueeRepeatLimit(-1);
         mTitleTv.setHorizontallyScrolling(true);
         mTitleTv.setFocusableInTouchMode(true);
+        mTitleTv.setMarqueeRepeatLimit(Integer.MAX_VALUE);
         addView(mTitleTv);
         mTitleTv.setGravity(Gravity.CENTER);  //实现文字居中效果  在setSupportTranslucentStatus中设置高度和HeaderLayout一样就好了
         params = (LayoutParams) mTitleTv.getLayoutParams();
