@@ -216,6 +216,7 @@ public abstract class AbsRepository<T> {
                         subscriber.setList(isList);
                         subscriber.setMsg(msg);
                         subscriber.setCancel(isCancel);
+                        subscriber.setStartTime(System.currentTimeMillis());
                         addSubscribe(obs, subscriber);
                     } else {
                         listener.onError(new ApiException(null, CodeException.UNKNOWN_ERROR, "接口信息不存在", method));

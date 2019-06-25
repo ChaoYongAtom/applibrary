@@ -51,7 +51,6 @@ public class UpdateApkUtil {
     private static String TAG = "UpdateApkUtil";
 
     public static void Update(Context context, CallBack callBack) {
-        RxLogTool.d(TAG, "获取版本信息开始..............................");
         if (callBack == null) {
             toastTest(context, "正在检查，请稍候...");
         }
@@ -62,8 +61,6 @@ public class UpdateApkUtil {
         RequestBody body = RequestBody.create(JSON, "");
         final Request request = new Request.Builder().url(JConstant.getHttpUrl() + JConstant.VersionName).addHeader("headers", JConstant.getHeardsVal()).post(body).build();
         Call call = okHttpClient.newCall(request);
-        RxLogTool.d(TAG, JConstant.getHttpUrl() + JConstant.VersionName);
-        RxLogTool.d(TAG, JConstant.getHeardsVal());
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -79,9 +76,9 @@ public class UpdateApkUtil {
                         RxLogTool.d("onResponse", string);
                         RxResult baseResult = JSONObject.parseObject(string, RxResult.class);
                         if (baseResult.getCode() == 200) {
-                            if (JConstant.isEncrypt()) {
+                            try {
                                 baseResult.setResult(AESOperator.decrypt(baseResult.getResult()));
-                            } else {
+                            } catch (Exception e) {
                                 JSONObject jsonObject = baseResult.getResult();
                                 baseResult.setResult(jsonObject.toJSONString());
                             }

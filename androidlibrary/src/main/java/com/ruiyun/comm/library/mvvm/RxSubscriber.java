@@ -51,7 +51,13 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
     private String method;
 
     private Context context;
-    private boolean isLoading=false;
+    private boolean isLoading = false;
+    private long startTime;
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
     /**
      * 构造
      */
@@ -91,10 +97,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      * 显示加载框
      */
     private void showProgressDialog() {
-        isLoading=true;
+        isLoading = true;
         if (!showProgress) return;
-        if (progressDialog != null)
-            progressDialog.show();
+        if (progressDialog != null) progressDialog.show();
     }
 
 
@@ -141,7 +146,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      * @param e
      */
     private void errorDo(Throwable e) {
-        isLoading=false;
+        long endTime = System.currentTimeMillis();
+        RxLogTool.d("http连接耗时" + method, "开始时间" + startTime + "   结束时间 ：" + endTime + " 总耗时：" + (endTime - startTime));
+        isLoading = false;
         RxLogTool.d("errorDo" + method, e.getMessage());
         if (mSubscriberOnNextListener == null) return;
         if (e instanceof HttpTimeException) {
@@ -162,7 +169,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
      */
     @Override
     public void onNext(T result) {
-        isLoading=false;
+        long endTime = System.currentTimeMillis();
+        RxLogTool.d("http连接耗时" + method, "开始时间" + startTime + "   结束时间 ：" + endTime + " 总耗时：" + (endTime - startTime));
+        isLoading = false;
         String t = JSONObject.toJSONString(result);
         RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
@@ -174,15 +183,15 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                     if (result instanceof RxResult) {
                         RxResult baseResult = (RxResult) result;
                         if (getData() != null) baseResult.setClassName(getData().getSimpleName());
+                        String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
+                        if (JConstant.isEncrypt()) {
+                            dataJson = AESOperator.decrypt(dataJson);
+                            if (RxDataTool.isNullString(dataJson)) {
+                                dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
+                            }
+                        }
                         if (baseResult.getCode() == 200) {
                             if (getData() != null) {
-                                String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                if (JConstant.isEncrypt()) {
-                                    dataJson = AESOperator.decrypt(dataJson);
-                                    if (RxDataTool.isNullString(dataJson)) {
-                                        dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                                    }
-                                }
                                 RxLogTool.d("onNext--" + method, dataJson);
                                 baseResult.setData(dataJson);
                                 RxLogTool.dJson(dataJson);
