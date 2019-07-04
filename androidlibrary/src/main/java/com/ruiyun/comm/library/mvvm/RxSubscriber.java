@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.mobstat.StatService;
 import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
@@ -13,6 +14,7 @@ import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.retrofit.exception.HttpTimeException;
 import org.wcy.android.retrofit.subscribers.ProgressDialogUtil;
 import org.wcy.android.utils.AESOperator;
+import org.wcy.android.utils.CrashHandler;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
@@ -184,11 +186,14 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                         RxResult baseResult = (RxResult) result;
                         if (getData() != null) baseResult.setClassName(getData().getSimpleName());
                         String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
-                        if (JConstant.isEncrypt()) {
+                        if (!RxDataTool.isNullString(dataJson) && JConstant.isEncrypt()) {
                             dataJson = AESOperator.decrypt(dataJson);
                             if (RxDataTool.isNullString(dataJson)) {
                                 dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
                             }
+                        }
+                        if(!RxDataTool.isNullString(dataJson)){
+                            baseResult.setResult(dataJson);
                         }
                         if (baseResult.getCode() == 200) {
                             if (getData() != null) {
@@ -222,7 +227,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                 JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
                             }
                         } else {
-                            ApiException apiException = getApiException(null, CodeException.ERROR, baseResult.getMsg(), t);
+                            ApiException apiException = getApiException(null, CodeException.ERROR, baseResult.getMsg(), JSONObject.toJSONString(baseResult));
                             apiException.setBusinessType(baseResult.getBusinessType());
                             mSubscriberOnNextListener.onError(apiException);
                         }
@@ -233,8 +238,9 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                 } catch (Exception e) {
                     if (RxActivityTool.isAppDebug(RxTool.getContext())) {
                         e.printStackTrace();
+                    } else {
+                        StatService.recordException(RxTool.getContext(), new Throwable((String) result));
                     }
-                    RxLogTool.d("RxSubscriberException" + method, e.getMessage());
                     mSubscriberOnNextListener.onError(getApiException(e, CodeException.JSON_ERROR, "网络数据处理错误", t));
                 } finally {
                     dismissProgressDialog();
