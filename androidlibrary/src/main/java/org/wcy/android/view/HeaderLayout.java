@@ -2,6 +2,7 @@ package org.wcy.android.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
@@ -36,7 +37,7 @@ public class HeaderLayout extends RelativeLayout {
     private int mTitleTextColor;
     private float mTitleTextSize;
     private boolean mTitleAlignLeft;
-
+    private boolean mTitleTextStyle;
     private float mNavigationWidth;
     private float mNavigationMinWidth;
     private float mNavigationMaxWidth;
@@ -113,6 +114,7 @@ public class HeaderLayout extends RelativeLayout {
             mTitleTextColor = a.getColor(R.styleable.HeaderLayout_hlTitleTextColor, getResources().getColor(R.color.default_header_layout_title_textColor));
             mTitleTextSize = a.getDimension(R.styleable.HeaderLayout_hlTitleTextSize, getResources().getDimension(R.dimen.default_header_layout_title_textSize));
             mTitleAlignLeft = a.getBoolean(R.styleable.HeaderLayout_hlTitleAlignLeft, false);
+            mTitleTextStyle = a.getBoolean(R.styleable.HeaderLayout_hlTitleTextStyle, false);
             //文字按钮相关配置
             mItemTextColor = a.getColor(R.styleable.HeaderLayout_hlItemTextColor, getResources().getColor(R.color.default_header_layout_title_textColor));
             mItemTextSize = a.getDimension(R.styleable.HeaderLayout_hlItemTextSize, getResources().getDimension(R.dimen.default_header_layout_menu_textSize));
@@ -204,8 +206,9 @@ public class HeaderLayout extends RelativeLayout {
         }
         mTitleTv.setLayoutParams(params);
         mTitleTv.setText(titleText);
-        mTitleTv.setPadding(mNavigationView.getWidth(),0,mNavigationView.getWidth(),0);
+        mTitleTv.setPadding(mNavigationView.getWidth(), 0, mNavigationView.getWidth(), 0);
         mTitleTv.setTextColor(mTitleTextColor);
+        if (mTitleTextStyle) mTitleTv.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         mTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTitleTextSize);
 
         //底部的分割线
@@ -298,8 +301,8 @@ public class HeaderLayout extends RelativeLayout {
      */
     public void setTitleText(String title) {
         if (mTitleTv != null) {
-            if(title.length()>11){
-                LayoutParams  params = (LayoutParams) mTitleTv.getLayoutParams();
+            if (title.length() > 11) {
+                LayoutParams params = (LayoutParams) mTitleTv.getLayoutParams();
                 params.addRule(RelativeLayout.RIGHT_OF, mNavigationView.getId());  //基于左边按钮的显示
                 params.addRule(RelativeLayout.LEFT_OF, mMenuLl.getId());  //基于左边按钮的显示
                 mTitleTv.setLayoutParams(params);
