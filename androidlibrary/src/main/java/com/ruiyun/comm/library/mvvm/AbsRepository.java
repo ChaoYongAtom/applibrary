@@ -141,17 +141,26 @@ public abstract class AbsRepository<T> {
         if (uploadType == null) uploadType = UploadType.IMAGE;
         if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
-            RxSubscriber<T> subscriber = new RxSubscriber();
-            subscriber.setmSubscriberOnNextListener(listener);
-            subscriber.setContext(getmContext());
-            subscriber.setMethod(uploadType.getEurl());
-            subscriber.setShowProgress(false);
-            subscriber.setData(UploadBean.class);
-            subscriber.setUpload(true);
-            Flowable observable = getOverrideUpload(path, subscriber.getMethod());
-            if (observable != null) {
-                addSubscribe(observable, subscriber);
-            } else {
+            try {
+                RxSubscriber<T> subscriber;
+                if (JConstant.getRxsubscriber() != null) {
+                    subscriber = JConstant.getRxsubscriber().newInstance();
+                } else {
+                    subscriber = new RxSubscriber();
+                }
+                subscriber.setmSubscriberOnNextListener(listener);
+                subscriber.setContext(getmContext());
+                subscriber.setMethod(uploadType.getEurl());
+                subscriber.setShowProgress(false);
+                subscriber.setData(UploadBean.class);
+                subscriber.setUpload(true);
+                Flowable observable = getOverrideUpload(path, subscriber.getMethod());
+                if (observable != null) {
+                    addSubscribe(observable, subscriber);
+                } else {
+                    listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
+                }
+            }catch (Exception e){
                 listener.onError(new ApiException(null, CodeException.NETWORD_ERROR, "图片上传错误", uploadType.getEurl()));
             }
         } else {

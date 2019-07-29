@@ -5,6 +5,7 @@ import android.content.Context;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baidu.mobstat.StatService;
+import com.ruiyun.comm.library.api.entitys.BaseResult;
 import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
@@ -14,7 +15,6 @@ import org.wcy.android.retrofit.exception.CodeException;
 import org.wcy.android.retrofit.exception.HttpTimeException;
 import org.wcy.android.retrofit.subscribers.ProgressDialogUtil;
 import org.wcy.android.utils.AESOperator;
-import org.wcy.android.utils.CrashHandler;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxLogTool;
@@ -37,7 +37,7 @@ import io.reactivex.subscribers.DisposableSubscriber;
  */
 public class RxSubscriber<T> extends DisposableSubscriber<T> {
     //    回调接口
-    private CallBack mSubscriberOnNextListener;
+    protected CallBack mSubscriberOnNextListener;
     //    加载框可自己定义
     /*是否能取消加载框*/
     private boolean cancel = false;
@@ -46,15 +46,15 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
     //    加载框可自己定义
     private ProgressDialogUtil progressDialog;
     /*是否弹框*/
-    private Class<?> data;
-    private boolean isList = false;
-    private String msg;
-    private boolean isUpload;
-    private String method;
+    protected Class<?> data;
+    protected boolean isList = false;
+    protected String msg;
+    protected boolean isUpload;
+    protected String method;
 
-    private Context context;
-    private boolean isLoading = false;
-    private long startTime;
+    protected Context context;
+    protected boolean isLoading = false;
+    protected long startTime;
 
     public void setStartTime(long startTime) {
         this.startTime = startTime;
@@ -108,7 +108,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
     /**
      * 隐藏
      */
-    private void dismissProgressDialog() {
+    protected void dismissProgressDialog() {
         if (!showProgress) return;
         if (progressDialog != null) {
             onCancelProgress();
@@ -178,7 +178,11 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
         RxLogTool.d("onNext--" + method, t);
         if (mSubscriberOnNextListener != null) {
             if (JConstant.getRxsubscriber() != null) {
-                handleResult(t);
+                if (result instanceof RxResult) {
+                    handleResult(t, (RxResult) result);
+                } else {
+                    handleResult(t, null);
+                }
                 dismissProgressDialog();
             } else {
                 try {
@@ -192,7 +196,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                 dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
                             }
                         }
-                        if(!RxDataTool.isNullString(dataJson)){
+                        if (!RxDataTool.isNullString(dataJson)) {
                             baseResult.setResult(dataJson);
                         }
                         if (baseResult.getCode() == 200) {
@@ -227,7 +231,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
                                 JConstant.getLoinOutInterface().loginOut(context, baseResult.getCode(), baseResult.getMsg());
                             }
                         } else {
-                            ApiException apiException = getApiException(null, CodeException.ERROR, baseResult.getMsg(), JSONObject.toJSONString(baseResult));
+                            ApiException apiException = getApiException(null, baseResult.getCode(), baseResult.getMsg(), JSONObject.toJSONString(baseResult));
                             apiException.setBusinessType(baseResult.getBusinessType());
                             mSubscriberOnNextListener.onError(apiException);
                         }
@@ -338,7 +342,7 @@ public class RxSubscriber<T> extends DisposableSubscriber<T> {
         return context;
     }
 
-    public void handleResult(String result) {
+    public void handleResult(String result, RxResult baseResult) {
     }
 
     public boolean isLoading() {
