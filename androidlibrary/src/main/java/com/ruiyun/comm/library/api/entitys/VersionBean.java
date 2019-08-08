@@ -25,6 +25,7 @@ public class VersionBean implements Serializable {
     public String versionNum = "";//服务器版本
     public String createDate = "";//更新时间
     public String apkSize = "";
+    public boolean isAlert;//是否弹出提示框	Integer	（1是、0否）
 
     public int getVersion() {
         if (RxDataTool.isNullString(versionNum)) {

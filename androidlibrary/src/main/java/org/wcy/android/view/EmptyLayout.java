@@ -250,7 +250,7 @@ public class EmptyLayout extends RelativeLayout {
                     }
                     if (childView != null) {
                         childView.setVisibility(View.VISIBLE);
-                        if (!isList) {
+                        if (pullToRefreshView != null) {
                             ((ViewGroup) childView).getChildAt(0).setVisibility(VISIBLE);
                         }
                     }

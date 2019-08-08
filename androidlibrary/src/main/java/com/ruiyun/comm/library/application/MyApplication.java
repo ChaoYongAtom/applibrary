@@ -14,6 +14,7 @@ import org.wcy.android.utils.RxTool;
 public class MyApplication extends MultiDexApplication {
     private static Context mContext;
     private static MyApplication instance;
+    private static boolean isUpdate=false;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -53,6 +54,15 @@ public class MyApplication extends MultiDexApplication {
         }
         return resources;
     }
+
+    public  boolean isUpdate() {
+        return isUpdate;
+    }
+
+    public  void setIsUpdate(boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
+
     public static Context getmContext() {
         return mContext;
     }

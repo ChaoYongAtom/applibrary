@@ -27,7 +27,7 @@ public class AnalysisNumberUtil {
             if (str.contains(",")) {
                 number = str.replaceAll(",", "");
             }
-            String regEx = "([0-9]\\d*\\.?\\d*)|(0\\.\\d*[1-9]) ";
+            String regEx = "([-]|[0-9]\\d*\\.?\\d*)|(0\\.\\d*[1-9])";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(number);
             m.find();
