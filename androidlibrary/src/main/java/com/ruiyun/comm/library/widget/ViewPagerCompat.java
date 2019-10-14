@@ -16,6 +16,7 @@
 
 package com.ruiyun.comm.library.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -28,19 +29,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
-import android.support.v4.os.ParcelableCompat;
-import android.support.v4.os.ParcelableCompatCreatorCallbacks;
-import android.support.v4.view.AccessibilityDelegateCompat;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.VelocityTrackerCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
-import android.support.v4.widget.EdgeEffectCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.FocusFinder;
@@ -56,6 +44,20 @@ import android.view.ViewParent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
+
+import androidx.core.os.ParcelableCompat;
+import androidx.core.os.ParcelableCompatCreatorCallbacks;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.MotionEventCompat;
+import androidx.core.view.VelocityTrackerCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewConfigurationCompat;
+import androidx.core.view.accessibility.AccessibilityEventCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import androidx.core.view.accessibility.AccessibilityRecordCompat;
+import androidx.core.widget.EdgeEffectCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -76,8 +78,7 @@ import java.util.Comparator;
  * which is a convenient way to supply and manage the lifecycle of each page.
  * There are standard adapters implemented for using fragments with the ViewPager,
  * which cover the most common use cases.  These are
- * {@link android.support.v4.app.FragmentPagerAdapter} and 
- * {@link android.support.v4.app.FragmentStatePagerAdapter}; each of these
+ * {@link android.support.v4.app}; each of these
  * classes have simple code showing how to build a full user interface
  * with them.
  *
@@ -859,30 +860,6 @@ public class ViewPagerCompat extends ViewGroup {
         for (int i = 0; i < mItems.size(); i++) {
             final ItemInfo ii = mItems.get(i);
             final int newPos = mAdapter.getItemPosition(ii.object);
-
-            if (newPos == PagerAdapter.POSITION_UNCHANGED) {
-                continue;
-            }
-
-            if (newPos == PagerAdapter.POSITION_NONE) {
-                mItems.remove(i);
-                i--;
-
-                if (!isUpdating) {
-                    mAdapter.startUpdate(this);
-                    isUpdating = true;
-                }
-
-                mAdapter.destroyItem(this, ii.position, ii.object);
-                needPopulate = true;
-
-                if (mCurItem == ii.position) {
-                    // Keep the current item in the valid range
-                    newCurrItem = Math.max(0, Math.min(mCurItem, adapterCount - 1));
-                    needPopulate = true;
-                }
-                continue;
-            }
 
             if (ii.position != newPos) {
                 if (ii.position == mCurItem) {
@@ -1773,10 +1750,11 @@ public class ViewPagerCompat extends ViewGroup {
         return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
     }
 
+    @SuppressLint("WrongConstant")
     private void enableLayers(boolean enable) {
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
-            final int layerType = enable ?
+             int layerType = enable ?
                     ViewCompat.LAYER_TYPE_HARDWARE : ViewCompat.LAYER_TYPE_NONE;
             ViewCompat.setLayerType(getChildAt(i), layerType, null);
         }
@@ -2720,10 +2698,6 @@ public class ViewPagerCompat extends ViewGroup {
     @Override
     public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
         // Dispatch scroll events from this ViewPager.
-        if (event.getEventType() == AccessibilityEventCompat.TYPE_VIEW_SCROLLED) {
-            return super.dispatchPopulateAccessibilityEvent(event);
-        }
-
         // Dispatch all other accessibility events from the current page.
         final int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -2762,6 +2736,7 @@ public class ViewPagerCompat extends ViewGroup {
 
     class MyAccessibilityDelegate extends AccessibilityDelegateCompat {
 
+        @SuppressLint("WrongConstant")
         @Override
         public void onInitializeAccessibilityEvent(View host, AccessibilityEvent event) {
             super.onInitializeAccessibilityEvent(host, event);

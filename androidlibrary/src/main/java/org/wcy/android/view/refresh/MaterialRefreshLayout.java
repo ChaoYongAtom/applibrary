@@ -3,10 +3,6 @@ package org.wcy.android.view.refresh;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v4.view.ViewPropertyAnimatorUpdateListener;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,8 +10,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AbsListView;
 import android.widget.FrameLayout;
+
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewPropertyAnimatorCompat;
+import androidx.core.view.ViewPropertyAnimatorUpdateListener;
 
 import org.wcy.android.R;
 import org.wcy.android.utils.ForPxTp;
@@ -442,38 +441,14 @@ public class MaterialRefreshLayout extends FrameLayout {
         if (mChildView == null) {
             return false;
         }
-        if (Build.VERSION.SDK_INT < 14) {
-            if (mChildView instanceof AbsListView) {
-                final AbsListView absListView = (AbsListView) mChildView;
-                return absListView.getChildCount() > 0 && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0).getTop() < absListView.getPaddingTop());
-            } else {
-                return ViewCompat.canScrollVertically(mChildView, -1) || mChildView.getScrollY() > 0;
-            }
-        } else {
-            return ViewCompat.canScrollVertically(mChildView, -1);
-        }
+        return ViewCompat.canScrollVertically(mChildView, -1) || mChildView.getScrollY() > 0;
     }
 
     public boolean canChildScrollDown() {
         if (mChildView == null) {
             return false;
         }
-        if (Build.VERSION.SDK_INT < 14) {
-            if (mChildView instanceof AbsListView) {
-                final AbsListView absListView = (AbsListView) mChildView;
-                if (absListView.getChildCount() > 0) {
-                    int lastChildBottom = absListView.getChildAt(absListView.getChildCount() - 1).getBottom();
-                    return absListView.getLastVisiblePosition() == absListView.getAdapter().getCount() - 1 && lastChildBottom <= absListView.getMeasuredHeight();
-                } else {
-                    return false;
-                }
-
-            } else {
-                return ViewCompat.canScrollVertically(mChildView, 1) || mChildView.getScrollY() > 0;
-            }
-        } else {
-            return ViewCompat.canScrollVertically(mChildView, 1);
-        }
+        return ViewCompat.canScrollVertically(mChildView, 1) || mChildView.getScrollY() > 0;
     }
 
     public void setWaveHigher() {

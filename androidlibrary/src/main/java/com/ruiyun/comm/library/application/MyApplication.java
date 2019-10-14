@@ -4,8 +4,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+
+import androidx.multidex.MultiDexApplication;
 
 import com.jeremyliao.liveeventbus.LiveEventBus;
 
@@ -18,9 +19,10 @@ public class MyApplication extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        LiveEventBus.get()
+        LiveEventBus
                 .config()
-                .lifecycleObserverAlwaysActive(false);
+                .lifecycleObserverAlwaysActive(true)
+                .autoClear(true);
         mContext = getApplicationContext();
         instance = this;
         RxTool.init(mContext);

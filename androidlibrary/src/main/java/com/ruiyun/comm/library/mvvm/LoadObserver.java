@@ -1,9 +1,10 @@
 package com.ruiyun.comm.library.mvvm;
 
 
-import android.arch.lifecycle.Observer;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 
 import com.ruiyun.comm.library.mvvm.interfaces.LoadInterface;
 import com.ruiyun.comm.library.mvvm.interfaces.StateConstants;

@@ -1,12 +1,13 @@
 package org.wcy.android.adapter;
 
 import android.graphics.Bitmap;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 通用ViewHolder
@@ -89,7 +90,6 @@ public class ViewRecyclerHolder extends RecyclerView.ViewHolder {
      * 为ImageView设置图片
      *
      * @param viewId
-     * @param bm
      * @return
      */
     public ViewRecyclerHolder setChecked(int viewId, boolean b) {

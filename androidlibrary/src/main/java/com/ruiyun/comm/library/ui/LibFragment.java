@@ -2,16 +2,16 @@ package com.ruiyun.comm.library.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.ruiyun.comm.library.listener.BackHandledInterface;
 
 import org.wcy.android.R;
 import org.wcy.android.utils.RxActivityTool;
-import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.view.HeaderLayout;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

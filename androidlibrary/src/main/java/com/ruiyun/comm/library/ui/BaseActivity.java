@@ -5,14 +5,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.gyf.barlibrary.ImmersionBar;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.gyf.immersionbar.ImmersionBar;
 import com.noober.background.BackgroundLibrary;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.listener.BackHandledInterface;
@@ -212,7 +212,6 @@ public abstract class BaseActivity extends SupportActivity implements BackHandle
     protected void onDestroy() {
         try {
             if (unbinder != null) unbinder.unbind();
-            if (mImmersionBar != null) mImmersionBar.destroy();
         } catch (Exception e) {
             e.printStackTrace();
         }

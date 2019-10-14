@@ -2,17 +2,14 @@ package org.wcy.android.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -32,6 +29,7 @@ public class ImageZoomPopupWindow extends BottomPushPopupWindow {
     HackyViewPager viewPager;
     TextView tv_position;
     private int position = 0;
+
     public ImageZoomPopupWindow(Activity activity, List<String> str, int position) {
         super(activity, str, true);
         this.position = position;
@@ -41,8 +39,8 @@ public class ImageZoomPopupWindow extends BottomPushPopupWindow {
     protected View generateCustomView(Object o) {
         datas = (ArrayList) o;
         View popupView = View.inflate(bActivity, R.layout.activity_image_zoom, null);
-        viewPager=popupView.findViewById(R.id.view_pager);
-        tv_position=popupView.findViewById(R.id.tv_position);
+        viewPager = popupView.findViewById(R.id.view_pager);
+        tv_position = popupView.findViewById(R.id.tv_position);
         viewPager.setAdapter(new SamplePagerAdapter(bActivity, datas));
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -86,7 +84,7 @@ public class ImageZoomPopupWindow extends BottomPushPopupWindow {
                     dismiss();
                 }
             });
-            GlideImgManager.loadImage(context, datas.get(position), R.mipmap.bg_estate_palceholder, R.mipmap.bg_estate_palceholder, photoView);
+            GlideImgManager.loadImage(datas.get(position), R.mipmap.bg_estate_palceholder, R.mipmap.bg_estate_palceholder, photoView);
             container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             return photoView;
         }

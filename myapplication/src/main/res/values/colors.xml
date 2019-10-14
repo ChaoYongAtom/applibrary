@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="navigation_text_color">#212121</color>
+    <!--二级文本-->
+    <color name="secondary_text_color">#666666</color>
+    <!--辅助性说明文本-->
+    <color name="assist_text_color">#999999</color>
+    <!--输入框中提示性文字 -->
+    <color name="et_alert_msg_color">#999999</color>
+    <!--深色背景-->
+    <color name="dark_background">#eeeeee</color>
+    <!--弹出框背景-->
+    <color name="dialog_bg">#ededed</color>
+</resources>

@@ -3,12 +3,12 @@ package com.ruiyun.comm.library.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import me.yokeyword.fragmentation.ExtraTransaction;
 import me.yokeyword.fragmentation.ISupportFragment;
@@ -226,9 +226,9 @@ public class SupportFragment extends Fragment implements ISupportFragment {
     }
 
     /**
-     * 类似  {@link Activity#onActivityResult(int, int, Intent)}
+     * 类似  {@link Activity#(int, int, Intent)}
      * <p>
-     * Similar to {@link Activity#onActivityResult(int, int, Intent)}
+     * Similar to {@link Activity#(int, int, Intent)}
      *
      * @see #startForResult(ISupportFragment, int)
      */
@@ -239,9 +239,9 @@ public class SupportFragment extends Fragment implements ISupportFragment {
 
     /**
      * 在start(TargetFragment,LaunchMode)时,启动模式为SingleTask/SingleTop, 回调TargetFragment的该方法
-     * 类似 {@link Activity#onNewIntent(Intent)}
+     * 类似 {@link Activity#(Intent)}
      * <p>
-     * Similar to {@link Activity#onNewIntent(Intent)}
+     * Similar to {@link Activity#(Intent)}
      *
      * @param args putNewBundle(Bundle newBundle)
      * @see #start(ISupportFragment, int)

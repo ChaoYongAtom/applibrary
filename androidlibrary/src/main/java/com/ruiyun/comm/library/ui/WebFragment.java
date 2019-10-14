@@ -1,15 +1,16 @@
 package com.ruiyun.comm.library.ui;
 
-import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.gyf.barlibrary.ImmersionBar;
+import androidx.annotation.Nullable;
+
+
+import com.gyf.immersionbar.ImmersionBar;
 
 import org.wcy.android.R;
 import org.wcy.android.view.X5WebView;
@@ -85,7 +86,7 @@ public class WebFragment extends BaseMFragment {
     @Override
     public void onDestroy() {
         try {
-            if (mImmersionBar != null) mImmersionBar.destroy();
+            if (mImmersionBar != null) mImmersionBar.destroy(getThisFragment());
         } catch (Exception e) {
         }
         if (webView != null) {

@@ -1,15 +1,16 @@
 package com.ruiyun.comm.library.ui;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+
 import com.baidu.mobstat.StatService;
-import com.gyf.barlibrary.ImmersionBar;
+import com.gyf.immersionbar.ImmersionBar;
 import com.ruiyun.comm.library.mvvm.BaseListVo;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.mvvm.LoadObserver;
@@ -246,7 +247,7 @@ public class BaseMFragment<T extends BaseViewModel> extends LibFragment implemen
     @Override
     public void onDestroy() {
         try {
-            if (mImmersionBar != null) mImmersionBar.destroy();
+            if (mImmersionBar != null) mImmersionBar.destroy(getThisFragment());
         } catch (Exception e) {
         }
         if (eventKeys != null && eventKeys.size() > 0) {

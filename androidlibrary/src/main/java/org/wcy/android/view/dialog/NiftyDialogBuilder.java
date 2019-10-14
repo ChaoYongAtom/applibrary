@@ -5,11 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.gyf.barlibrary.ImmersionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import com.gyf.immersionbar.ImmersionBar;
 
 import org.wcy.android.R;
 import org.wcy.android.view.dialog.effects.Effectstype;
@@ -19,8 +21,6 @@ import org.wcy.android.view.dialog.effects.Effectstype;
  */
 public class NiftyDialogBuilder extends Dialog implements DialogInterface {
 
-    private View mDialogView;
-    private int mDuration = -1;
     ImmersionBar mImmersionBarDialog;
     private volatile static NiftyDialogBuilder instance;
     private Activity activity;
@@ -34,7 +34,7 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
         super(context, theme);
         this.activity = context;
         try {
-            mImmersionBarDialog = ImmersionBar.with(context, this, "Bottom");
+            mImmersionBarDialog = ImmersionBar.with(context);
             mImmersionBarDialog.init();
         } catch (Exception e) {
         }
@@ -53,16 +53,11 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
     }
 
     public NiftyDialogBuilder setView(View view) {
-        mDialogView = ((ViewGroup) view).getChildAt(0);
         setContentView(view);
         return this;
     }
 
 
-    public NiftyDialogBuilder withDuration(int duration) {
-        this.mDuration = duration;
-        return this;
-    }
 
     public NiftyDialogBuilder withEffect(Effectstype type) {
         return this;
@@ -86,11 +81,6 @@ public class NiftyDialogBuilder extends Dialog implements DialogInterface {
 
     @Override
     public void dismiss() {
-        try{
-            if (mImmersionBarDialog != null) mImmersionBarDialog.destroy();
-        }catch (Exception e){
-
-        }
         if (isShowing())
             super.dismiss();
 

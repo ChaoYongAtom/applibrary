@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply from: "../upload.gradle"
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.compileSdkVersion
+        versionCode 100
+        versionName "1.0.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+    resourcePrefix 'ucrop_'
+
+}
+
+dependencies {
+    //noinspection GradleCompatible
+    //noinspection GradleCompatible
+    api rootProject.depsLibs.appcompat
+    api rootProject.depsLibs.recyclerview
+    api rootProject.depsLibs.glide
+    annotationProcessor rootProject.depsLibs.glideCompiler
+}

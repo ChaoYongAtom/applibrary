@@ -1,25 +1,99 @@
 ext {
-    configs=[
-        compileSdkVersion: 28,
-        buildToolsVersion :"28.0.0",
-        minSdkVersion : 19,
-        targetSdkVersion:28,
-        v4Version : "28.0.0",
-        glideVersion:"4.7.1",
-        fragmentationVersion:"1.3.6",
-        rxlifecycleVersion:"2.1.0",
-        retrofitVersion:"2.6.0",
-        rxjavaVersion: "2.2.2",
-        rxandroidVersion: "2.1.0",
-        fastjsonVersion: "1.1.70.android",
-        photoViewVersion:"2.1.4",
-        zloadingVersion:"1.0.11",
-        archLifecycle:"1.1.1",
-        backgroundVersion:"core:1.3.4",
-        versionchecklibVersion:"2.1.9",
-        retrofitVersion:"2.4.0",
-        lifecycleVersion:"2.2.2",
-        liveEventBusVersion:"live-event-bus:1.4.4"
+    android = [
+            compileSdkVersion: 29,
+            buildToolsVersion: "29.0.0",
+            minSdkVersion    : 19,
+            targetSdkVersion : 29,
+            versionCode      : 100,
+            versionName      : '1.0.0',
+            multiDexEnabled  : true,
     ]
+    depsVersion = [
+            appcompact     : "1.0.0",
+            design         : "1.0.0",
+            glide          : "4.10.0",
+            fragmentation  : "1.0.1",
+            rxlifecycle    : "3.1.0",
+            retrofit       : "2.6.0",
+            rxjava         : "2.2.12",
+            rxandroid      : "2.1.1",
+            fastjson       : "1.1.71.android",
+            photoView      : "2.1.4",
+            zloading       : "1.0.11",
+            archLifecycle  : "1.1.1",
+            background     : "core:1.6.0",
+            versionchecklib: "2.2.1",
+            retrofit       : "2.6.2",
+            lifecycle      : "2.2.2",
+            liveEventBus   : "1.5.1",
+            butterknife    : '10.2.0',
+            multidex       : "2.0.0",
+            nineoldandroids: "2.4.0",
+            rxpermissions  : "0.9.4@aar",
+            okhttpLogging  : "4.2.0",
+            logutils       : "1.7.5",
+            rxrelay        : "2.0.0",
+            immersionbar   : "3.0.0",
+    ]
+
+    depsLibs = [
+            //https://github.com/ReactiveX/RxAndroid
+            rxjava           : "io.reactivex.rxjava2:rxjava:${depsVersion.rxjava}",
+            rxandroid        : "io.reactivex.rxjava2:rxandroid:${depsVersion.rxandroid}",
+
+            /*rotrofit  https://github.com/square/retrofit*/
+            retrofit         : "com.squareup.retrofit2:retrofit:${depsVersion.retrofit}",
+            retrofitAdapter  : "com.squareup.retrofit2:adapter-rxjava2:${depsVersion.retrofit}",
+            okhttpLogging    : "com.squareup.okhttp3:logging-interceptor:${depsVersion.okhttpLogging}",
+
+            /* recyclerview**/
+
+            //noinspection GradleCompatible
+            appcompat        : "androidx.appcompat:appcompat:${depsVersion.appcompact}",
+            design           : "com.google.android.material:material:${depsVersion.appcompact}",
+            recyclerview     : "androidx.recyclerview:recyclerview:${depsVersion.appcompact}",
+
+            //debug版本编译日志库 https://github.com/pengwei1024/LogUtils
+            logutils         : "com.apkfuns.logutils:library:${depsVersion.logutils}",
+
+            /* json https://mvnrepository.com/artifact/com.alibaba/fastjson*/
+            fastjson         : "com.alibaba:fastjson:${depsVersion.fastjson}",
+
+            /*注解 https://github.com/JakeWharton/butterknife*/
+            butterknife      : "com.jakewharton:butterknife:${depsVersion.butterknife}",
+            butterknifeCompiler      : "com.jakewharton:butterknife-compiler:${depsVersion.butterknife}",
+            //权限https://github.com/tbruyelle/RxPermissions
+            rxpermissions    : "com.tbruyelle.rxpermissions2:rxpermissions:${depsVersion.rxpermissions}",
+
+            //图片加载https://github.com/bumptech/glide
+            glide            : "com.github.bumptech.glide:glide:${depsVersion.glide}",
+            glideCompiler    : "com.github.bumptech.glide:compiler:${depsVersion.glide}",
+            //https://github.com/JakeWharton/NineOldAndroids
+            nineoldandroids  : "com.nineoldandroids:library:${depsVersion.nineoldandroids}",
+            //https://github.com/chrisbanes/PhotoView
+            photoView        : "com.github.chrisbanes:PhotoView:${depsVersion.photoView}",
+            //https://github.com/zyao89/ZLoading
+            zloading         : "com.zyao89:zloading:${depsVersion.zloading}",
+            //https://github.com/JakeWharton/RxRelay
+            rxrelay          : "com.jakewharton.rxrelay2:rxrelay:${depsVersion.rxrelay}",
+            //https://github.com/YoKeyword/Fragmentation
+            fragmentation    : "me.yokeyword:fragmentationx:${depsVersion.fragmentation}",
+            //https://github.com/gyf-dev/ImmersionBar
+            immersionbar     : "com.gyf.immersionbar:immersionbar:${depsVersion.immersionbar}",
+            //
+            lifecycle        : "android.arch.lifecycle:extensions:${depsVersion.archLifecycle}",
+            lifecycleCompiler: "android.arch.lifecycle:compiler:${depsVersion.archLifecycle}",
+            multidex         : "androidx.multidex:multidex:${depsVersion.multidex}",
+            //https://github.com/JavaNoober/BackgroundLibrary
+            background       : "com.noober.background:${depsVersion.background}",
+            //https://github.com/AlexLiuSheng/CheckVersionLib
+            versionchecklib  : "com.allenliu.versionchecklib:library:${depsVersion.versionchecklib}",
+            mobstat          : 'com.baidu.mobstat:mtj-sdk-circle:latest.integration',
+            //https://github.com/trello/RxLifecycle
+            rxlifecycle      : "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:${depsVersion.rxlifecycle}",
+            //https://github.com/JeremyLiao/LiveEventBus
+            liveEventBus       : "com.jeremyliao:live-event-bus-x:${depsVersion.liveEventBus}",
+    ]
+
 
 }

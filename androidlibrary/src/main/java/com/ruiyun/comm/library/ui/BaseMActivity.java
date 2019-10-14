@@ -1,8 +1,9 @@
 package com.ruiyun.comm.library.ui;
 
-import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.ruiyun.comm.library.mvvm.BaseListVo;
 import com.ruiyun.comm.library.mvvm.BaseViewModel;

@@ -4,16 +4,16 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import org.wcy.android.R;
 import org.wcy.android.utils.RxFragmentUtil;
-import org.wcy.android.utils.RxKeyboardTool;
 
 import java.util.ArrayList;
 import java.util.List;

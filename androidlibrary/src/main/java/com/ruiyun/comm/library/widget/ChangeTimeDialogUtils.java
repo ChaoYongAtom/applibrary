@@ -1,17 +1,17 @@
 package com.ruiyun.comm.library.widget;
 
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.wcy.android.R;
 import org.wcy.android.utils.DateUtil;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.view.dialog.NiftyDialogBuilder;
-import org.wcy.android.view.dialog.effects.Effectstype;
 
 import java.util.Date;
 

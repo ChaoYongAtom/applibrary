@@ -1,10 +1,11 @@
 package com.ruiyun.comm.library.ui;
 
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import com.ruiyun.comm.library.mvvm.BaseViewModel;
 import com.ruiyun.comm.library.widget.ViewPagerCompat;

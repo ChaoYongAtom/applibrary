@@ -169,8 +169,8 @@ public final class KeyBoardEventBus {
             return (Activity) object;
         } else if (object instanceof Fragment) {
             return ((Fragment) object).getActivity();
-        } else if (object instanceof android.support.v4.app.Fragment) {
-            return ((android.support.v4.app.Fragment) object).getActivity();
+        } else if (object instanceof Fragment) {
+            return ((Fragment) object).getActivity();
         } else if (object instanceof Dialog) {
             return (Activity) ((Dialog) object).getContext();
         } else if (object instanceof View) {

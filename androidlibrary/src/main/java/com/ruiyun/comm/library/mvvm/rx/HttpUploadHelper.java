@@ -1,8 +1,7 @@
 package com.ruiyun.comm.library.mvvm.rx;
 
 
-import android.support.annotation.NonNull;
-
+import androidx.annotation.NonNull;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.utils.HttpLogInterceptor;
 

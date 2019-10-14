@@ -1,36 +1,26 @@
 package com.ruiyun.comm.library.utils;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
-import com.ruiyun.comm.library.api.entitys.UploadBean;
 import com.ruiyun.comm.library.api.entitys.VersionBean;
+import com.ruiyun.comm.library.application.MyApplication;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.mvvm.RxResult;
 import com.ruiyun.comm.library.mvvm.interfaces.CallBack;
 
-import org.wcy.android.BuildConfig;
 import org.wcy.android.R;
 import org.wcy.android.utils.AESOperator;
-import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxTool;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -88,7 +78,10 @@ public class UpdateApkUtil {
                             //判断服务器是否有新版本
                             if (uploadBean.isUpdate()) {
                                 if (callBack != null && !uploadBean.isAlert) {
-                                    if (callBack != null) callBack.onNext(baseResult);
+                                    if (callBack != null){
+                                        MyApplication.getThisApplication().setIsUpdate(uploadBean.isUpdate());
+                                        callBack.onNext(baseResult);
+                                    }
                                 } else {
                                     UIData uiData = UIData.create();
                                     uiData.setDownloadUrl(uploadBean.download_url);

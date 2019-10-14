@@ -3,6 +3,8 @@ package org.wcy.android.view;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 /**
  * MarqueeTextView
  *
@@ -11,7 +13,7 @@ import android.util.AttributeSet;
  * @time 2019/5/24
  * @description YjSales
  */
-public class MarqueeTextView extends android.support.v7.widget.AppCompatTextView{
+public class MarqueeTextView extends AppCompatTextView {
     public MarqueeTextView(Context context) {
         super(context);
     }
