@@ -1,1 +1,1 @@
-include ':androidlibrary', ':myapplication',"zxinglibrary","picture_library","ucrop"
+include ':androidlibrary', ':myapplication', ':lib_network',"zxinglibrary","picture_library","ucrop"

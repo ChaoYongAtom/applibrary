@@ -1,7 +1,6 @@
 package com.ruiyun.comm.library.mvvm.rx;
 
 
-
 import androidx.annotation.NonNull;
 
 import com.ruiyun.comm.library.common.JConstant;
@@ -67,13 +66,11 @@ public class HttpHelper {
                     if (mBuilder == null) {
                         HttpLoggingInterceptor loggingInterceptor = HttpLogInterceptor.getHttpLoggingInterceptor();
                         mBuilder = new OkHttpClient.Builder().addInterceptor(loggingInterceptor).addInterceptor(new DynamicConnectTimeout()).addNetworkInterceptor(loggingInterceptor).connectTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS).writeTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS).readTimeout(JConstant.getConnectionTime(), TimeUnit.SECONDS);
+                        mBuilder.addInterceptor(chain -> {
+                            Request newRequest = chain.request().newBuilder().addHeader("Connection", "close").addHeader("headers", JConstant.getHeardsVal()).build();
+                            return chain.proceed(newRequest);
+                        });
 
-                        if (JConstant.isIsHeaders()) {
-                            mBuilder.addInterceptor(chain -> {
-                                Request newRequest = chain.request().newBuilder().addHeader("headers", JConstant.getHeardsVal()).build();
-                                return chain.proceed(newRequest);
-                            });
-                        }
                     }
                 }
             }

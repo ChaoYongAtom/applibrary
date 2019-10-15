@@ -40,6 +40,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="ENABLE_DEBUG"
+            android:value="${ENABLE_DEBUG}" />
+        <meta-data
+            android:name="HTTP_URL"
+            android:value="${HTTP_URL}" />
     </application>
 
 </manifest>

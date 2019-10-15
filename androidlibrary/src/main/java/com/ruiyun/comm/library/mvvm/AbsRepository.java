@@ -323,6 +323,7 @@ public abstract class AbsRepository<T> {
             Disposable disposable1 = HttpHelper.disposableMap.get(key);
             if (disposable1 instanceof RxSubscriber && ((RxSubscriber) disposable1).isLoading()) {
                 RxLogTool.d("onNext", method + "取消请求");
+                disposable1.dispose();
                 mCompositeSubscription.remove(disposable1);
             }
         }
