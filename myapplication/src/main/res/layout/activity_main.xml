@@ -11,12 +11,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="msg" />
-
-    <Button
-        android:id="@+id/btnSubmit"
+<ImageView
+    android:id="@+id/image_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@mipmap/download"/>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="扫码!" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="版本更新!" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="登录!" />
+        <Button
+            android:id="@+id/web_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="网页!" />
+    </LinearLayout>
+
 
 </RelativeLayout>

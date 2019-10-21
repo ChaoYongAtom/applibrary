@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+apply from: "../upload.gradle"
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+    lintOptions {
+        abortOnError false
+    }
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+    buildToolsVersion = android.buildToolsVersion
+
+}
+
+dependencies {
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    //rxjava rxandroid
+    //https://github.com/ReactiveX/RxAndroid
+    api rootProject.depsLibs.rxjava
+    api rootProject.depsLibs.rxandroid
+
+    /* recyclerview**/
+
+    //noinspection GradleCompatible
+    api rootProject.depsLibs.appcompat
+    api rootProject.depsLibs.design
+    api rootProject.depsLibs.recyclerview
+
+    //debug版本编译日志库 https://github.com/pengwei1024/LogUtils
+    api rootProject.depsLibs.logutils
+
+    /* json https://mvnrepository.com/artifact/com.alibaba/fastjson*/
+    api rootProject.depsLibs.fastjson
+
+    /*注解 https://github.com/JakeWharton/butterknife*/
+    api rootProject.depsLibs.butterknife
+
+    //权限https://github.com/tbruyelle/RxPermissions
+    api  rootProject.depsLibs.rxpermissions
+
+    //https://github.com/JakeWharton/NineOldAndroids
+    api rootProject.depsLibs.nineoldandroids
+//    //https://github.com/chrisbanes/PhotoView
+//    api rootProject.depsLibs.photoView
+    //https://github.com/zyao89/ZLoading
+    api rootProject.depsLibs.zloading
+    //https://github.com/JakeWharton/RxRelay
+   // api rootProject.depsLibs.rxrelay
+    //https://github.com/YoKeyword/Fragmentation
+    api rootProject.depsLibs.fragmentation
+    //https://github.com/gyf-dev/ImmersionBar
+    api rootProject.depsLibs.immersionbar
+    //
+    api rootProject.depsLibs.lifecycle
+    annotationProcessor rootProject.depsLibs.lifecycleCompiler
+    api rootProject.depsLibs.multidex
+    //https://github.com/JavaNoober/BackgroundLibrary
+    api rootProject.depsLibs.background
+    //https://github.com/trello/RxLifecycle
+    api rootProject.depsLibs.rxlifecycle
+    api rootProject.depsLibs.liveEventBus
+
+}
+

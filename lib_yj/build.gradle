@@ -1,0 +1,34 @@
+apply plugin: 'com.android.library'
+apply from: "../upload.gradle"
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+    lintOptions {
+        abortOnError false
+    }
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+        versionCode 100
+        versionName "1.0.0"
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+    buildToolsVersion = android.buildToolsVersion
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation  rootProject.depsLibs.mobstat
+    implementation project(':lib_base')
+    implementation project(':lib_update')
+    implementation project(':lib_network')
+}
