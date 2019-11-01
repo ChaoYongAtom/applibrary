@@ -11,6 +11,9 @@ import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.RxResult;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
 import com.ruiyun.comm.library.ui.BaseMActivity;
+import com.ruiyun.comm.library.ui.WebXFragment;
+import com.ruiyun.comm.library.utils.TurnFragmentUtil;
+import com.ruiyun.comm.library.utils.UpdateApkUtil;
 import com.wcy.app.lib.imageloader.ImageLoaderManager;
 import com.wcy.app.lib.network.HttpUtils;
 import com.wcy.app.lib.network.exception.ApiException;
@@ -45,9 +48,24 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         }
 
         RxPermissionsTool.with(this).addPermission(RxPermissionsTool.PERMISSION_WRITE_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_PHONE_STATE).addPermission(RxPermissionsTool.PERMISSION_CAMERA).addPermission(RxPermissionsTool.PERMISSION_ACCESS_FINE_LOCATION).addPermission(RxPermissionsTool.PERMISSION_ACCESS_COARSE_LOCATION).addPermission(RxPermissionsTool.REQUEST_INSTALL_PACKAGES).initPermission();
-        findViewById(R.id.btnSubmit).setOnClickListener(view -> mViewModel.loading());
+        findViewById(R.id.btnSubmit).setOnClickListener(view -> UpdateApkUtil.Update(getThisContext(), new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                toast("点击了取消");
+            }
+
+            @Override
+            public void onError(ApiException e) {
+
+            }
+        }));
         findViewById(R.id.btnLogin).setOnClickListener(view -> mViewModel.login());
-        findViewById(R.id.web_btn).setOnClickListener(view -> startActivity(WebActivity.class, false));
+        findViewById(R.id.web_btn).setOnClickListener(view -> {
+            String url = "http://prwap.hejuzg.cn/ww/wap/h5/auth?h5ModuleNo=%7b%22moduleNo%22%3a1%7d&terminalId=33&token=67ba5cc83c1028082f19137d409d7a25";
+            Bundle bundle = new Bundle();
+            bundle.putString(WebXFragment.URL, url);
+            TurnFragmentUtil.startFragment(getThisContext(), WebXFragment.class, bundle);
+        });
     }
 
     @Override

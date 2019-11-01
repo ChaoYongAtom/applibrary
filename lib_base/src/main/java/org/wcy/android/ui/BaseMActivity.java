@@ -1,5 +1,8 @@
 package org.wcy.android.ui;
 
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import org.wcy.android.live.AbsViewModel;
@@ -23,6 +26,13 @@ import java.util.List;
 public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implements LoadInterface {
     protected T mViewModel;
     protected List<String> eventKeys = new ArrayList<>();
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initViewModel();
+    }
+
     private void initViewModel() {
         mViewModel = ParameterizedTypeUtil.VMProviders(this);
         if (null != mViewModel && !mViewModel.getClass().getSimpleName().equals(AbsViewModel.class.getSimpleName())) {

@@ -3,6 +3,10 @@ package org.wcy.android.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import org.wcy.android.R;
 
 
@@ -27,12 +31,19 @@ public class CommonActivity extends BaseActivity {
     protected void initView() {
         Intent intent = getIntent();
         try {
-            String fragmentClazz = intent
-                    .getStringExtra(EXTRA_FRAGMENT);
-            BaseFragment fragment = (BaseFragment) Class.forName(fragmentClazz)
-                    .newInstance();
+            String fragmentClazz = intent.getStringExtra(EXTRA_FRAGMENT);
+            Fragment fragment = (Fragment) Class.forName(fragmentClazz).newInstance();
             fragment.setArguments(intent.getExtras());
-            loadRootFragment(R.id.common_frame, fragment);
+            if (fragment instanceof BaseFragment) {
+                loadRootFragment(R.id.common_frame, (BaseFragment) fragment);
+            } else {
+                //实例化碎片管理器对象
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                //选择fragment替换的部分
+                ft.replace(R.id.common_frame, fragment);
+                ft.commit();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package com.ruiyun.comm.library.live;
 
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONObject;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.emum.UploadType;
@@ -196,9 +198,9 @@ public class BaseRepository extends AbsRepository {
     }
 
     public void send(HttpBuilder builder, Class cl, CallBack listener) {
+        if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             try {
-                if (listener == null) listener = callBack;
                 RxSubscriber subscriber;
                 if (JConstant.getRxsubscriber() != null) {
                     subscriber = JConstant.getRxsubscriber().newInstance();
@@ -228,18 +230,16 @@ public class BaseRepository extends AbsRepository {
                 });
                 addDisposable(disposable);
             } catch (Exception e) {
-                e.printStackTrace();
-                if (listener != null)
-                    listener.onError(new ApiException(null, CodeException.RUNTIME_ERROR, "无网络连接，请检查网络是否正常", builder.getUrl()));
+                Log.e("BaseRepository", e.getMessage());
+                listener.onError(new ApiException(null, CodeException.RUNTIME_ERROR, "无网络连接，请检查网络是否正常", builder.getUrl()));
             }
         } else {
-            if (listener != null)
-                listener.onError(new ApiException(null, CodeException.RUNTIME_ERROR, "无网络连接，请检查网络是否正常", builder.getUrl()));
+            listener.onError(new ApiException(null, CodeException.RUNTIME_ERROR, "无网络连接，请检查网络是否正常", builder.getUrl()));
         }
     }
 
 
-    public JSONObject getJsonObject(){
+    public JSONObject getJsonObject() {
         return new JSONObject();
     }
 

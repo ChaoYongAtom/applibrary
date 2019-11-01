@@ -1,7 +1,5 @@
 package com.wcy.app.lib.update.interfaces;
 
-import com.wcy.app.lib.update.VersionBean;
-
 /**
  * UpdateInterface
  *
@@ -11,7 +9,5 @@ import com.wcy.app.lib.update.VersionBean;
  * @description applibrary
  */
 public interface UpdateInterface {
-    public void succeed(VersionBean versionBean);
-
-    public void error(String msg);
+    void succeed();
 }

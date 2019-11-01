@@ -95,7 +95,10 @@ public class HttpUtils {
         baseUrl = url;
         mTimeout = timeout;
         if (timeout > 0) {
-            RxHttp.init(getDefaultOkHttpClient(timeout), isdebug);
+            try {
+                RxHttp.init(getDefaultOkHttpClient(timeout), isdebug);
+            }catch (IllegalArgumentException e){
+            }
         } else {
             RxHttp.setDebug(isdebug);
         }

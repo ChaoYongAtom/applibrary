@@ -31,8 +31,8 @@ android {
 dependencies {
     //noinspection GradleCompatible
     //noinspection GradleCompatible
-    implementation rootProject.depsLibs.appcompat
-    implementation rootProject.depsLibs.recyclerview
-    implementation rootProject.depsLibs.glide
+    compileOnly rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.recyclerview
+    compileOnly rootProject.depsLibs.glide
     annotationProcessor rootProject.depsLibs.glideCompiler
 }

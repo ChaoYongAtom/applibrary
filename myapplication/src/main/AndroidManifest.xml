@@ -36,6 +36,7 @@
         tools:replace="android:label,android:theme,android:allowBackup">
         <activity android:name=".WebActivity"></activity>
         <activity android:name=".ScanActivity" />
+        <activity android:name="org.wcy.android.ui.CommonActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

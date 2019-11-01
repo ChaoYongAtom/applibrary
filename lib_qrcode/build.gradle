@@ -28,7 +28,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.appcompat
 
 //    api 'com.ruiyun.app.android:androidlibrary:1.0.0'
    //api project(':applibrary:androidlibrary')
