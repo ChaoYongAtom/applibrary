@@ -22,6 +22,7 @@ public class UpdateApkUtil {
     public static void Update(Context context, CallBack callBack) {
         if (callBack == null) toastTest(context, "正在获取最新版本号信息，请稍等......");
         BaseRepository baseRepository = new BaseRepository();
+        baseRepository.setmContext(context);
         baseRepository.sendPost(JConstant.VersionName, null, VersionBean.class, new CallBack() {
             @Override
             public void onNext(RxResult result) {

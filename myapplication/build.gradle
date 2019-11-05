@@ -47,9 +47,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api project(':lib_webview')
     api project(':lib_yj')
-    api project(':lib_qrcode')
     api project(':lib_picture')
-    api project(':lib_imageloader')
 }

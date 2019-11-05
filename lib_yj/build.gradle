@@ -28,16 +28,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation  rootProject.depsLibs.mobstat
-    api 'com.ruiyun.app.android:lib_base:1.0.0'
-    api 'com.ruiyun.app.android:lib_update:1.0.0'
-    api 'com.ruiyun.app.android:lib_network:1.0.1'
-    api 'com.ruiyun.app.android:lib_imageloader:1.0.0'
-    api 'com.ruiyun.app.android:lib_webview:1.0.0'
-//    api project(':applibrary:lib_base')
+    api "${rootProject.depsLibs.ryapp}:lib_base:1.0.0"
+    api "${rootProject.depsLibs.ryapp}:lib_update:1.0.0"
+    api "${rootProject.depsLibs.ryapp}:lib_network:1.0.0"
+    api "${rootProject.depsLibs.ryapp}:lib_imageloader:1.0.0"
+    api "${rootProject.depsLibs.ryapp}:lib_webview:1.0.0"
+   // api project(':applibrary:lib_base')
 //    api project(':applibrary:lib_update')
 //    api project(':applibrary:lib_network')
 //    api project(':applibrary:lib_imageloader')
 //    api project(':applibrary:lib_webview')
-//    api project(':applibrary:lib_qrcode')
-//    api project(':applibrary:lib_picture')
 }

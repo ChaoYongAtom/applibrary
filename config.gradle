@@ -39,6 +39,7 @@ ext {
     ]
 
     depsLibs = [
+            ryapp:"com.app.lib.android",
             //https://github.com/ReactiveX/RxAndroid
             rxjava             : "io.reactivex.rxjava2:rxjava:${depsVersion.rxjava}",
             rxandroid          : "io.reactivex.rxjava2:rxandroid:${depsVersion.rxandroid}",

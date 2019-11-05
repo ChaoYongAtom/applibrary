@@ -23,12 +23,12 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-   // implementation project(':applibrary:lib_ucrop')
+  // implementation project(':lib_ucrop')
     implementation rootProject.depsLibs.appcompat
     compileOnly rootProject.depsLibs.recyclerview
     compileOnly rootProject.depsLibs.glide
     annotationProcessor rootProject.depsLibs.glideCompiler
-    compileOnly 'com.ruiyun.app.android:lib_ucrop:1.0.0@aar'
+    compileOnly "${rootProject.depsLibs.ryapp}:lib_ucrop:1.0.0@aar"
     //noinspection GradleCompatible
     compileOnly rootProject.depsLibs.rxjava
     compileOnly rootProject.depsLibs.rxandroid

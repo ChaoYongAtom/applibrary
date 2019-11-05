@@ -34,7 +34,6 @@
         android:theme="@style/AAppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:theme,android:allowBackup">
-        <activity android:name=".WebActivity"></activity>
         <activity android:name=".ScanActivity" />
         <activity android:name="org.wcy.android.ui.CommonActivity"/>
         <activity android:name=".MainActivity">

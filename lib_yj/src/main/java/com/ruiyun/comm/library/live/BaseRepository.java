@@ -127,7 +127,6 @@ public class BaseRepository extends AbsRepository {
     }
 
     public void upload(String method, String path, CallBack listener) {
-        RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
         HttpBuilder builder = HttpBuilder.getBuilder(method);
         builder.getFiles().put("file", path);
         send(builder, UploadBean.class, listener);
@@ -198,6 +197,7 @@ public class BaseRepository extends AbsRepository {
     }
 
     public void send(HttpBuilder builder, Class cl, CallBack listener) {
+        RxKeyboardTool.hideSoftInput(RxActivityTool.currentActivity());
         if (listener == null) listener = callBack;
         if (RxNetTool.isNetworkAvailable(RxTool.getContext())) {
             try {
