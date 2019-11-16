@@ -2,6 +2,8 @@ package com.androidlibrary.myapplication;
 
 import androidx.multidex.MultiDexApplication;
 
+
+
 /**
  * MyApplication
  *
@@ -11,4 +13,8 @@ import androidx.multidex.MultiDexApplication;
  * @description applibrary
  */
 public class MyApplication extends MultiDexApplication {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 }

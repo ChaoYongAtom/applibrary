@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -1064,11 +1065,11 @@ public class SuperWebX5 {
         }
     }
 
-    public static SuperWebX5 create(Fragment fragment, View view, ChromeClientCallbackManager.ReceivedTitleCallback mCallback, String url) {
-        return create(fragment, view, new LinearLayout.LayoutParams(-1, -1), mCallback, url);
+    public static SuperWebX5 create(Fragment fragment, View view, TextView textView, String url) {
+        return create(fragment, view, new LinearLayout.LayoutParams(-1, -1), textView, url);
     }
 
-    public static SuperWebX5 create(Fragment fragment, View view, ViewGroup.LayoutParams lp, ChromeClientCallbackManager.ReceivedTitleCallback mCallback, String url) {
+    public static SuperWebX5 create(Fragment fragment, View view, ViewGroup.LayoutParams lp, TextView textView, String url) {
         WebViewClient mWebViewClient = new WebViewClient() {
             private HashMap<String, Long> timer = new HashMap<>();
 
@@ -1101,7 +1102,17 @@ public class SuperWebX5 {
                 super.onPageFinished(view, url);
             }
         };
-
+        /**
+         * 获取网页title
+         */
+        ChromeClientCallbackManager.ReceivedTitleCallback mCallback = new ChromeClientCallbackManager.ReceivedTitleCallback() {
+            @Override
+            public void onReceivedTitle(WebView view, String title) {
+                if (textView != null) {
+                    textView.setText(title);
+                }
+            }
+        };
         SuperWebX5 mSuperWebX5 = SuperWebX5.with(fragment).setSuperWebParent((ViewGroup) view, lp).
                 setCustomIndicator(null).setWebLayout(null).
                 setWebSettings(WebDefaultSettingsManager.getInstance()).setWebViewClient(mWebViewClient).setReceivedTitleCallback(mCallback).

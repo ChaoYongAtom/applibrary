@@ -10,8 +10,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 
+import com.ruiyun.comm.library.common.JConstant;
+import com.ruiyun.comm.library.ui.CommonActivity;
+
 import org.wcy.android.R;
-import org.wcy.android.ui.CommonActivity;
 import org.wcy.android.utils.RxFragmentUtil;
 
 
@@ -24,7 +26,7 @@ import org.wcy.android.utils.RxFragmentUtil;
 public class TurnFragmentUtil extends RxFragmentUtil {
     public static void startFragment(Context context, Class cl, Bundle bundle) {
         Intent intent = new Intent(context, CommonActivity.class);
-        intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
+        intent.putExtra(JConstant.EXTRA_FRAGMENT, cl.getName());
         if (bundle != null)
             intent.putExtras(bundle);
         context.startActivity(intent);
@@ -32,7 +34,7 @@ public class TurnFragmentUtil extends RxFragmentUtil {
     public static void startFragmentForResult(AppCompatActivity activity, Class cl, Bundle bundle, Integer requestCode) {
 
         Intent intent = new Intent(activity, CommonActivity.class);
-        intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
+        intent.putExtra(JConstant.EXTRA_FRAGMENT, cl.getName());
         if (bundle != null)
             intent.putExtras(bundle);
         activity.startActivityForResult(intent, requestCode);

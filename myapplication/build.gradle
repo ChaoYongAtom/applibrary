@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion rootProject.android.compileSdkVersion
-    buildToolsVersion "29.0.0"
     lintOptions {
         abortOnError false
     }
@@ -13,8 +13,12 @@ android {
         applicationId "com.androidlibrary.myapplication"
         minSdkVersion rootProject.android.minSdkVersion
         targetSdkVersion rootProject.android.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 100
+        versionName "1.0.0"
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi'
+        }
         multiDexEnabled rootProject.android.multiDexEnabled
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
@@ -26,27 +30,59 @@ android {
                 HTTP_URL     : "http://appadviser.hejuzg.cn/version2/",
         ]
     }
+    dexOptions {
+        preDexLibraries = false
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    signingConfigs {
+        debug {
+            storeFile file("../keystores/debug_key.jks")
+            storePassword "123456"
+            keyAlias "android"
+            keyPassword "123456"
+        }
+    }
     buildTypes {
-
-        release {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.debug
+            minifyEnabled true
+            zipAlignEnabled true
+            debuggable false
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions {
+        pickFirst 'META-INF/*'
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
+    testImplementation 'junit:junit:4.12'
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api project(':lib_yj')
-    api project(':lib_picture')
+    implementation project(':lib_yj')
+    implementation project(':lib_dex')
+    implementation project(':lib_webview')
+    //implementation "${rootProject.depsLibs.ryapp}:lib_yj:1.0.1"
 }

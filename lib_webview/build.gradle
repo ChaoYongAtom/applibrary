@@ -26,7 +26,9 @@ android {
 }
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-   compileOnly rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.appcompat
     compileOnly rootProject.depsLibs.design
-    api files("libs/tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar")
+    compileOnly rootProject.depsLibs.immersionbar
+    compileOnly "${rootProject.depsLibs.ryapp}:lib_base:1.0.1"
+    implementation files("libs/tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar")
 }

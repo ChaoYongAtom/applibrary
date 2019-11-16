@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wcy.app.lib.web" >
+    package="com.wcy.app.lib.web">
 
     <application>
-        <activity android:name="com.wcy.app.lib.web.file.ActionActivity"/>
+        <activity android:name="com.wcy.app.lib.web.file.ActionActivity" />
         <activity
             android:name="com.tencent.smtt.sdk.VideoActivity"
             android:alwaysRetainTaskState="true"
@@ -15,7 +15,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <receiver android:name=".file.RealDownLoader$NotificationBroadcastReceiver"/>
+        <activity
+            android:name=".ui.WebXActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name=".file.RealDownLoader$NotificationBroadcastReceiver" />
         <provider
             android:name="com.wcy.app.lib.web.SuperWebX5FileProvider"
             android:authorities="${applicationId}.SuperWebX5FileProvider"

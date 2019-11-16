@@ -1,26 +1,46 @@
 package org.wcy.android.utils;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.wcy.android.R;
+import org.wcy.android.ui.CommonActivity;
 
 import java.util.List;
 
 public class RxFragmentUtil {
+    public static void startFragment(Context context, Class cl, Bundle bundle) {
+        Intent intent = new Intent(context, CommonActivity.class);
+        intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
+        if (bundle != null)
+            intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
+    public static void startFragmentForResult(AppCompatActivity activity, Class cl, Bundle bundle, Integer requestCode) {
 
+        Intent intent = new Intent(activity, CommonActivity.class);
+        intent.putExtra(CommonActivity.EXTRA_FRAGMENT, cl.getName());
+        if (bundle != null)
+            intent.putExtras(bundle);
+        activity.startActivityForResult(intent, requestCode);
+    }
     /**
      * 切换tab
      *
      * @param idx
      */
+    @Deprecated
     public static int showTab(int frameId, int idx, int currentTab, List<? extends Fragment> fragments, AppCompatActivity activity) {
         return showTab(frameId, idx, currentTab, fragments, activity.getSupportFragmentManager(), true);
     }
-
+    @Deprecated
     public static int showTab(int frameId, int idx, int currentTab, List<? extends Fragment> fragments, FragmentManager fragmentManager) {
         return showTab(frameId, idx, currentTab, fragments, fragmentManager, true);
     }
@@ -30,6 +50,7 @@ public class RxFragmentUtil {
      *
      * @param idx
      */
+    @Deprecated
     public static int showTab(int frameId, int idx, int currentTab, List<? extends Fragment> fragments, FragmentManager fragmentManager, boolean isShoWanimation) {
         if (idx != currentTab) {
             if (idx == -1) {
@@ -61,10 +82,11 @@ public class RxFragmentUtil {
      * @param index
      * @return
      */
+    @Deprecated
     public static FragmentTransaction obtainFragmentTransaction(int index, int index2, FragmentManager fragmentManager) {
         return obtainFragmentTransaction(index, index2, fragmentManager, true);
     }
-
+    @Deprecated
     public static FragmentTransaction obtainFragmentTransaction(int index, int index2, FragmentManager fragmentManager, boolean isShoWanimation) {
         // FragmentTransaction ft = appCompatActivity.getSupportFragmentManager().beginTransaction();
         FragmentTransaction ft = fragmentManager.beginTransaction();

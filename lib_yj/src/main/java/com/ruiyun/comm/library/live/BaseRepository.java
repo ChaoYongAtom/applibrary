@@ -43,6 +43,28 @@ public class BaseRepository extends AbsRepository {
      * @param urls
      * @param listener
      */
+    public void uplaod(UploadType uploadType, List<String> paths, Map<String, Object> map, List<UploadBean> urls, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s, map, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                urls.add(result.getResult());
+                paths.remove(s);
+                if (paths.size() == 0) {
+                    result.setResult(urls);
+                    listener.onNext(result);
+                } else {
+                    uplaod(uploadType, paths, map, urls, listener);
+                }
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
+    }
+
     public void uplaod(UploadType uploadType, List<String> paths, List<UploadBean> urls, CallBack listener) {
         String s = paths.get(0);
         uplaod(uploadType, s, new CallBack() {
@@ -86,6 +108,21 @@ public class BaseRepository extends AbsRepository {
                 listener.onError(e);
             }
         });
+    }
+
+    public void uplaod(UploadType uploadType, List<String> paths, Map<String, Object> map, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s, map, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                listener.onNext(result);
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
 
     }
 
@@ -97,6 +134,29 @@ public class BaseRepository extends AbsRepository {
      * @param sb
      * @param listener
      */
+    public void uplaod(UploadType uploadType, List<String> paths, Map<String,Object> map,StringBuffer sb, CallBack listener) {
+        String s = paths.get(0);
+        uplaod(uploadType, s,map, new CallBack() {
+            @Override
+            public void onNext(RxResult result) {
+                UploadBean uploadBean = result.getResult();
+                sb.append(uploadBean.fileUrl).append(",");
+                paths.remove(s);
+                if (paths.size() == 0) {
+                    sb.delete(sb.length() - 1, sb.length());
+                    result.setResult(sb.toString());
+                    listener.onNext(result);
+                } else {
+                    uplaod(uploadType, paths,map, sb, listener);
+                }
+            }
+
+            @Override
+            public void onError(ApiException e) {
+                listener.onError(e);
+            }
+        });
+    }
     public void uplaod(UploadType uploadType, List<String> paths, StringBuffer sb, CallBack listener) {
         String s = paths.get(0);
         uplaod(uploadType, s, new CallBack() {
@@ -126,9 +186,18 @@ public class BaseRepository extends AbsRepository {
         upload(uploadType.getEurl(), path, listener);
     }
 
+    public void uplaod(UploadType uploadType, String path, Map<String, Object> map, CallBack listener) {
+        upload(uploadType.getEurl(), path, map, listener);
+    }
+
     public void upload(String method, String path, CallBack listener) {
+        upload(method, path, null, listener);
+    }
+
+    public void upload(String method, String path, Map<String, Object> map, CallBack listener) {
         HttpBuilder builder = HttpBuilder.getBuilder(method);
         builder.getFiles().put("file", path);
+        if (map != null) builder.setParameters(map);
         send(builder, UploadBean.class, listener);
     }
 

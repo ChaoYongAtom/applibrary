@@ -1,13 +1,18 @@
 package com.wcy.app.lib.network;
+
 import com.wcy.app.lib.network.exception.ApiException;
+import com.wcy.app.lib.network.interfaces.DownLoadResult;
 import com.wcy.app.lib.network.interfaces.NetWorkResult;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
+
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import okhttp3.OkHttpClient;
 import rxhttp.wrapper.annotation.DefaultDomain;
@@ -16,6 +21,7 @@ import rxhttp.wrapper.param.RxHttp;
 import rxhttp.wrapper.param.RxHttp$FormParam;
 import rxhttp.wrapper.ssl.SSLSocketFactoryImpl;
 import rxhttp.wrapper.ssl.X509TrustManagerImpl;
+
 /**
  * RxHttp
  *
@@ -32,6 +38,66 @@ public class HttpUtils {
     private static int mTimeout = 6;
     private static HashMap<String, Disposable> disposableMap = new HashMap<>();
 
+    public static void postBody(HttpBuilder builder, String parameters, NetWorkResult listener) {
+        RxHttp rxHttp = RxHttp.postJson(builder.getUrl()).setJsonParams(parameters);
+        if (builder.getDomainUrl() != null && !"".equals(builder.getDomainUrl())) {
+            mDomainUrl = builder.getDomainUrl();
+            rxHttp.setDomainTodomainUrlIfAbsent();
+        }
+        rxHttp.addHeader("Connection", "close");
+        if (builder.getHeaders() != null && builder.getHeaders().size() > 0) {
+            for (String keys : builder.getHeaders().keySet()) {
+                rxHttp.addHeader(keys, builder.getHeaders().get(keys));
+            }
+        }
+        Observable<String> observable = rxHttp.asString();
+        //动态设置超时时间
+        if (builder.getTimeout() > 0) {
+            observable.timeout(builder.getTimeout(), TimeUnit.SECONDS);
+        }
+        observable.subscribe(s -> {
+            listener.onNext(s);
+        }, throwable -> {
+        });
+    }
+
+    public static Disposable postBodyDisposable(HttpBuilder builder, String parameters, NetWorkResult listener) {
+        //生成一个根据地址和tab组合的key,来判断是否同一请求发起了多次请求，则取消之前的请求，使用最后一次
+        String key = (builder.getTag() == null ? builder.getUrl() : builder.getTag().concat(builder.getUrl()));
+        if (disposableMap.containsKey(key)) dispose(key);
+        RxHttp rxHttp = RxHttp.postJson(builder.getUrl()).setJsonParams(parameters);
+        if (builder.getDomainUrl() != null && !"".equals(builder.getDomainUrl())) {
+            mDomainUrl = builder.getDomainUrl();
+            rxHttp.setDomainTodomainUrlIfAbsent();
+        }
+        rxHttp.addHeader("Connection", "close");
+        if (builder.getHeaders() != null && builder.getHeaders().size() > 0) {
+            for (String keys : builder.getHeaders().keySet()) {
+                rxHttp.addHeader(keys, builder.getHeaders().get(keys));
+            }
+        }
+        Observable<String> observable = rxHttp.asString();
+        //动态设置超时时间
+        if (builder.getTimeout() > 0) {
+            observable.timeout(builder.getTimeout(), TimeUnit.SECONDS);
+        }
+        Disposable disposable = observable.subscribe(s -> {
+            listener.onNext(s);
+        }, throwable -> {
+            dispose(key);
+            listener.onError(new ApiException(throwable));
+        });
+        disposableMap.put(key, disposable);
+        return disposable;
+    }
+
+
+    public static void download(String url, String savePath, DownLoadResult listener) {
+        RxHttp.get(url).asDownload(savePath, progress -> {
+            listener.Progress(progress.getProgress(), progress.getCurrentSize(), progress.getTotalSize());
+        }, AndroidSchedulers.mainThread()).subscribe(s -> listener.onNext(s), throwable -> listener.onError(throwable));
+    }
+
     /**
      * @param builder  是否使用默认地址，如果不使用默认地址则使用第二默认地址
      * @param listener 请求成功与失败的回调函数
@@ -43,7 +109,7 @@ public class HttpUtils {
         if (disposableMap.containsKey(key)) dispose(key);
         RxHttp$FormParam rxHttp = RxHttp.postForm(builder.getUrl());
         //判断使用默认地址还是动态地址
-        if (builder.getDomainUrl() != null && "".equals(builder.getDomainUrl())) {
+        if (builder.getDomainUrl() != null && !"".equals(builder.getDomainUrl())) {
             mDomainUrl = builder.getDomainUrl();
             rxHttp.setDomainTodomainUrlIfAbsent();
         }
@@ -97,7 +163,7 @@ public class HttpUtils {
         if (timeout > 0) {
             try {
                 RxHttp.init(getDefaultOkHttpClient(timeout), isdebug);
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
             }
         } else {
             RxHttp.setDebug(isdebug);

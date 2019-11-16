@@ -22,6 +22,7 @@ public class JConstant {
     public final static int MIN_PAGE_ROWS = 50;
     private static boolean encrypt = true;
     public static String VersionName = "newestversion";
+    public static final String EXTRA_FRAGMENT = "fragmentName";
     private static LoinOutInterface loinOutInterface;
     private static String httpUrl;
     private static String token;

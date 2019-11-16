@@ -22,20 +22,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation  rootProject.depsLibs.mobstat
-    api "${rootProject.depsLibs.ryapp}:lib_base:1.0.0"
-    api "${rootProject.depsLibs.ryapp}:lib_update:1.0.0"
-    api "${rootProject.depsLibs.ryapp}:lib_network:1.0.0"
-    api "${rootProject.depsLibs.ryapp}:lib_imageloader:1.0.0"
-    api "${rootProject.depsLibs.ryapp}:lib_webview:1.0.0"
-   // api project(':applibrary:lib_base')
-//    api project(':applibrary:lib_update')
-//    api project(':applibrary:lib_network')
+//    api "${rootProject.depsLibs.ryapp}:lib_base:1.0.1"
+//    api "${rootProject.depsLibs.ryapp}:lib_update:1.0.0"
+//    api "${rootProject.depsLibs.ryapp}:lib_network:1.0.1"
+ //   api "${rootProject.depsLibs.ryapp}:lib_imageloader:1.0.0"
+   // api "${rootProject.depsLibs.ryapp}:lib_webview:1.0.0"
+    api project(':lib_base')
+    api project(':lib_update')
+    api project(':lib_network')
 //    api project(':applibrary:lib_imageloader')
-//    api project(':applibrary:lib_webview')
 }

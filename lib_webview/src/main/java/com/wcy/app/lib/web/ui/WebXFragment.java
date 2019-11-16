@@ -1,4 +1,4 @@
-package com.ruiyun.comm.library.ui;
+package com.wcy.app.lib.web.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.gyf.immersionbar.ImmersionBar;
-import com.ruiyun.comm.library.R;
+import com.wcy.app.lib.web.R;
 import com.wcy.app.lib.web.SuperWebX5;
-import com.wcy.app.lib.web.client.ChromeClientCallbackManager;
+
+import org.wcy.android.ui.BaseFragment;
 
 /**
  * WebXFragment
@@ -24,7 +26,7 @@ import com.wcy.app.lib.web.client.ChromeClientCallbackManager;
 public class WebXFragment extends BaseFragment {
     TextView title_tv;
     ImageView btn_close;
-    public static final String URL = "url";
+    private static final String URL = "url";
     protected SuperWebX5 mSuperWebX5;
 
     public static WebXFragment getInstance(String url) {
@@ -43,28 +45,17 @@ public class WebXFragment extends BaseFragment {
     }
 
     @Override
-    protected void initView() {
+    public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(rootView, savedInstanceState);
         btn_close = rootView.findViewById(R.id.btn_close);
         title_tv = rootView.findViewById(R.id.title_tv);
-        btn_close.setOnClickListener(v ->{
+        btn_close.setOnClickListener(v -> {
             finishFramager();
+            setFragmentResult(RESULT_OK, null);
         });
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         initImmersionBar();
-        mSuperWebX5 = SuperWebX5.create(this, rootView, mCallback, getArguments().getString(URL));
+        mSuperWebX5 = SuperWebX5.create(this, rootView, title_tv, getArguments().getString(URL));
     }
-
-    /**
-     * 获取网页title
-     */
-    protected ChromeClientCallbackManager.ReceivedTitleCallback mCallback = (view, title) -> {
-        title_tv.setText(title);
-    };
 
     /**
      * 初始化沉浸式
@@ -85,7 +76,8 @@ public class WebXFragment extends BaseFragment {
             mSuperWebX5.back();
         } else {
             mSuperWebX5.clearWebCache();
-           finishFramager();
+            finishFramager();
+            setFragmentResult(RESULT_OK, null);
         }
     }
 
