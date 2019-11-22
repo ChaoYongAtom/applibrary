@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply from: "../upload.gradle"
 android {
     compileSdkVersion rootProject.android.compileSdkVersion
     defaultConfig {
@@ -16,11 +17,15 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly project(':lib_network')
+    //compileOnly project(':lib_network')
     compileOnly rootProject.depsLibs.fastjson
-   // compileOnly "${rootProject.depsLibs.ryapp}:lib_network:1.0.0"
+    compileOnly "${rootProject.depsLibs.ryapp}:lib_network:1.0.2"
 }

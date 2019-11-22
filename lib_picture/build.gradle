@@ -28,7 +28,7 @@ dependencies {
     compileOnly rootProject.depsLibs.recyclerview
     compileOnly rootProject.depsLibs.glide
     annotationProcessor rootProject.depsLibs.glideCompiler
-    compileOnly "${rootProject.depsLibs.ryapp}:lib_ucrop:1.0.0@aar"
+    implementation "${rootProject.depsLibs.ryapp}:lib_ucrop:1.0.1@aar"
     //noinspection GradleCompatible
     compileOnly rootProject.depsLibs.rxjava
     compileOnly rootProject.depsLibs.rxandroid

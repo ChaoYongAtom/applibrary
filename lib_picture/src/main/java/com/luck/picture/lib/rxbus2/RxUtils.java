@@ -2,7 +2,6 @@
 
 package com.luck.picture.lib.rxbus2;
 
-
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.TimeUnit;
@@ -12,6 +11,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * @author：luck
+ * @date：2019-3-18 10:12
+ * @describe：The thread
+ */
 public class RxUtils {
 
     public static <T> DisposableObserver computation(final RxUtils.RxSimpleTask task, Object... objects) {

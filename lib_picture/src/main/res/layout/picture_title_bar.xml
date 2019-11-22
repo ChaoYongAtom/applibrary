@@ -9,7 +9,7 @@
         android:id="@+id/rl_picture_title"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="?colorPrimary"
+        android:background="@color/blue"
         android:gravity="center_vertical">
 
         <ImageView

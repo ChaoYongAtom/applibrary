@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="progressBg">@color/gray</color>
-    <color name="progressB">#0080FF</color>
+    <color name="progressB">#009B4E</color>
 </resources>

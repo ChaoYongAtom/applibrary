@@ -92,7 +92,6 @@ public class MyWebView extends WebView {
         addView(progressbar);
         // WebStorage webStorage = WebStorage.getInstance();
         initWebViewSettings();
-        setClickable(true);
     }
 
 

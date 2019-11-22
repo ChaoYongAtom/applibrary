@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 
+import com.wcy.app.lib_dex.FixDexUtil;
+
 import org.wcy.android.utils.RxPermissionsTool;
 
 
@@ -20,14 +22,14 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void init() {
-       // FixDexUtil.getInstance().init(this,"key");
+       FixDexUtil.getInstance().init(this,"fnaF6512268E4C946DBA3900A4211199BA9vxq");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }
-        }, 50);
+        }, 300);
 
     }
 

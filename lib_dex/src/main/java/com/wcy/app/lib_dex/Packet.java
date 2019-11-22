@@ -4,7 +4,6 @@ import java.nio.charset.Charset;
 
 /**
  * 数据包定义
- * 指令格式：0xFFFFFFFF,指令码由8位16进制整数构成,对应二进制32位
  */
 public class Packet {
     //JSON字段,指令与响应

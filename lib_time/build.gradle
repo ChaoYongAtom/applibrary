@@ -1,0 +1,28 @@
+apply plugin: 'com.android.library'
+apply from: "../upload.gradle"
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation project(':lib_base')
+    implementation 'com.lxj:xpopup:1.8.10-x'
+    implementation "${rootProject.depsLibs.ryapp}:lib_base:1.0.2"
+}

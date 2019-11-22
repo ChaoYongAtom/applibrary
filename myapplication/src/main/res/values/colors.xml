@@ -14,4 +14,5 @@
     <color name="dark_background">#eeeeee</color>
     <!--弹出框背景-->
     <color name="dialog_bg">#ededed</color>
+    <color name="bar_grey">#ededed</color>
 </resources>

@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import androidx.annotation.StyleRes;
 
 import com.luck.picture.lib.R;
+import com.luck.picture.lib.engine.GlideEngine;
+import com.luck.picture.lib.engine.ImageEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.PictureFileUtils;
 
@@ -13,19 +15,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib.config
- * email：893855882@qq.com
- * data：2017/5/24
+ * @author：luck
+ * @date：2017-05-24 17:02
+ * @describe：PictureSelector Config
  */
 
 public final class PictureSelectionConfig implements Parcelable {
-    public int mimeType;
+    public int chooseMode;
     public boolean camera;
+    public boolean isSingleDirectReturn;
+    public boolean isChangeStatusBarFontColor;
+    public boolean isOpenStyleNumComplete;
+    public boolean isOpenStyleCheckNumMode;
+    public int titleBarBackgroundColor;
+    public int statusBarColorPrimaryDark;
+    public int cropTitleBarBackgroundColor;
+    public int cropStatusBarColorPrimaryDark;
+    public int cropTitleColor;
+    public int upResId;
+    public int downResId;
+    @Deprecated
     public String outputCameraPath;
     public String compressSavePath;
     public String suffixType;
+    public String cameraFileName;
+    public String specifiedFormat;
     @StyleRes
     public int themeStyleId;
     public int selectionMode;
@@ -38,13 +52,17 @@ public final class PictureSelectionConfig implements Parcelable {
     public int recordVideoSecond;
     public int minimumCompressSize;
     public int imageSpanCount;
+    @Deprecated
     public int overrideWidth;
+    @Deprecated
     public int overrideHeight;
     public int aspect_ratio_x;
     public int aspect_ratio_y;
+    @Deprecated
     public float sizeMultiplier;
     public int cropWidth;
     public int cropHeight;
+    public int compressQuality;
     public boolean zoomAnim;
     public boolean isCompress;
     public boolean isCamera;
@@ -65,11 +83,13 @@ public final class PictureSelectionConfig implements Parcelable {
     public boolean previewEggs;
     public boolean synOrAsy;
     public boolean isDragFrame;
+    public boolean isNotPreviewDownload;
+    public ImageEngine imageEngine = GlideEngine.createGlideEngine();
 
     public List<LocalMedia> selectionMedias;
 
     private void reset() {
-        mimeType = PictureConfig.TYPE_IMAGE;
+        chooseMode = PictureMimeType.ofImage();
         camera = false;
         themeStyleId = R.style.picture_default_style;
         selectionMode = PictureConfig.MULTIPLE;
@@ -80,6 +100,7 @@ public final class PictureSelectionConfig implements Parcelable {
         videoMaxSecond = 0;
         videoMinSecond = 0;
         recordVideoSecond = 60;
+        compressQuality = 60;
         minimumCompressSize = PictureConfig.MAX_COMPRESS_SIZE;
         imageSpanCount = 4;
         overrideWidth = 0;
@@ -89,12 +110,24 @@ public final class PictureSelectionConfig implements Parcelable {
         aspect_ratio_y = 0;
         cropWidth = 0;
         cropHeight = 0;
+        titleBarBackgroundColor = 0;
+        statusBarColorPrimaryDark = 0;
+        cropTitleBarBackgroundColor = 0;
+        cropStatusBarColorPrimaryDark = 0;
+        cropTitleColor = 0;
+        upResId = 0;
+        downResId = 0;
         isCamera = true;
         isGif = false;
+        isSingleDirectReturn = false;
+        isChangeStatusBarFontColor = false;
+        isOpenStyleNumComplete = false;
+        isOpenStyleCheckNumMode = false;
         enablePreview = true;
         enPreviewVideo = true;
         enablePreviewAudio = true;
         checkNumMode = false;
+        isNotPreviewDownload = false;
         openClickSound = false;
         enableCrop = false;
         freeStyleCropEnabled = false;
@@ -111,8 +144,11 @@ public final class PictureSelectionConfig implements Parcelable {
         outputCameraPath = "";
         compressSavePath = "";
         suffixType = PictureFileUtils.POSTFIX;
+        cameraFileName = "";
+        specifiedFormat = "";
         sizeMultiplier = 0.5f;
         selectionMedias = new ArrayList<>();
+        imageEngine = GlideEngine.createGlideEngine();
     }
 
     public static PictureSelectionConfig getInstance() {
@@ -129,6 +165,9 @@ public final class PictureSelectionConfig implements Parcelable {
         private static final PictureSelectionConfig INSTANCE = new PictureSelectionConfig();
     }
 
+    public PictureSelectionConfig() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -136,11 +175,23 @@ public final class PictureSelectionConfig implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.mimeType);
+        dest.writeInt(this.chooseMode);
         dest.writeByte(this.camera ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isSingleDirectReturn ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isChangeStatusBarFontColor ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isOpenStyleNumComplete ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isOpenStyleCheckNumMode ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.titleBarBackgroundColor);
+        dest.writeInt(this.statusBarColorPrimaryDark);
+        dest.writeInt(this.cropTitleBarBackgroundColor);
+        dest.writeInt(this.cropStatusBarColorPrimaryDark);
+        dest.writeInt(this.cropTitleColor);
+        dest.writeInt(this.upResId);
+        dest.writeInt(this.downResId);
         dest.writeString(this.outputCameraPath);
         dest.writeString(this.compressSavePath);
         dest.writeString(this.suffixType);
+        dest.writeString(this.cameraFileName);
         dest.writeInt(this.themeStyleId);
         dest.writeInt(this.selectionMode);
         dest.writeInt(this.maxSelectNum);
@@ -182,15 +233,24 @@ public final class PictureSelectionConfig implements Parcelable {
         dest.writeTypedList(this.selectionMedias);
     }
 
-    public PictureSelectionConfig() {
-    }
-
     protected PictureSelectionConfig(Parcel in) {
-        this.mimeType = in.readInt();
+        this.chooseMode = in.readInt();
         this.camera = in.readByte() != 0;
+        this.isSingleDirectReturn = in.readByte() != 0;
+        this.isChangeStatusBarFontColor = in.readByte() != 0;
+        this.isOpenStyleNumComplete = in.readByte() != 0;
+        this.isOpenStyleCheckNumMode = in.readByte() != 0;
+        this.titleBarBackgroundColor = in.readInt();
+        this.statusBarColorPrimaryDark = in.readInt();
+        this.cropTitleBarBackgroundColor = in.readInt();
+        this.cropStatusBarColorPrimaryDark = in.readInt();
+        this.cropTitleColor = in.readInt();
+        this.upResId = in.readInt();
+        this.downResId = in.readInt();
         this.outputCameraPath = in.readString();
         this.compressSavePath = in.readString();
         this.suffixType = in.readString();
+        this.cameraFileName = in.readString();
         this.themeStyleId = in.readInt();
         this.selectionMode = in.readInt();
         this.maxSelectNum = in.readInt();
@@ -232,7 +292,7 @@ public final class PictureSelectionConfig implements Parcelable {
         this.selectionMedias = in.createTypedArrayList(LocalMedia.CREATOR);
     }
 
-    public static final Parcelable.Creator<PictureSelectionConfig> CREATOR = new Parcelable.Creator<PictureSelectionConfig>() {
+    public static final Creator<PictureSelectionConfig> CREATOR = new Creator<PictureSelectionConfig>() {
         @Override
         public PictureSelectionConfig createFromParcel(Parcel source) {
             return new PictureSelectionConfig(source);

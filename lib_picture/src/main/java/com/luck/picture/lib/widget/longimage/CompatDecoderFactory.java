@@ -1,5 +1,6 @@
 package com.luck.picture.lib.widget.longimage;
 
+
 import androidx.annotation.NonNull;
 
 /**

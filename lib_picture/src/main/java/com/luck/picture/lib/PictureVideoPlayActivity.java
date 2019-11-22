@@ -11,6 +11,11 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+/**
+ * @author：luck
+ * @data：2017/8/28 下午11:00
+ * @描述: 视频播放类
+ */
 public class PictureVideoPlayActivity extends PictureBaseActivity implements MediaPlayer.OnErrorListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, View.OnClickListener {
     private String video_path = "";
     private ImageView picture_left_back;
@@ -25,10 +30,10 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_activity_video_play);
         video_path = getIntent().getStringExtra("video_path");
-        picture_left_back = (ImageView) findViewById(R.id.picture_left_back);
-        mVideoView = (VideoView) findViewById(R.id.video_view);
+        picture_left_back = findViewById(R.id.picture_left_back);
+        mVideoView = findViewById(R.id.video_view);
         mVideoView.setBackgroundColor(Color.BLACK);
-        iv_play = (ImageView) findViewById(R.id.iv_play);
+        iv_play = findViewById(R.id.iv_play);
         mMediaController = new MediaController(this);
         mVideoView.setOnCompletionListener(this);
         mVideoView.setOnPreparedListener(this);
@@ -113,16 +118,13 @@ public class PictureVideoPlayActivity extends PictureBaseActivity implements Med
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        mp.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                    // video started
-                    mVideoView.setBackgroundColor(Color.TRANSPARENT);
-                    return true;
-                }
-                return false;
+        mp.setOnInfoListener((mp1, what, extra) -> {
+            if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                // video started
+                mVideoView.setBackgroundColor(Color.TRANSPARENT);
+                return true;
             }
+            return false;
         });
     }
 }

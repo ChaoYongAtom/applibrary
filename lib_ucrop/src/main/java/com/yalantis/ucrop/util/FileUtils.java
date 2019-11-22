@@ -17,9 +17,11 @@
 package com.yalantis.ucrop.util;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -34,6 +36,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.Locale;
 
@@ -297,6 +301,113 @@ public class FileUtils {
         } else {
             int lastSep = filePath.lastIndexOf(File.separator);
             return lastSep == -1 ? "" : filePath.substring(0, lastSep + 1);
+        }
+    }
+
+
+    /**
+     * 复制文件至指定目录
+     *
+     * @param fileInputStream
+     * @param outFilePath
+     * @return
+     */
+    public static boolean copyFile(FileInputStream fileInputStream, String outFilePath) {
+        // 判断目录是否存在。如不存在则创建一个目录
+        File file = new File(FileUtils.getDirName(outFilePath));
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        try {
+            file = new File(outFilePath);
+            if (!file.exists()) {
+                FileUtils.mkDirs(FileUtils.getDirName(outFilePath));
+            }
+            OutputStream myOutput = new FileOutputStream(outFilePath);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fileInputStream.read(buffer)) > 0) {
+                myOutput.write(buffer, 0, length);
+            }
+            myOutput.flush();
+            myOutput.close();
+            fileInputStream.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean mkDirs(String path) {
+        if (path == null) {
+            return false;
+        }
+        File dir = new File(path);
+        if (dir.isDirectory()) {
+            if (!dir.exists()) {
+                return dir.mkdirs();
+            }
+        } else {
+            if (!dir.exists()) {
+                return dir.mkdirs();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 根据uri获取MIME_TYPE
+     *
+     * @param uri
+     * @return
+     */
+    public static String getImageMimeType(Uri uri, Context context) {
+        String mimeType = "";
+        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
+            Cursor cursor = context.getApplicationContext().getContentResolver().query(uri,
+                    new String[]{MediaStore.Images.Media.DATA}, null, null, null);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MIME_TYPE);
+                    if (columnIndex > -1) {
+                        mimeType = cursor.getString(columnIndex);
+                    }
+                }
+                cursor.close();
+            }
+        }
+        return mimeType;
+    }
+
+    /**
+     * 获取图片后缀
+     *
+     * @param mineType
+     * @return
+     */
+    public static String getLastImgSuffix(String mineType) {
+        String defaultSuffix = ".png";
+        try {
+            int index = mineType.lastIndexOf("/") + 1;
+            if (index > 0) {
+                return "." + mineType.substring(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return defaultSuffix;
+        }
+        return defaultSuffix;
+    }
+
+    public static String extSuffix(InputStream input) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, options);
+            return options.outMimeType.replace("image/", ".");
+        } catch (Exception e) {
+            return ".jpg";
         }
     }
 }

@@ -1,18 +1,21 @@
 package com.yalantis.ucrop.view.widget;
+
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.view.Gravity;
+import android.os.Build;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
+import android.text.TextUtils;
+import android.util.AttributeSet;
+import android.view.Gravity;
+import android.widget.TextView;
 
 import com.yalantis.ucrop.R;
 import com.yalantis.ucrop.model.AspectRatio;
@@ -23,7 +26,7 @@ import java.util.Locale;
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
  */
-public class AspectRatioTextView extends AppCompatTextView {
+public class AspectRatioTextView extends TextView {
 
     private final Rect mCanvasClipBounds = new Rect();
     private Paint mDotPaint;
@@ -43,6 +46,13 @@ public class AspectRatioTextView extends AppCompatTextView {
 
     public AspectRatioTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ucrop_AspectRatioTextView);
+        init(a);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public AspectRatioTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ucrop_AspectRatioTextView);
         init(a);
     }

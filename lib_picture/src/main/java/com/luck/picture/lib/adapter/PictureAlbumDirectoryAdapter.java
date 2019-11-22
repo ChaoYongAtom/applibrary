@@ -1,23 +1,16 @@
 package com.luck.picture.lib.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.luck.picture.lib.R;
 import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.config.PictureSelectionConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
 
@@ -25,20 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.adapter
- * email：893855882@qq.com
- * data：16/12/31
+ * @author：luck
+ * @date：2016-12-11 17:02
+ * @describe：文件夹目录
  */
 public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAlbumDirectoryAdapter.ViewHolder> {
     private Context mContext;
     private List<LocalMediaFolder> folders = new ArrayList<>();
-    private int mimeType;
+    private int chooseMode;
+    private PictureSelectionConfig config;
 
-    public PictureAlbumDirectoryAdapter(Context mContext) {
+    public PictureAlbumDirectoryAdapter(Context mContext, PictureSelectionConfig config) {
         super();
         this.mContext = mContext;
+        this.config = config;
+        this.chooseMode = config.chooseMode;
     }
 
     public void bindFolderData(List<LocalMediaFolder> folders) {
@@ -46,8 +40,8 @@ public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAl
         notifyDataSetChanged();
     }
 
-    public void setMimeType(int mimeType) {
-        this.mimeType = mimeType;
+    public void setChooseMode(int chooseMode) {
+        this.chooseMode = chooseMode;
     }
 
     public List<LocalMediaFolder> getFolderData() {
@@ -71,45 +65,27 @@ public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAl
         String imagePath = folder.getFirstImagePath();
         boolean isChecked = folder.isChecked();
         int checkedNum = folder.getCheckedNum();
-        holder.tv_sign.setVisibility(checkedNum > 0 ? View.VISIBLE : View.INVISIBLE);
+        holder.tvSign.setVisibility(checkedNum > 0 ? View.VISIBLE : View.INVISIBLE);
         holder.itemView.setSelected(isChecked);
-        if (mimeType == PictureMimeType.ofAudio()) {
-            holder.first_image.setImageResource(R.drawable.audio_placeholder);
+        if (chooseMode == PictureMimeType.ofAudio()) {
+            holder.ivFirstImage.setImageResource(R.drawable.audio_placeholder);
         } else {
-            RequestOptions options = new RequestOptions()
-                    .placeholder(R.drawable.ic_placeholder)
-                    .centerCrop()
-                    .sizeMultiplier(0.5f)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .override(160, 160);
-            Glide.with(holder.itemView.getContext())
-                    .asBitmap()
-                    .load(imagePath)
-                    .apply(options)
-                    .into(new BitmapImageViewTarget(holder.first_image) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.
-                                            create(mContext.getResources(), resource);
-                            circularBitmapDrawable.setCornerRadius(8);
-                            holder.first_image.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
+            if (config != null && config.imageEngine != null) {
+                config.imageEngine
+                        .loadAsBitmapImage(holder.itemView.getContext(),
+                                imagePath, holder.ivFirstImage, R.drawable.ic_placeholder);
+            }
         }
-        holder.image_num.setText("(" + imageNum + ")");
-        holder.tv_folder_name.setText(name);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onItemClickListener != null) {
-                    for (LocalMediaFolder mediaFolder : folders) {
-                        mediaFolder.setChecked(false);
-                    }
-                    folder.setChecked(true);
-                    notifyDataSetChanged();
-                    onItemClickListener.onItemClick(folder.getName(), folder.getImages());
+        holder.imageNum.setText("(" + imageNum + ")");
+        holder.tvFolderName.setText(name);
+        holder.itemView.setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                for (LocalMediaFolder mediaFolder : folders) {
+                    mediaFolder.setChecked(false);
                 }
+                folder.setChecked(true);
+                notifyDataSetChanged();
+                onItemClickListener.onItemClick(folder.getName(), folder.getImages());
             }
         });
     }
@@ -120,15 +96,15 @@ public class PictureAlbumDirectoryAdapter extends RecyclerView.Adapter<PictureAl
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView first_image;
-        TextView tv_folder_name, image_num, tv_sign;
+        ImageView ivFirstImage;
+        TextView tvFolderName, imageNum, tvSign;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            first_image = (ImageView) itemView.findViewById(R.id.first_image);
-            tv_folder_name = (TextView) itemView.findViewById(R.id.tv_folder_name);
-            image_num = (TextView) itemView.findViewById(R.id.image_num);
-            tv_sign = (TextView) itemView.findViewById(R.id.tv_sign);
+            ivFirstImage = itemView.findViewById(R.id.first_image);
+            tvFolderName = itemView.findViewById(R.id.tv_folder_name);
+            imageNum = itemView.findViewById(R.id.image_num);
+            tvSign = itemView.findViewById(R.id.tv_sign);
         }
     }
 

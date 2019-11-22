@@ -8,7 +8,9 @@ import androidx.annotation.IntRange;
 import androidx.annotation.StyleRes;
 import androidx.fragment.app.Fragment;
 
+import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.config.PictureSelectionConfig;
+import com.luck.picture.lib.engine.ImageEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.tools.DoubleUtils;
 
@@ -16,29 +18,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.lib
- * describe：PictureSelector selection configuration.
- * email：893855882@qq.com
- * data：2017/5/24
+ * @author：luck
+ * @date：2017-5-24 21:30
+ * @describe：PictureSelectionModel
  */
 
 public class PictureSelectionModel {
     private PictureSelectionConfig selectionConfig;
     private PictureSelector selector;
 
-    public PictureSelectionModel(PictureSelector selector, int mimeType) {
+    public PictureSelectionModel(PictureSelector selector, int chooseMode) {
         this.selector = selector;
         selectionConfig = PictureSelectionConfig.getCleanInstance();
-        selectionConfig.mimeType = mimeType;
+        selectionConfig.chooseMode = chooseMode;
     }
 
-    public PictureSelectionModel(PictureSelector selector, int mimeType, boolean camera) {
+    public PictureSelectionModel(PictureSelector selector, int chooseMode, boolean camera) {
         this.selector = selector;
         selectionConfig = PictureSelectionConfig.getCleanInstance();
         selectionConfig.camera = camera;
-        selectionConfig.mimeType = mimeType;
+        selectionConfig.chooseMode = chooseMode;
     }
 
     /**
@@ -47,6 +46,17 @@ public class PictureSelectionModel {
      */
     public PictureSelectionModel theme(@StyleRes int themeStyleId) {
         selectionConfig.themeStyleId = themeStyleId;
+        return this;
+    }
+
+    /**
+     * @param engine Image Load the engine
+     * @return
+     */
+    public PictureSelectionModel loadImageEngine(ImageEngine engine) {
+        if (selectionConfig.imageEngine != engine) {
+            selectionConfig.imageEngine = engine;
+        }
         return this;
     }
 
@@ -171,6 +181,16 @@ public class PictureSelectionModel {
     }
 
     /**
+     * @param Select whether to return directly
+     * @return
+     */
+    public PictureSelectionModel isSingleDirectReturn(boolean isSingleDirectReturn) {
+        selectionConfig.isSingleDirectReturn = selectionConfig.selectionMode
+                == PictureConfig.SINGLE ? isSingleDirectReturn : false;
+        return this;
+    }
+
+    /**
      * @param videoQuality video quality and 0 or 1
      * @return
      */
@@ -233,6 +253,7 @@ public class PictureSelectionModel {
      * @param height glide height
      * @return
      */
+    @Deprecated
     public PictureSelectionModel glideOverride(@IntRange(from = 100) int width,
                                                @IntRange(from = 100) int height) {
         selectionConfig.overrideWidth = width;
@@ -246,6 +267,7 @@ public class PictureSelectionModel {
      *                       loading the resource.
      * @return
      */
+    @Deprecated
     public PictureSelectionModel sizeMultiplier(@FloatRange(from = 0.1f) float sizeMultiplier) {
         selectionConfig.sizeMultiplier = sizeMultiplier;
         return this;
@@ -273,8 +295,18 @@ public class PictureSelectionModel {
      * @param compressQuality crop compress quality default 90
      * @return
      */
+    @Deprecated
     public PictureSelectionModel cropCompressQuality(int compressQuality) {
         selectionConfig.cropCompressQuality = compressQuality;
+        return this;
+    }
+
+    /**
+     * @param cutQuality crop compress quality default 90
+     * @return
+     */
+    public PictureSelectionModel cutOutQuality(int cutQuality) {
+        selectionConfig.cropCompressQuality = cutQuality;
         return this;
     }
 
@@ -284,6 +316,15 @@ public class PictureSelectionModel {
      */
     public PictureSelectionModel compress(boolean isCompress) {
         selectionConfig.isCompress = isCompress;
+        return this;
+    }
+
+    /**
+     * @param compressQuality Image compressed output quality
+     * @return
+     */
+    public PictureSelectionModel compressQuality(int compressQuality) {
+        selectionConfig.compressQuality = compressQuality;
         return this;
     }
 
@@ -302,6 +343,17 @@ public class PictureSelectionModel {
      */
     public PictureSelectionModel compressSavePath(String path) {
         selectionConfig.compressSavePath = path;
+        return this;
+    }
+
+    /**
+     * Camera custom local file name
+     *
+     * @param fileName
+     * @return
+     */
+    public PictureSelectionModel cameraFileName(String fileName) {
+        selectionConfig.cameraFileName = fileName;
         return this;
     }
 
@@ -333,9 +385,13 @@ public class PictureSelectionModel {
     }
 
     /**
+     * # Responding to the Q version of Android, it's all in the app
+     * sandbox so customizations are no longer provided
+     *
      * @param outputCameraPath Camera save path
      * @return
      */
+    @Deprecated
     public PictureSelectionModel setOutputCameraPath(String outputCameraPath) {
         selectionConfig.outputCameraPath = outputCameraPath;
         return this;
@@ -369,6 +425,24 @@ public class PictureSelectionModel {
     }
 
     /**
+     * @param isNotPreviewDownload Previews do not show downloads
+     * @return
+     */
+    public PictureSelectionModel isNotPreviewDownload(boolean isNotPreviewDownload) {
+        selectionConfig.isNotPreviewDownload = isNotPreviewDownload;
+        return this;
+    }
+
+    /**
+     * @param Specify get image format
+     * @return
+     */
+    public PictureSelectionModel querySpecifiedFormatSuffix(String specifiedFormat) {
+        selectionConfig.specifiedFormat = specifiedFormat;
+        return this;
+    }
+
+    /**
      * @param openClickSound Whether to open click voice
      * @return
      */
@@ -393,7 +467,126 @@ public class PictureSelectionModel {
         if (selectionMedia == null) {
             selectionMedia = new ArrayList<>();
         }
+        if (selectionConfig.selectionMode == PictureConfig.SINGLE
+                && selectionConfig.isSingleDirectReturn) {
+            selectionMedia.clear();
+        }
         selectionConfig.selectionMedias = selectionMedia;
+        return this;
+    }
+
+    /**
+     * 是否改变状态栏字段颜色(黑白字体转换)
+     * #适合所有style使用
+     *
+     * @param isChangeStatusBarFontColor
+     * @return
+     */
+    public PictureSelectionModel isChangeStatusBarFontColor(boolean isChangeStatusBarFontColor) {
+        selectionConfig.isChangeStatusBarFontColor = isChangeStatusBarFontColor;
+        return this;
+    }
+
+    /**
+     * 选择图片样式0/9
+     * #适合所有style使用
+     *
+     * @param isOpenStyleNumComplete
+     * @return
+     */
+    public PictureSelectionModel isOpenStyleNumComplete(boolean isOpenStyleNumComplete) {
+        selectionConfig.isOpenStyleNumComplete = isOpenStyleNumComplete;
+        return this;
+    }
+
+    /**
+     * 是否开启数字选择模式
+     * #适合qq style 样式使用
+     *
+     * @param isOpenStyleCheckNumMode
+     * @return
+     */
+    public PictureSelectionModel isOpenStyleCheckNumMode(boolean isOpenStyleCheckNumMode) {
+        selectionConfig.isOpenStyleCheckNumMode = isOpenStyleCheckNumMode;
+        return this;
+    }
+
+    /**
+     * 设置标题栏背景色
+     *
+     * @param color
+     * @return
+     */
+    public PictureSelectionModel setTitleBarBackgroundColor(int color) {
+        selectionConfig.titleBarBackgroundColor = color;
+        return this;
+    }
+
+
+    /**
+     * 状态栏背景色
+     *
+     * @param color
+     * @return
+     */
+    public PictureSelectionModel setStatusBarColorPrimaryDark(int color) {
+        selectionConfig.statusBarColorPrimaryDark = color;
+        return this;
+    }
+
+
+    /**
+     * 裁剪页面标题背景色
+     *
+     * @param color
+     * @return
+     */
+    public PictureSelectionModel setCropTitleBarBackgroundColor(int color) {
+        selectionConfig.cropTitleBarBackgroundColor = color;
+        return this;
+    }
+
+    /**
+     * 裁剪页面状态栏背景色
+     *
+     * @param color
+     * @return
+     */
+    public PictureSelectionModel setCropStatusBarColorPrimaryDark(int color) {
+        selectionConfig.cropStatusBarColorPrimaryDark = color;
+        return this;
+    }
+
+    /**
+     * 裁剪页面标题文字颜色
+     *
+     * @param color
+     * @return
+     */
+    public PictureSelectionModel setCropTitleColor(int color) {
+        selectionConfig.cropTitleColor = color;
+        return this;
+    }
+
+    /**
+     * 设置相册标题右侧向上箭头图标
+     *
+     * @param resId
+     * @return
+     */
+    public PictureSelectionModel setUpArrowDrawable(int resId) {
+        selectionConfig.upResId = resId;
+        return this;
+    }
+
+    /**
+     * 设置相册标题右侧向下箭头图标
+     *
+     * @param resId
+     * @return
+     */
+    public PictureSelectionModel setDownArrowDrawable(int resId) {
+        selectionConfig.downResId = resId;
         return this;
     }
 
@@ -408,7 +601,8 @@ public class PictureSelectionModel {
             if (activity == null) {
                 return;
             }
-            Intent intent = new Intent(activity, PictureSelectorActivity.class);
+            Intent intent = new Intent(activity, selectionConfig != null && selectionConfig.camera
+                    ? PictureSelectorCameraEmptyActivity.class : PictureSelectorActivity.class);
             Fragment fragment = selector.getFragment();
             if (fragment != null) {
                 fragment.startActivityForResult(intent, requestCode);
@@ -416,6 +610,29 @@ public class PictureSelectionModel {
                 activity.startActivityForResult(intent, requestCode);
             }
             activity.overridePendingTransition(R.anim.a5, 0);
+        }
+    }
+
+    /**
+     * Start to select media and wait for result.
+     *
+     * @param requestCode Identity of the request Activity or Fragment.
+     */
+    public void forResult(int requestCode, int enterAnim, int exitAnim) {
+        if (!DoubleUtils.isFastDoubleClick()) {
+            Activity activity = selector.getActivity();
+            if (activity == null) {
+                return;
+            }
+            Intent intent = new Intent(activity, selectionConfig != null && selectionConfig.camera
+                    ? PictureSelectorCameraEmptyActivity.class : PictureSelectorActivity.class);
+            Fragment fragment = selector.getFragment();
+            if (fragment != null) {
+                fragment.startActivityForResult(intent, requestCode);
+            } else {
+                activity.startActivityForResult(intent, requestCode);
+            }
+            activity.overridePendingTransition(enterAnim, exitAnim);
         }
     }
 

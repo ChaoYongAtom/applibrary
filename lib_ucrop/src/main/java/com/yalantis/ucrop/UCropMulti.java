@@ -2,7 +2,6 @@ package com.yalantis.ucrop;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +16,7 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.model.CutInfo;
@@ -142,14 +142,12 @@ public class UCropMulti {
         start(context, fragment, REQUEST_MULTI_CROP);
     }
 
-
     /**
      * Send the crop Intent with a custom request code
      *
      * @param fragment    Fragment to receive result
      * @param requestCode requestCode for result
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void start(@NonNull Context context, @NonNull Fragment fragment, int requestCode) {
         fragment.startActivityForResult(getIntent(context), requestCode);
     }
@@ -194,6 +192,15 @@ public class UCropMulti {
         return intent.getIntExtra(EXTRA_OUTPUT_IMAGE_HEIGHT, -1);
     }
 
+    /**
+     * Retrieve cropped image aspect ratio from the result Intent
+     *
+     * @param intent crop result intent
+     * @return aspect ratio as a floating point value (x:y) - so it will be 1 for 1:1 or 4/3 for 4:3
+     */
+    public static float getOutputCropAspectRatio(@NonNull Intent intent) {
+        return intent.getParcelableExtra(EXTRA_OUTPUT_CROP_ASPECT_RATIO);
+    }
 
     /**
      * Method retrieves error from the result intent.

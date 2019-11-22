@@ -1,5 +1,6 @@
 package com.luck.picture.lib;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.luck.picture.lib.compress.Luban;
@@ -25,23 +27,28 @@ import com.luck.picture.lib.entity.EventEntity;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.entity.LocalMediaFolder;
 import com.luck.picture.lib.immersive.ImmersiveManage;
+import com.luck.picture.lib.permissions.RxPermissions;
 import com.luck.picture.lib.rxbus2.RxBus;
 import com.luck.picture.lib.rxbus2.RxUtils;
-import com.luck.picture.lib.tools.AttrsUtils;
+import com.luck.picture.lib.tools.AndroidQTransformUtils;
 import com.luck.picture.lib.tools.DateUtils;
 import com.luck.picture.lib.tools.DoubleUtils;
+import com.luck.picture.lib.tools.MediaUtils;
 import com.luck.picture.lib.tools.PictureFileUtils;
 import com.luck.picture.lib.tools.SdkVersionUtils;
+import com.luck.picture.lib.tools.ToastUtils;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropMulti;
-import com.yalantis.ucrop.util.BitmapUtils;
+import com.yalantis.ucrop.model.CutInfo;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -59,6 +66,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected PictureDialog dialog;
     protected PictureDialog compressDialog;
     protected List<LocalMedia> selectionMedias;
+    protected RxPermissions rxPermissions;
 
     /**
      * 是否使用沉浸式，子类复写该方法来确定是否采用沉浸式
@@ -67,7 +75,7 @@ public class PictureBaseActivity extends FragmentActivity {
      */
     @Override
     public boolean isImmersive() {
-        return true;
+        return config != null && config.isCamera ? false : true;
     }
 
     /**
@@ -93,6 +101,7 @@ public class PictureBaseActivity extends FragmentActivity {
         setTheme(themeStyleId);
         super.onCreate(savedInstanceState);
         mContext = this;
+        rxPermissions = new RxPermissions(this);
         initConfig();
         if (isImmersive()) {
             immersive();
@@ -105,18 +114,19 @@ public class PictureBaseActivity extends FragmentActivity {
     private void initConfig() {
         outputCameraPath = config.outputCameraPath;
         // 是否开启白色状态栏
-        openWhiteStatusBar = AttrsUtils.getTypeValueBoolean
-                (this, R.attr.picture_statusFontColor);
+        openWhiteStatusBar = config.isChangeStatusBarFontColor;
         // 是否是0/9样式
-        numComplete = AttrsUtils.getTypeValueBoolean(this,
-                R.attr.picture_style_numComplete);
+        numComplete = config.isOpenStyleNumComplete;
         // 是否开启数字勾选模式
-        config.checkNumMode = AttrsUtils.getTypeValueBoolean
-                (this, R.attr.picture_style_checkNumMode);
+        config.checkNumMode = config.isOpenStyleCheckNumMode;
         // 标题栏背景色
-        colorPrimary = AttrsUtils.getTypeValueColor(this, R.attr.colorPrimary);
+        colorPrimary = config.titleBarBackgroundColor <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey)
+                : ContextCompat.getColor(this, config.titleBarBackgroundColor);
         // 状态栏背景色
-        colorPrimaryDark = AttrsUtils.getTypeValueColor(this, R.attr.colorPrimaryDark);
+        colorPrimaryDark = config.statusBarColorPrimaryDark <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey)
+                : ContextCompat.getColor(this, config.statusBarColorPrimaryDark);
         // 已选图片列表
         selectionMedias = config.selectionMedias;
         if (selectionMedias == null) {
@@ -213,8 +223,9 @@ public class PictureBaseActivity extends FragmentActivity {
                     .map(list -> {
                         List<File> files =
                                 Luban.with(mContext)
-                                        .loadMediaData(list)
+                                        .loadMediaData(list, config.cameraFileName)
                                         .setTargetDir(config.compressSavePath)
+                                        .setCompressQuality(config.compressQuality)
                                         .ignoreBy(config.minimumCompressSize)
                                         .get();
                         if (files == null) {
@@ -226,8 +237,9 @@ public class PictureBaseActivity extends FragmentActivity {
                     .subscribe(files -> handleCompressCallBack(result, files));
         } else {
             Luban.with(this)
-                    .loadMediaData(result)
+                    .loadMediaData(result, config.cameraFileName)
                     .ignoreBy(config.minimumCompressSize)
+                    .setCompressQuality(config.compressQuality)
                     .setTargetDir(config.compressSavePath)
                     .setCompressListener(new OnCompressListener() {
                         @Override
@@ -279,9 +291,12 @@ public class PictureBaseActivity extends FragmentActivity {
      */
     protected void startCrop(String originalPath) {
         UCrop.Options options = new UCrop.Options();
-        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
-        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
-        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
+        int toolbarColor = config.cropTitleBarBackgroundColor <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey) : ContextCompat.getColor(this, config.cropTitleBarBackgroundColor);
+        int statusColor = config.cropStatusBarColorPrimaryDark <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey) : ContextCompat.getColor(this, config.cropStatusBarColorPrimaryDark);
+        int titleColor = config.cropTitleColor <= 0 ?
+                ContextCompat.getColor(this, R.color.white) : ContextCompat.getColor(this, config.cropTitleColor);
         options.setToolbarColor(toolbarColor);
         options.setStatusBarColor(statusColor);
         options.setToolbarWidgetColor(titleColor);
@@ -295,11 +310,14 @@ public class PictureBaseActivity extends FragmentActivity {
         options.setHideBottomControls(config.hideBottomControls);
         options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
         boolean isHttp = PictureMimeType.isHttp(originalPath);
-        String imgType = PictureMimeType.getLastImgType(originalPath);
         boolean isAndroidQ = SdkVersionUtils.checkedAndroid_Q();
+        String imgType = isAndroidQ ? PictureMimeType
+                .getLastImgSuffix(PictureMimeType.getMimeType(mContext, Uri.parse(originalPath)))
+                : PictureMimeType.getLastImgType(originalPath);
         Uri uri = isHttp || isAndroidQ ? Uri.parse(originalPath) : Uri.fromFile(new File(originalPath));
-        UCrop.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
-                System.currentTimeMillis() + imgType)))
+        File file = new File(PictureFileUtils.getDiskCacheDir(this),
+                TextUtils.isEmpty(config.cameraFileName) ? System.currentTimeMillis() + imgType : config.cameraFileName + imgType);
+        UCrop.of(uri, Uri.fromFile(file))
                 .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
                 .withMaxResultSize(config.cropWidth, config.cropHeight)
                 .withOptions(options)
@@ -313,9 +331,12 @@ public class PictureBaseActivity extends FragmentActivity {
      */
     protected void startCrop(ArrayList<String> list) {
         UCropMulti.Options options = new UCropMulti.Options();
-        int toolbarColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_toolbar_bg);
-        int statusColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_status_color);
-        int titleColor = AttrsUtils.getTypeValueColor(this, R.attr.picture_crop_title_color);
+        int toolbarColor = config.cropTitleBarBackgroundColor <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey) : ContextCompat.getColor(this, config.cropTitleBarBackgroundColor);
+        int statusColor = config.cropStatusBarColorPrimaryDark <= 0 ?
+                ContextCompat.getColor(this, R.color.bar_grey) : ContextCompat.getColor(this, config.cropStatusBarColorPrimaryDark);
+        int titleColor = config.cropTitleColor <= 0 ?
+                ContextCompat.getColor(this, R.color.white) : ContextCompat.getColor(this, config.cropTitleColor);
         options.setToolbarColor(toolbarColor);
         options.setStatusBarColor(statusColor);
         options.setToolbarWidgetColor(titleColor);
@@ -325,17 +346,20 @@ public class PictureBaseActivity extends FragmentActivity {
         options.setShowCropGrid(config.showCropGrid);
         options.setScaleEnabled(config.scaleEnabled);
         options.setRotateEnabled(config.rotateEnabled);
-        options.setHideBottomControls(true);
+        options.setHideBottomControls(config.hideBottomControls);
         options.setCompressionQuality(config.cropCompressQuality);
         options.setCutListData(list);
         options.setFreeStyleCropEnabled(config.freeStyleCropEnabled);
         String path = list.size() > 0 ? list.get(0) : "";
-        boolean isHttp = PictureMimeType.isHttp(path);
-        String imgType = PictureMimeType.getLastImgType(path);
         boolean isAndroidQ = SdkVersionUtils.checkedAndroid_Q();
+        boolean isHttp = PictureMimeType.isHttp(path);
+        String imgType = isAndroidQ ? PictureMimeType
+                .getLastImgSuffix(PictureMimeType.getMimeType(mContext, Uri.parse(path)))
+                : PictureMimeType.getLastImgType(path);
         Uri uri = isHttp || isAndroidQ ? Uri.parse(path) : Uri.fromFile(new File(path));
-        UCropMulti.of(uri, Uri.fromFile(new File(PictureFileUtils.getDiskCacheDir(this),
-                System.currentTimeMillis() + imgType)))
+        File file = new File(PictureFileUtils.getDiskCacheDir(this),
+                TextUtils.isEmpty(config.cameraFileName) ? System.currentTimeMillis() + imgType : config.cameraFileName + imgType);
+        UCropMulti.of(uri, Uri.fromFile(file))
                 .withAspectRatio(config.aspect_ratio_x, config.aspect_ratio_y)
                 .withMaxResultSize(config.cropWidth, config.cropHeight)
                 .withOptions(options)
@@ -389,7 +413,7 @@ public class PictureBaseActivity extends FragmentActivity {
         if (folders.size() == 0) {
             // 没有相册 先创建一个最近相册出来
             LocalMediaFolder newFolder = new LocalMediaFolder();
-            String folderName = config.mimeType == PictureMimeType.ofAudio() ?
+            String folderName = config.chooseMode == PictureMimeType.ofAudio() ?
                     getString(R.string.picture_all_audio) : getString(R.string.picture_camera_roll);
             newFolder.setName(folderName);
             newFolder.setPath("");
@@ -430,7 +454,7 @@ public class PictureBaseActivity extends FragmentActivity {
     protected void onResult(List<LocalMedia> images) {
         boolean androidQ = SdkVersionUtils.checkedAndroid_Q();
         boolean isVideo = PictureMimeType.isVideo(images != null && images.size() > 0
-                ? images.get(0).getPictureType() : "");
+                ? images.get(0).getMimeType() : "");
         if (androidQ && !isVideo) {
             showCompressDialog();
         }
@@ -438,7 +462,7 @@ public class PictureBaseActivity extends FragmentActivity {
             @NonNull
             @Override
             public List<LocalMedia> doSth(Object... objects) {
-                if (androidQ && !isVideo) {
+                if (androidQ) {
                     // Android Q 版本做拷贝应用内沙盒适配
                     int size = images.size();
                     for (int i = 0; i < size; i++) {
@@ -447,17 +471,22 @@ public class PictureBaseActivity extends FragmentActivity {
                             continue;
                         }
                         if (media.isCompressed()) {
-                            media.setPath(media.getCompressPath());
+                            media.setAndroidQToPath(media.getCompressPath());
                         } else if (media.isCut()) {
-                            media.setPath(media.getCutPath());
+                            media.setAndroidQToPath(media.getCutPath());
                         } else {
-                            String cachedDir = PictureFileUtils.getDiskCacheDir(getApplicationContext());
-                            String imgType = PictureMimeType.getLastImgType(media.getPath());
-                            String newPath = cachedDir + File.separator + System.currentTimeMillis() + imgType;
-                            Bitmap bitmapFromUri = BitmapUtils.getBitmapFromUri(getApplicationContext(),
-                                    Uri.parse(media.getPath()));
-                            BitmapUtils.saveBitmap(bitmapFromUri, newPath);
-                            media.setPath(newPath);
+                            String path;
+                            if (isVideo) {
+                                path = AndroidQTransformUtils.parseVideoPathToAndroidQ
+                                        (getApplicationContext(), media.getPath(), config.cameraFileName, media.getMimeType());
+                            } else if (config.chooseMode == PictureMimeType.ofAudio()) {
+                                path = AndroidQTransformUtils.parseAudioPathToAndroidQ
+                                        (getApplicationContext(), media.getPath(), config.cameraFileName, media.getMimeType());
+                            } else {
+                                path = AndroidQTransformUtils.parseImagePathToAndroidQ
+                                        (getApplicationContext(), media.getPath(), config.cameraFileName, media.getMimeType());
+                            }
+                            media.setAndroidQToPath(path);
                         }
 
                     }
@@ -569,7 +598,7 @@ public class PictureBaseActivity extends FragmentActivity {
      */
     protected String getAudioPath(Intent data) {
         boolean compare_SDK_19 = Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT;
-        if (data != null && config.mimeType == PictureMimeType.ofAudio()) {
+        if (data != null && config.chooseMode == PictureMimeType.ofAudio()) {
             try {
                 Uri uri = data.getData();
                 final String audioPath;
@@ -601,9 +630,121 @@ public class PictureBaseActivity extends FragmentActivity {
             cursor.moveToFirst();
             int index = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA);
             path = cursor.getString(index);
+            cursor.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return path;
+    }
+
+
+    /**
+     * start to camera、preview、crop
+     */
+    protected void startOpenCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            Uri imageUri;
+            if (SdkVersionUtils.checkedAndroid_Q()) {
+                imageUri = MediaUtils.createImagePathUri(getApplicationContext(), config.cameraFileName);
+                cameraPath = imageUri.toString();
+            } else {
+                int type = config.chooseMode == PictureConfig.TYPE_ALL ? PictureConfig.TYPE_IMAGE
+                        : config.chooseMode;
+                File cameraFile = PictureFileUtils.createCameraFile(getApplicationContext(),
+                        type, config.cameraFileName, config.suffixType);
+                cameraPath = cameraFile.getAbsolutePath();
+                imageUri = PictureFileUtils.parUri(this, cameraFile);
+            }
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
+        }
+    }
+
+
+    /**
+     * start to camera、video
+     */
+    protected void startOpenCameraVideo() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            Uri imageUri;
+            if (SdkVersionUtils.checkedAndroid_Q()) {
+                imageUri = MediaUtils.createImageVideoUri(getApplicationContext(), config.cameraFileName);
+                cameraPath = imageUri.toString();
+            } else {
+                File cameraFile = PictureFileUtils.createCameraFile(getApplicationContext(), config.chooseMode ==
+                                PictureConfig.TYPE_ALL ? PictureConfig.TYPE_VIDEO : config.chooseMode, config.cameraFileName,
+                        config.suffixType);
+                cameraPath = cameraFile.getAbsolutePath();
+                imageUri = PictureFileUtils.parUri(this, cameraFile);
+            }
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            cameraIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, config.recordVideoSecond);
+            cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, config.videoQuality);
+            startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
+        }
+    }
+
+    /**
+     * start to camera audio
+     */
+    public void startOpenCameraAudio() {
+        if (rxPermissions == null) {
+            rxPermissions = new RxPermissions(this);
+        }
+        rxPermissions.request(Manifest.permission.RECORD_AUDIO).subscribe(new Observer<Boolean>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+            }
+
+            @Override
+            public void onNext(Boolean aBoolean) {
+                if (aBoolean) {
+                    Intent cameraIntent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+                    if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(cameraIntent, PictureConfig.REQUEST_CAMERA);
+                    }
+                } else {
+                    ToastUtils.s(mContext, getString(R.string.picture_audio));
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
+    }
+
+    /**
+     * 多张图片裁剪
+     *
+     * @param data
+     */
+    protected void multiCropHandleResult(Intent data) {
+        List<LocalMedia> medias = new ArrayList<>();
+        List<CutInfo> mCuts = UCropMulti.getOutput(data);
+        for (CutInfo c : mCuts) {
+            LocalMedia media = new LocalMedia();
+            String imageType = PictureMimeType.getImageMimeType(c.getCutPath());
+            media.setCut(TextUtils.isEmpty(c.getCutPath()) ? false : true);
+            media.setPath(c.getPath());
+            media.setCutPath(c.getCutPath());
+            media.setMimeType(imageType);
+            media.setWidth(c.getImageWidth());
+            media.setHeight(c.getImageHeight());
+            media.setSize(new File(TextUtils.isEmpty(c.getCutPath())
+                    ? c.getPath() : c.getCutPath()).length());
+            if (SdkVersionUtils.checkedAndroid_Q()) {
+                media.setAndroidQToPath(c.getCutPath());
+            }
+            media.setChooseModel(config.chooseMode);
+            medias.add(media);
+        }
+        handlerResult(medias);
     }
 }

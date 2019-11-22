@@ -1,0 +1,60 @@
+lib_base  基础包
+    api rootProject.depsLibs.rxjava
+    api rootProject.depsLibs.rxandroid
+    api rootProject.depsLibs.appcompat
+    api rootProject.depsLibs.design
+    api rootProject.depsLibs.recyclerview
+    api rootProject.depsLibs.logutils
+    api rootProject.depsLibs.fastjson
+    api rootProject.depsLibs.butterknife
+    api  rootProject.depsLibs.rxpermissions
+    api rootProject.depsLibs.nineoldandroids
+    api rootProject.depsLibs.zloading
+    api rootProject.depsLibs.fragmentation
+    api rootProject.depsLibs.immersionbar
+    api rootProject.depsLibs.lifecycle
+    annotationProcessor rootProject.depsLibs.lifecycleCompiler
+    api rootProject.depsLibs.multidex
+    api rootProject.depsLibs.background
+    api rootProject.depsLibs.rxlifecycle
+    api rootProject.depsLibs.liveEventBus
+lib_dex 热更新组件
+     compileOnly project(':lib_network')
+     compileOnly rootProject.depsLibs.fastjson
+lib_imageloader 图片加载组件
+     api rootProject.depsLibs.glide
+     annotationProcessor rootProject.depsLibs.glideCompiler
+lib_network 网络请求组件
+     implementation rootProject.depsLibs.rxhttp
+     annotationProcessor rootProject.depsLibs.rxhttpCompiler
+lib_picture 图片选择组件
+    implementation rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.recyclerview
+    compileOnly rootProject.depsLibs.glide
+    annotationProcessor rootProject.depsLibs.glideCompiler
+    implementation "${rootProject.depsLibs.ryapp}:lib_ucrop:1.0.1@aar"
+    //noinspection GradleCompatible
+    compileOnly rootProject.depsLibs.rxjava
+    compileOnly rootProject.depsLibs.rxandroid
+lib_ucrop   图片选择裁剪组件
+    compileOnly rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.recyclerview
+lib_qrcode  二维码扫码组件
+    compileOnly rootProject.depsLibs.appcompat
+lib_time    时间选择组件
+    implementation 'com.lxj:xpopup:1.8.10-x'
+    implementation "${rootProject.depsLibs.ryapp}:lib_base:1.0.2"
+lib_update  APK更新组件
+    implementation rootProject.depsLibs.versionchecklib
+lib_webview 网页加载组件
+    compileOnly rootProject.depsLibs.appcompat
+    compileOnly rootProject.depsLibs.design
+    compileOnly rootProject.depsLibs.immersionbar
+    compileOnly "${rootProject.depsLibs.ryapp}:lib_base:1.0.2"
+    implementation files("libs/tbs_sdk_thirdapp_v4.3.0.1148_43697_sharewithdownloadwithfile_withoutGame_obfs_20190805_175505.jar")
+lib_yj      悦家产品组件
+    implementation  rootProject.depsLibs.mobstat
+    api "${rootProject.depsLibs.ryapp}:lib_base:1.0.2"
+    api "${rootProject.depsLibs.ryapp}:lib_update:1.0.0"
+    api "${rootProject.depsLibs.ryapp}:lib_network:1.0.2"
+    api "${rootProject.depsLibs.ryapp}:lib_imageloader:1.0.0"

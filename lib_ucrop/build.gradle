@@ -33,6 +33,4 @@ dependencies {
     //noinspection GradleCompatible
     compileOnly rootProject.depsLibs.appcompat
     compileOnly rootProject.depsLibs.recyclerview
-    compileOnly rootProject.depsLibs.glide
-    annotationProcessor rootProject.depsLibs.glideCompiler
 }

@@ -25,7 +25,7 @@ import com.luck.picture.lib.rxbus2.RxBus;
 import com.luck.picture.lib.rxbus2.Subscribe;
 import com.luck.picture.lib.rxbus2.ThreadMode;
 import com.luck.picture.lib.tools.ScreenUtils;
-import com.luck.picture.lib.tools.ToastManage;
+import com.luck.picture.lib.tools.ToastUtils;
 import com.luck.picture.lib.tools.VoiceUtils;
 import com.luck.picture.lib.widget.PreviewViewPager;
 import com.yalantis.ucrop.UCrop;
@@ -37,11 +37,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * author：luck
- * project：PictureSelector
- * package：com.luck.picture.ui
- * email：893855882@qq.com
- * data：16/12/31
+ * @author：luck
+ * @data：2016/1/29 下午21:50
+ * @描述:图片预览
  */
 public class PicturePreviewActivity extends PictureBaseActivity implements
         View.OnClickListener, Animation.AnimationListener, SimpleFragmentAdapter.OnCallBackActivity {
@@ -93,16 +91,16 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
         screenWidth = ScreenUtils.getScreenWidth(this);
         animation = OptAnimationLoader.loadAnimation(this, R.anim.modal_in);
         animation.setAnimationListener(this);
-        picture_left_back = (ImageView) findViewById(R.id.picture_left_back);
-        viewPager = (PreviewViewPager) findViewById(R.id.preview_pager);
-        ll_check = (LinearLayout) findViewById(R.id.ll_check);
-        id_ll_ok = (LinearLayout) findViewById(R.id.id_ll_ok);
-        check = (TextView) findViewById(R.id.check);
+        picture_left_back = findViewById(R.id.picture_left_back);
+        viewPager = findViewById(R.id.preview_pager);
+        ll_check = findViewById(R.id.ll_check);
+        id_ll_ok = findViewById(R.id.id_ll_ok);
+        check = findViewById(R.id.check);
         picture_left_back.setOnClickListener(this);
-        tv_ok = (TextView) findViewById(R.id.tv_ok);
+        tv_ok = findViewById(R.id.tv_ok);
         id_ll_ok.setOnClickListener(this);
-        tv_img_num = (TextView) findViewById(R.id.tv_img_num);
-        tv_title = (TextView) findViewById(R.id.picture_title);
+        tv_img_num = findViewById(R.id.tv_img_num);
+        tv_title = findViewById(R.id.picture_title);
         position = getIntent().getIntExtra(PictureConfig.EXTRA_POSITION, 0);
         tv_ok.setText(numComplete ? getString(R.string.picture_done_front_num,
                 0, config.selectionMode == PictureConfig.SINGLE ? 1 : config.maxSelectNum)
@@ -122,60 +120,56 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
             images = ImagesObservable.getInstance().readLocalMedias();
         }
         initViewPageAdapterData();
-        ll_check.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("StringFormatMatches")
-            @Override
-            public void onClick(View view) {
-                if (images != null && images.size() > 0) {
-                    LocalMedia image = images.get(viewPager.getCurrentItem());
-                    String pictureType = selectImages.size() > 0 ?
-                            selectImages.get(0).getPictureType() : "";
-                    if (!TextUtils.isEmpty(pictureType)) {
-                        boolean toEqual = PictureMimeType.
-                                mimeToEqual(pictureType, image.getPictureType());
-                        if (!toEqual) {
-                            ToastManage.s(mContext,getString(R.string.picture_rule));
-                            return;
-                        }
-                    }
-                    // 刷新图片列表中图片状态
-                    boolean isChecked;
-                    if (!check.isSelected()) {
-                        isChecked = true;
-                        check.setSelected(true);
-                        check.startAnimation(animation);
-                    } else {
-                        isChecked = false;
-                        check.setSelected(false);
-                    }
-                    if (selectImages.size() >= config.maxSelectNum && isChecked) {
-                        ToastManage.s(mContext, getString(R.string.picture_message_max_num, config.maxSelectNum));
-                        check.setSelected(false);
+        ll_check.setOnClickListener(view -> {
+            if (images != null && images.size() > 0) {
+                LocalMedia image = images.get(viewPager.getCurrentItem());
+                String mimeType = selectImages.size() > 0 ?
+                        selectImages.get(0).getMimeType() : "";
+                if (!TextUtils.isEmpty(mimeType)) {
+                    boolean toEqual = PictureMimeType.
+                            mimeToEqual(mimeType, image.getMimeType());
+                    if (!toEqual) {
+                        ToastUtils.s(mContext, getString(R.string.picture_rule));
                         return;
                     }
-                    if (isChecked) {
-                        VoiceUtils.playVoice(mContext, config.openClickSound);
-                        // 如果是单选，则清空已选中的并刷新列表(作单一选择)
-                        if (config.selectionMode == PictureConfig.SINGLE) {
-                            singleRadioMediaImage();
-                        }
-                        selectImages.add(image);
-                        image.setNum(selectImages.size());
-                        if (config.checkNumMode) {
-                            check.setText(String.valueOf(image.getNum()));
-                        }
-                    } else {
-                        for (LocalMedia media : selectImages) {
-                            if (media.getPath().equals(image.getPath())) {
-                                selectImages.remove(media);
-                                subSelectPosition();
-                                notifyCheckChanged(media);
-                                break;
-                            }
+                }
+                // 刷新图片列表中图片状态
+                boolean isChecked;
+                if (!check.isSelected()) {
+                    isChecked = true;
+                    check.setSelected(true);
+                    check.startAnimation(animation);
+                } else {
+                    isChecked = false;
+                    check.setSelected(false);
+                }
+                if (selectImages.size() >= config.maxSelectNum && isChecked) {
+                    ToastUtils.s(mContext, getString(R.string.picture_message_max_num, config.maxSelectNum));
+                    check.setSelected(false);
+                    return;
+                }
+                if (isChecked) {
+                    VoiceUtils.playVoice(mContext, config.openClickSound);
+                    // 如果是单选，则清空已选中的并刷新列表(作单一选择)
+                    if (config.selectionMode == PictureConfig.SINGLE) {
+                        singleRadioMediaImage();
+                    }
+                    selectImages.add(image);
+                    image.setNum(selectImages.size());
+                    if (config.checkNumMode) {
+                        check.setText(String.valueOf(image.getNum()));
+                    }
+                } else {
+                    for (LocalMedia media : selectImages) {
+                        if (media.getPath().equals(image.getPath())) {
+                            selectImages.remove(media);
+                            subSelectPosition();
+                            notifyCheckChanged(media);
+                            break;
                         }
                     }
-                    onSelectNumChange(true);
                 }
+                onSelectNumChange(true);
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -258,7 +252,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
      */
     private void initViewPageAdapterData() {
         tv_title.setText(position + 1 + "/" + images.size());
-        adapter = new SimpleFragmentAdapter(images, this, this);
+        adapter = new SimpleFragmentAdapter(config,images, this, this);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(position);
         onSelectNumChange(false);
@@ -399,17 +393,17 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
             // 如果设置了图片最小选择数量，则判断是否满足条件
             int size = selectImages.size();
             LocalMedia image = selectImages.size() > 0 ? selectImages.get(0) : null;
-            String pictureType = image != null ? image.getPictureType() : "";
+            String mimeType = image != null ? image.getMimeType() : "";
             if (config.minSelectNum > 0) {
                 if (size < config.minSelectNum && config.selectionMode == PictureConfig.MULTIPLE) {
-                    boolean eqImg = pictureType.startsWith(PictureConfig.IMAGE);
-                    String str = eqImg ? getString(R.string.picture_min_img_num, config.minSelectNum)
+                    boolean eqImg = mimeType.startsWith(PictureConfig.IMAGE);
+                    @SuppressLint("StringFormatMatches") String str = eqImg ? getString(R.string.picture_min_img_num, config.minSelectNum)
                             : getString(R.string.picture_min_video_num, config.minSelectNum);
-                    ToastManage.s(mContext,str);
+                    ToastUtils.s(mContext, str);
                     return;
                 }
             }
-            if (config.enableCrop && pictureType.startsWith(PictureConfig.IMAGE)) {
+            if (config.enableCrop && mimeType.startsWith(PictureConfig.IMAGE)) {
                 if (config.selectionMode == PictureConfig.SINGLE) {
                     originalPath = image.getPath();
                     startCrop(originalPath);
@@ -438,6 +432,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -457,7 +452,7 @@ public class PicturePreviewActivity extends PictureBaseActivity implements
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
             Throwable throwable = (Throwable) data.getSerializableExtra(UCrop.EXTRA_ERROR);
-            ToastManage.s(mContext,throwable.getMessage());
+            ToastUtils.s(mContext, throwable.getMessage());
         }
     }
 

@@ -14,6 +14,9 @@ import com.wcy.app.lib.web.MyWebView;
 
 import org.wcy.android.ui.BaseFragment;
 
+import me.yokeyword.fragmentation.anim.DefaultNoAnimator;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
+
 /**
  * WebXFragment
  *
@@ -36,6 +39,11 @@ public class WebFragment extends BaseFragment {
             mSuperWebX5Fragment.setArguments(bundle);
         }
         return mSuperWebX5Fragment;
+    }
+
+    @Override
+    public FragmentAnimator onCreateFragmentAnimator() {
+        return new DefaultNoAnimator();
     }
 
     @Override
