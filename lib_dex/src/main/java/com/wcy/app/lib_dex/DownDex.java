@@ -44,6 +44,7 @@ public class DownDex {
         HttpUtils.postBody(httpBuilder, encode(jsonObject.toJSONString()), new NetWorkResult() {
             @Override
             public void onNext(String result) {
+                Log.i(TAG, "原始数据"+decode(result));
                 if (0x3A810200 == menty) {
                     JSONObject resAllJSON = JSONObject.parseObject(decode(result));
                     //获取返回消息
@@ -53,7 +54,7 @@ public class DownDex {
                         //数据
                         byte[] data = resAllJSON.getBytes(Packet.DATA);
                         JSONObject dataJson = toByteJSON(data);
-                        downDex(dataJson.getString("url"), dataJson.getIntValue("ver"), dataJson.getString("name"), key);
+                        downDex(dataJson.getString(Packet.url), dataJson.getIntValue(Packet.ver), dataJson.getString(Packet.name), key);
                     }
                 }
 

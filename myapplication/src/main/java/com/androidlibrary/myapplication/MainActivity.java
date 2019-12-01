@@ -23,18 +23,32 @@ import com.wcy.app.time.ChangeTimeDialogUtils;
 import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxPermissionsTool;
 import org.wcy.android.utils.RxTool;
+import org.wcy.android.view.EmptyLayout;
+import org.wcy.android.view.refresh.MaterialRefreshListener;
 
 import java.util.List;
 
 public class MainActivity extends BaseMActivity<GuideModel> implements CallBack {
     TextView msg;
     ImageView image_view;
-
+    EmptyLayout emptyLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RxTool.init(getApplication());
         setView(R.layout.activity_main, "");
+        emptyLayout=findViewById(R.id.emptylayout);
+        emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
+            @Override
+            public void onRefresh() {
+                emptyLayout.onRefreshComplete();
+            }
+
+            @Override
+            public void onRefreshLoadMore() {
+                emptyLayout.onRefreshComplete();
+            }
+        });
         try {
             ApplicationInfo appInfo = RxTool.getContext().getPackageManager().getApplicationInfo(RxTool.getContext().getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = appInfo.metaData;

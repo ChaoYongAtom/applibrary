@@ -119,7 +119,7 @@ public class FixDexUtil {
                         Object dexElements = combineArray(leftDexElements, rightDexElements);
                         // 重写给PathList里面的Element[] dexElements;赋值
                         Object pathList = getPathList(pathLoader);// 一定要重新获取，不要用pathPathList，会报错
-                        setField(pathList, pathList.getClass(), "dexElements", dexElements);
+                        setField(pathList, pathList.getClass(), Packet.dexElements, dexElements);
                         Log.i(TAG, "修复完成");
                     }
                 }
@@ -146,7 +146,7 @@ public class FixDexUtil {
                     String fName = f.getName();
                     if (fName.endsWith(APK_SUFFIX) || fName.endsWith(DEX_SUFFIX) || fName.endsWith(JAR_SUFFIX) || fName.endsWith(ZIP_SUFFIX)) {
                         String[] versions = fName.split("_");
-                        if (versions.length ==3) {
+                        if (versions.length == 3) {
                             Integer v = Integer.parseInt(versions[1]);
                             if (v >= ver) {
                                 falg = false;
@@ -193,14 +193,14 @@ public class FixDexUtil {
      * 反射得到类加载器中的pathList对象
      */
     private Object getPathList(Object baseDexClassLoader) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        return getField(baseDexClassLoader, Class.forName("dalvik.system.BaseDexClassLoader"), "pathList");
+        return getField(baseDexClassLoader, Class.forName(Packet.baseDexClassLoader), Packet.pathList);
     }
 
     /**
      * 反射得到pathList中的dexElements
      */
     private Object getDexElements(Object pathList) throws NoSuchFieldException, IllegalAccessException {
-        return getField(pathList, pathList.getClass(), "dexElements");
+        return getField(pathList, pathList.getClass(), Packet.dexElements);
     }
 
     /**

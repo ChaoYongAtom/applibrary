@@ -17,7 +17,7 @@ android {
         versionName "1.0.0"
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi','x86', 'armeabi-v7a', 'x86_64'
+            abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64'
         }
         multiDexEnabled rootProject.android.multiDexEnabled
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -72,22 +72,27 @@ android {
         pickFirst 'META-INF/*'
         exclude 'META-INF/rxjava.properties'
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     implementation project(':lib_yj')
     implementation project(':lib_time')
     implementation project(':lib_dex')
     implementation project(':lib_picture')
-   // implementation "${rootProject.depsLibs.ryapp}:lib_time:1.0.0"
-   // implementation "${rootProject.depsLibs.ryapp}:lib_picture:1.0.2"
-  //  implementation project(':lib_webview')
+    // implementation "${rootProject.depsLibs.ryapp}:lib_time:1.0.0"
+    // implementation "${rootProject.depsLibs.ryapp}:lib_picture:1.0.2"
+    //  implementation project(':lib_webview')
     //implementation "${rootProject.depsLibs.ryapp}:lib_webview:1.0.1"
     //implementation "${rootProject.depsLibs.ryapp}:lib_yj:1.0.1"
 }

@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
-
-import com.wcy.app.lib_dex.FixDexUtil;
+import com.wcy.app.lib_dex.FixDexLoad;
 
 import org.wcy.android.utils.RxPermissionsTool;
 
@@ -22,7 +20,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void init() {
-       FixDexUtil.getInstance().init(this,"fnaF6512268E4C946DBA3900A4211199BA9vxq");
+        FixDexLoad.init(this,"NNWEB1E47B1D72C43B0A018DA669632B7EDPTO");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

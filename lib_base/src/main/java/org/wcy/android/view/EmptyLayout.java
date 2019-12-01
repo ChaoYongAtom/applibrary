@@ -104,14 +104,12 @@ public class EmptyLayout extends RelativeLayout {
                 mainview.removeAllViews();
                 pullToRefreshView = new MaterialRefreshLayout(mContext);
                 pullToRefreshView.addView(viewGroup);
-                pullToRefreshView.setIsOverLay(true);
-                pullToRefreshView.setWaveColor(getResources().getColor(R.color.waveColor));
+                pullToRefreshView.setIsOverLay(false);
+                pullToRefreshView.setWaveShow(false);
                 mainview.addView(pullToRefreshView, lp);
             }
         } else if (isRefresh && isList) {//同时需要刷新而且是列表并且内部无childview
             pullToRefreshView = new MaterialRefreshLayout(mContext);
-            pullToRefreshView.setIsOverLay(true);
-            pullToRefreshView.setWaveColor(getResources().getColor(R.color.waveColor));
             initListView(null);
             pullToRefreshView.addView(listView);
             mainview.addView(pullToRefreshView, lp);

@@ -49,7 +49,9 @@ public class AnalysisNumberUtil {
     public static AnalysisNumberData AnalysisNumber(String str, boolean isneedBrackets) {
         AnalysisNumberData strScaleNum = AnalysisNumber(str);
         if (isneedBrackets) {
-            strScaleNum.dataUnit = "(" + strScaleNum.dataUnit + ")";
+            if (!RxDataTool.isNullString(strScaleNum.dataUnit))
+                strScaleNum.dataUnit = "(" + strScaleNum.dataUnit + ")";
+            else strScaleNum.dataUnit = "";
         }
         return strScaleNum;
     }
@@ -93,9 +95,11 @@ public class AnalysisNumberUtil {
     public static void setNumberToTextView(String str, boolean isneedBrackets, TextView textViewOne, TextView textViewTwo, String twoStr) {
         setNumberToTextView(str, isneedBrackets, textViewOne, "", textViewTwo, twoStr);
     }
+
     public static void setNumberToTextView(String str, boolean isneedBrackets, TextView textViewOne, TextView textViewTwo) {
         setNumberToTextView(str, isneedBrackets, textViewOne, "", textViewTwo, "");
     }
+
     public static void setNumberToTextView(String str, boolean isneedBrackets, TextView textViewOne, String oneStr) {
         setNumberToTextView(str, isneedBrackets, textViewOne, oneStr, null, null);
     }
