@@ -36,6 +36,18 @@ public class BaseMFragment<T extends AbsViewModel>  extends BaseFragment impleme
     }
 
     @Override
+    public void finishFramager() {
+        if (eventKeys != null && eventKeys.size() > 0) {
+            for (int i = 0; i < eventKeys.size(); i++) {
+                LiveBus.getDefault().clear(eventKeys.get(i));
+            }
+        }
+        if(mViewModel!=null)mViewModel.unSubscribe();
+        mViewModel=null;
+        super.finishFramager();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (mViewModel == null) {

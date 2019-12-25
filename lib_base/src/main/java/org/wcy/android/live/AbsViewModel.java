@@ -35,11 +35,13 @@ public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+
+    }
+    public void unSubscribe(){
         if (mRepository != null) {
             mRepository.unSubscribe();
         }
     }
-
     protected void postData(Object object, String tag) {
         if (!RxDataTool.isNullString(tag)) {
             if (object instanceof List) {

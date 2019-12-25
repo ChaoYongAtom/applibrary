@@ -48,6 +48,19 @@ public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implemen
             initViewModel();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        if (eventKeys != null && eventKeys.size() > 0) {
+            for (int i = 0; i < eventKeys.size(); i++) {
+                LiveBus.getDefault().clear(eventKeys.get(i));
+            }
+        }
+        if(mViewModel!=null)mViewModel.unSubscribe();
+        mViewModel=null;
+        super.onDestroy();
+    }
+
     protected <M> MutableLiveData<M> registerObserver(Class<M> tClass) {
         return registerObserver(tClass, "");
     }

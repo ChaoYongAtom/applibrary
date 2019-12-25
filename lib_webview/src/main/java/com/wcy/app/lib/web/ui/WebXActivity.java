@@ -1,6 +1,5 @@
 package com.wcy.app.lib.web.ui;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -24,12 +23,12 @@ public class WebXActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_main);
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            loadRootFragment(R.id.framelayout, WebFragment.getInstance(getIntent().getStringExtra(URL)));
-        } else {
-            loadRootFragment(R.id.framelayout, WebXFragment.getInstance(getIntent().getStringExtra(URL)));
-        }
-
+//        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            loadRootFragment(R.id.framelayout, WebFragment.getInstance(getIntent().getStringExtra(URL)));
+//        } else {
+//            loadRootFragment(R.id.framelayout, WebXFragment.getInstance(getIntent().getStringExtra(URL)));
+//        }
+        loadRootFragment(R.id.framelayout, WebXFragment.getInstance(getIntent().getStringExtra(URL)));
 
     }
 }

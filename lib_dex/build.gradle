@@ -2,6 +2,10 @@ apply plugin: 'com.android.library'
 apply from: "../upload.gradle"
 android {
     compileSdkVersion rootProject.android.compileSdkVersion
+    buildToolsVersion = android.buildToolsVersion
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         minSdkVersion rootProject.android.minSdkVersion
         targetSdkVersion rootProject.android.targetSdkVersion
@@ -12,7 +16,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

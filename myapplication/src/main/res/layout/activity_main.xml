@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.wcy.android.view.EmptyLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/emptylayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    app:isRefresh="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_20">
         <TextView
+            android:id="@+id/tv_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="msg" />
+
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/download"/>
+            android:src="@mipmap/download" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
             <Button
@@ -37,31 +43,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="登录!" />
+
             <Button
                 android:id="@+id/web_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="网页!" />
+
             <Button
                 android:id="@+id/btnUpdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="更新!" />
+
+            <Button
+                android:id="@+id/btnAddJava"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增加java文件" />
+
+            <Button
+                android:id="@+id/btnAddKotlin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增加kotlin文件" />
         </LinearLayout>
     </LinearLayout>
-    <org.wcy.android.view.EmptyLayout
-        android:id="@+id/emptylayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:isRefresh="true">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="asdfasdfadsfsa4564"
-            android:gravity="center"
-            android:textSize="@dimen/sp_26">
 
-        </TextView>
-    </org.wcy.android.view.EmptyLayout>
 
-</LinearLayout>
+</org.wcy.android.view.EmptyLayout>

@@ -47,7 +47,7 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
             debuggable true
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -56,9 +56,6 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled true
             zipAlignEnabled true
-            debuggable false
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
@@ -88,9 +85,12 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':lib_yj')
     implementation project(':lib_time')
+    implementation project(':lib_webview')
     implementation project(':lib_dex')
     implementation project(':lib_picture')
-    // implementation "${rootProject.depsLibs.ryapp}:lib_time:1.0.0"
+  //  implementation project(':lib_xpopup')
+    //implementation "${rootProject.depsLibs.ryapp}:lib_xpopup:1.0.0"
+    // implementation "${rootProject.depsLibs.ryapp}:lib_time:1.0.3"
     // implementation "${rootProject.depsLibs.ryapp}:lib_picture:1.0.2"
     //  implementation project(':lib_webview')
     //implementation "${rootProject.depsLibs.ryapp}:lib_webview:1.0.1"

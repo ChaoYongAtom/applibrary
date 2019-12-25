@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.tencent.smtt.sdk.QbSdk;
 import com.wcy.app.lib.web.R;
 import com.wcy.app.lib.web.SuperWebX5Config;
 import com.wcy.app.lib.web.SuperWebX5Permissions;
@@ -396,6 +397,9 @@ public class DefaultChromeClient extends MiddleWareWebChromeBase implements File
             return;
         }
         IFileUploadChooser mIFileUploadChooser = this.mIFileUploadChooser;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            QbSdk.forceSysWebView();
+        }
         this.mIFileUploadChooser = mIFileUploadChooser = new FileUpLoadChooserImpl.Builder()
                 .setWebView(webView)
                 .setActivity(mActivity)
@@ -446,6 +450,9 @@ public class DefaultChromeClient extends MiddleWareWebChromeBase implements File
         if (mActivity == null || mActivity.isFinishing()) {
             valueCallback.onReceiveValue(new Object());
             return;
+        }
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            QbSdk.forceSysWebView();
         }
         this.mIFileUploadChooser = new FileUpLoadChooserImpl.Builder()
                 .setWebView(this.mWebView)

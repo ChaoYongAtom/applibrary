@@ -5,18 +5,15 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BottomPopupView;
+import com.wcy.app.time.utils.DateUtil;
 
-import org.wcy.android.utils.DateUtil;
-import org.wcy.android.utils.RxDataTool;
 
 import java.util.Date;
 
-import static org.wcy.android.utils.DateUtil.getDaysOfCurMonth;
+import static com.wcy.app.time.utils.DateUtil.getDaysOfCurMonth;
+
 
 /**
  * PickerviewPopup
@@ -61,13 +58,13 @@ public abstract class PickerviewPopup extends BottomPopupView {
     protected void initPopupContent() {
         super.initPopupContent();
         String data;
-        if (!RxDataTool.isNullString(showData)) {
+        if (showData!=null&&!"".equals(showData)) {
             data = showData;
             year = format(DateUtil.getDateYear(data));
             month = format(DateUtil.getDateMonedh(data) + 1);
             day = format(DateUtil.getDateDay(showData));
         } else {
-            data = DateUtil.getCurrentDate(DateUtil.DF_YYYY_MM_DD);
+            data = DateUtil.getCurrentDate(DateUtil.DF_YYYY_MM_DD_HH_MM);
             year = format(DateUtil.getDateYear(data));
             month = format(DateUtil.getDateMonedh(data) + 1);
             day = format(DateUtil.getDateDay(data) - 1);
@@ -214,13 +211,4 @@ public abstract class PickerviewPopup extends BottomPopupView {
     }
 
     public abstract void selectData(String date);
-
-    /**
-     * 弹出底部滚轮选择
-     *
-     * @param context
-     */
-    public static void show(Context context, String sData, int minYear, int maxYear) {
-
-    }
 }

@@ -21,8 +21,6 @@ public class MaterialFooterView extends FrameLayout implements MaterialHeadListe
     private int textType;
     private int progressBg;
     private int progressSize;
-    private MaterialHeadListener listener;
-
     public MaterialFooterView(Context context) {
         this(context, null);
     }
@@ -117,14 +115,12 @@ public class MaterialFooterView extends FrameLayout implements MaterialHeadListe
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        final float density = getContext().getResources().getDisplayMetrics().density;
-
         materialWaveView = new MaterialWaveView(getContext());
         materialWaveView.setColor(waveColor);
         addView(materialWaveView);
 
         circleProgressBar = new CircleProgressBar(getContext());
-        LayoutParams layoutParams = new LayoutParams((int) density * progressSize, (int) density * progressSize);
+        LayoutParams layoutParams = new LayoutParams(progressSize, progressSize);
         layoutParams.gravity = Gravity.CENTER;
         circleProgressBar.setLayoutParams(layoutParams);
         circleProgressBar.setColorSchemeColors(progress_colors);

@@ -1,6 +1,7 @@
 package com.wcy.app.lib.web.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.tencent.smtt.sdk.QbSdk;
 import com.wcy.app.lib.web.R;
 import com.wcy.app.lib.web.SuperWebX5;
 
@@ -60,6 +62,9 @@ public class WebXFragment extends BaseFragment {
             setFragmentResult(RESULT_OK, null);
         });
         initImmersionBar();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            QbSdk.forceSysWebView();
+        }
         mSuperWebX5 = SuperWebX5.create(this, rootView, title_tv, getArguments().getString(URL));
     }
 

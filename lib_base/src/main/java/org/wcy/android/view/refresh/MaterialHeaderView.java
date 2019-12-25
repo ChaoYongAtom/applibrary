@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 
 import androidx.core.view.ViewCompat;
 
+import org.wcy.android.R;
 import org.wcy.android.utils.ForPxTp;
 
 
@@ -24,7 +25,6 @@ public class MaterialHeaderView extends FrameLayout implements MaterialHeadListe
     private int textType;
     private int progressBg;
     private int progressSize;
-    private static float density;
 
     public MaterialHeaderView(Context context) {
         this(context, null);
@@ -59,7 +59,7 @@ public class MaterialHeaderView extends FrameLayout implements MaterialHeadListe
 
     public void setProgressSize(int progressSize) {
         this.progressSize = progressSize;
-        LayoutParams layoutParams = new LayoutParams((int) density * progressSize, (int) density * progressSize);
+        LayoutParams layoutParams = new LayoutParams(progressSize, progressSize);
         layoutParams.gravity = Gravity.CENTER;
         if(circleProgressBar!=null)
         circleProgressBar.setLayoutParams(layoutParams);
@@ -123,13 +123,11 @@ public class MaterialHeaderView extends FrameLayout implements MaterialHeadListe
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        density = getContext().getResources().getDisplayMetrics().density;
         materialWaveView = new MaterialWaveView(getContext());
         materialWaveView.setColor(waveColor);
         addView(materialWaveView);
-
         circleProgressBar = new CircleProgressBar(getContext());
-        LayoutParams layoutParams = new LayoutParams((int) density * progressSize, (int) density * progressSize);
+        LayoutParams layoutParams = new LayoutParams(progressSize, progressSize);
         layoutParams.gravity = Gravity.CENTER;
         circleProgressBar.setLayoutParams(layoutParams);
         circleProgressBar.setColorSchemeColors(progress_colors);

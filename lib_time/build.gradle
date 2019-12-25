@@ -22,7 +22,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //implementation project(':lib_base')
-    implementation 'com.lxj:xpopup:1.8.10-x'
-    implementation "${rootProject.depsLibs.ryapp}:lib_base:1.0.2"
+  //  compileOnly project(':lib_xpopup')
+    api "${rootProject.depsLibs.ryapp}:lib_xpopup:1.0.0"
 }

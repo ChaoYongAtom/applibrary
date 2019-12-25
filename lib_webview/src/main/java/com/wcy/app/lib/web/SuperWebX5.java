@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;

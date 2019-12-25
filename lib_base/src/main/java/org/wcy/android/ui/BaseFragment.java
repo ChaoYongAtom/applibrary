@@ -223,11 +223,6 @@ public abstract class BaseFragment extends SupportFragment {
             if (mImmersionBar != null) mImmersionBar.destroy(getThisFragment());
         } catch (Exception e) {
         }
-        if (eventKeys != null && eventKeys.size() > 0) {
-            for (int i = 0; i < eventKeys.size(); i++) {
-                LiveBus.getDefault().clear(eventKeys.get(i));
-            }
-        }
         if (unbinder != null) unbinder.unbind();
         super.onDestroy();
     }

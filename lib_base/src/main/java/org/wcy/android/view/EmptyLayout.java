@@ -102,14 +102,12 @@ public class EmptyLayout extends RelativeLayout {
                 viewGroup.setFocusable(true);
                 viewGroup.setClickable(true);
                 mainview.removeAllViews();
-                pullToRefreshView = new MaterialRefreshLayout(mContext);
+                getRefreshLayout();
                 pullToRefreshView.addView(viewGroup);
-                pullToRefreshView.setIsOverLay(false);
-                pullToRefreshView.setWaveShow(false);
                 mainview.addView(pullToRefreshView, lp);
             }
         } else if (isRefresh && isList) {//同时需要刷新而且是列表并且内部无childview
-            pullToRefreshView = new MaterialRefreshLayout(mContext);
+            getRefreshLayout();
             initListView(null);
             pullToRefreshView.addView(listView);
             mainview.addView(pullToRefreshView, lp);
@@ -118,6 +116,11 @@ public class EmptyLayout extends RelativeLayout {
             mainview.addView(listView);
         }
         childView = getChildAt(0);
+    }
+    private void getRefreshLayout(){
+        pullToRefreshView = new MaterialRefreshLayout(mContext);
+        pullToRefreshView.setIsOverLay(true);
+        pullToRefreshView.setWaveShow(false);
     }
 
     private void initListView(LayoutParams lp) {

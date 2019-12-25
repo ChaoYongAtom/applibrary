@@ -27,8 +27,6 @@ public class MaterialRefreshLayout extends FrameLayout {
     private final static int HIGHER_WAVE_HEIGHT = 180;
     private final static int DEFAULT_HEAD_HEIGHT = 70;
     private final static int hIGHER_HEAD_HEIGHT = 100;
-    private final static int DEFAULT_PROGRESS_SIZE = 50;
-    private final static int BIG_PROGRESS_SIZE = 60;
     private final static int PROGRESS_STOKE_WIDTH = 3;
 
     private MaterialHeaderView mMaterialHeaderView;
@@ -55,10 +53,8 @@ public class MaterialRefreshLayout extends FrameLayout {
     private boolean showProgressBg;
     private int progressBg;
     private boolean isShowWave;
-    private int progressSizeType;
     private int progressSize = 0;
     private boolean isLoadMoreing;
-    private boolean isSunStyle = false;
     //设置状体
     private int model = Mode.BOTH;
 
@@ -115,15 +111,13 @@ public class MaterialRefreshLayout extends FrameLayout {
         progressMax = t.getInteger(R.styleable.MaterialRefreshLayout_progress_max_value, 100);
         showProgressBg = t.getBoolean(R.styleable.MaterialRefreshLayout_progress_show_circle_backgroud, true);
         progressBg = t.getColor(R.styleable.MaterialRefreshLayout_progress_backgroud_color, CircleProgressBar.DEFAULT_CIRCLE_BG_LIGHT);
-        progressSizeType = t.getInt(R.styleable.MaterialRefreshLayout_progress_size_type, 0);
-        if (progressSizeType == 0) {
-            progressSize = DEFAULT_PROGRESS_SIZE;
-        } else {
-            progressSize = BIG_PROGRESS_SIZE;
-        }
+        progressSize = (int) getContext().getResources().getDimension(R.dimen.dp_40);
         t.recycle();
     }
 
+    public void setProgressSize(int progressSize) {
+        this.progressSize = progressSize;
+    }
 
     @Override
     protected void onAttachedToWindow() {
@@ -142,24 +136,23 @@ public class MaterialRefreshLayout extends FrameLayout {
         setHeaderHeight(ForPxTp.dip2px(context, headHeight));
 
 
-            mMaterialHeaderView = new MaterialHeaderView(context);
-            LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForPxTp.dip2px(context, hIGHER_HEAD_HEIGHT));
-            layoutParams.gravity = Gravity.TOP;
-            mMaterialHeaderView.setLayoutParams(layoutParams);
-            mMaterialHeaderView.setWaveColor(isShowWave ? waveColor : Color.TRANSPARENT);
-            mMaterialHeaderView.showProgressArrow(showArrow);
-            mMaterialHeaderView.setProgressSize(progressSize);
-            mMaterialHeaderView.setProgressColors(colorSchemeColors);
-            mMaterialHeaderView.setProgressStokeWidth(PROGRESS_STOKE_WIDTH);
-            mMaterialHeaderView.setTextType(textType);
-            mMaterialHeaderView.setProgressTextColor(progressTextColor);
-            mMaterialHeaderView.setProgressValue(progressValue);
-            mMaterialHeaderView.setProgressValueMax(progressMax);
-            mMaterialHeaderView.setIsProgressBg(showProgressBg);
-            mMaterialHeaderView.setProgressBg(progressBg);
-            mMaterialHeaderView.setVisibility(View.GONE);
-            setHeaderView(mMaterialHeaderView);
-
+        mMaterialHeaderView = new MaterialHeaderView(context);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ForPxTp.dip2px(context, hIGHER_HEAD_HEIGHT));
+        layoutParams.gravity = Gravity.TOP;
+        mMaterialHeaderView.setLayoutParams(layoutParams);
+        mMaterialHeaderView.setWaveColor(isShowWave ? waveColor : Color.TRANSPARENT);
+        mMaterialHeaderView.showProgressArrow(showArrow);
+        mMaterialHeaderView.setProgressSize(progressSize);
+        mMaterialHeaderView.setProgressColors(colorSchemeColors);
+        mMaterialHeaderView.setProgressStokeWidth(PROGRESS_STOKE_WIDTH);
+        mMaterialHeaderView.setTextType(textType);
+        mMaterialHeaderView.setProgressTextColor(progressTextColor);
+        mMaterialHeaderView.setProgressValue(progressValue);
+        mMaterialHeaderView.setProgressValueMax(progressMax);
+        mMaterialHeaderView.setIsProgressBg(showProgressBg);
+        mMaterialHeaderView.setProgressBg(progressBg);
+        mMaterialHeaderView.setVisibility(View.GONE);
+        setHeaderView(mMaterialHeaderView);
 
 
         mMaterialFooterView = new MaterialFooterView(context);
@@ -281,10 +274,6 @@ public class MaterialRefreshLayout extends FrameLayout {
 
         return super.onTouchEvent(e);
 
-    }
-
-    public void setSunStyle(boolean isSunStyle) {
-        this.isSunStyle = isSunStyle;
     }
 
     public void autoRefresh() {

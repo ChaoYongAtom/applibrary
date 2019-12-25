@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply from: "../upload.gradle"
+android {
+    compileSdkVersion rootProject.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.android.minSdkVersion
+        targetSdkVersion rootProject.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.depsLibs.appcompat
+    implementation rootProject.depsLibs.recyclerview
+    implementation  rootProject.depsLibs.design
+    implementation 'com.lxj:easyadapter:1.1.1'
+    implementation 'com.lxj:xpermission:1.0.1'
+}
+
+

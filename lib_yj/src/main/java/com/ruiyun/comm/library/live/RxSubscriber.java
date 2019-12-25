@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.baidu.mobstat.StatService;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
@@ -101,7 +102,7 @@ public class RxSubscriber implements NetWorkResult {
                 dismissProgressDialog();
             } else {
                 try {
-                    RxResult baseResult = JSONObject.parseObject(result, RxResult.class);
+                    RxResult baseResult = JSONObject.parseObject(result, RxResult.class, Feature.OrderedField);
                     if (getData() != null) baseResult.setClassName(getData().getSimpleName());
                     String dataJson = baseResult.getResult() == null ? "" : baseResult.getResult().toString();
                     if (!RxDataTool.isNullString(dataJson) && JConstant.isEncrypt()) {
@@ -130,7 +131,7 @@ public class RxSubscriber implements NetWorkResult {
                                 } else if (getData() == Integer.class) {
                                     baseResult.setResult(Integer.parseInt(dataJson));
                                 } else if (getData() != null) {
-                                    baseResult.setResult(JSONObject.parseObject(dataJson, getData()));
+                                    baseResult.setResult(JSONObject.parseObject(dataJson, getData(), Feature.OrderedField));
                                 }
 
                             }
