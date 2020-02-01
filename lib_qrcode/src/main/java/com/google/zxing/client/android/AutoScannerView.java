@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -21,7 +22,6 @@ import com.google.zxing.client.android.camera.CameraManager;
 
 public class AutoScannerView extends View {
 
-    private static final String TAG = AutoScannerView.class.getSimpleName();
 
     private Paint maskPaint;
     private Paint linePaint;
@@ -30,9 +30,9 @@ public class AutoScannerView extends View {
     private CameraManager cameraManager;
 
     private final int maskColor = Color.parseColor("#60000000");                          //蒙在摄像头上面区域的半透明颜色
-    private final int triAngleColor = Color.parseColor("#76EE00");                        //边角的颜色
-    private final int lineColor = Color.parseColor("#FF0000");                            //中间线的颜色
-    private final int textColor = Color.parseColor("#CCCCCC");                            //文字的颜色
+    private int triAngleColor = Color.parseColor("#76EE00");                        //边角的颜色
+    private int lineColor = Color.parseColor("#FF0000");                            //中间线的颜色
+    private int textColor = Color.parseColor("#CCCCCC");                            //文字的颜色
     private final int triAngleLength = dp2px(20);                                         //每个角的点距离
     private final int triAngleWidth = dp2px(2);                                           //每个角的点宽度
     private final int textMarinTop = dp2px(30);                                           //文字距离识别框的距离
@@ -56,6 +56,24 @@ public class AutoScannerView extends View {
         textPaint.setTextSize(dp2px(14));
     }
 
+    public void setColor(String triAngle, String line, String text) {
+        if (!TextUtils.isEmpty(triAngle)) {
+            triAngleColor = Color.parseColor(triAngle);                        //边角的颜色\
+            traAnglePaint.setColor(triAngleColor);
+        }
+
+        if (!TextUtils.isEmpty(line)) {
+            lineColor = Color.parseColor(line);                            //中间线的颜色
+            linePaint.setColor(lineColor);
+        }
+
+        if (!TextUtils.isEmpty(text)) {
+            textColor = Color.parseColor(text);
+            textPaint.setColor(textColor);
+        }
+
+    }
+
     public void setCameraManager(CameraManager cameraManager) {
         this.cameraManager = cameraManager;
         invalidate();//重新进入可能不刷新，所以调用一次。
@@ -63,8 +81,7 @@ public class AutoScannerView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (cameraManager == null)
-            return;
+        if (cameraManager == null) return;
         Rect frame = cameraManager.getFramingRect();
         Rect previewFrame = cameraManager.getFramingRectInPreview();
         if (frame == null || previewFrame == null) {

@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.zxing" />
+    package="com.google.zxing" >
+    <application>
+        <activity android:name=".client.android.camera.ScanActivity"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>

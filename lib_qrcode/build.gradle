@@ -9,7 +9,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
+            }
+        }
     }
 
     buildTypes {
@@ -29,7 +33,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly rootProject.depsLibs.appcompat
-
+    compileOnly rootProject.depsLibs.immersionbar
+    compileOnly (rootProject.depsLibs.arouterapi)
+    annotationProcessor rootProject.depsLibs.aroutercompiler
 //    api 'com.ruiyun.app.android:androidlibrary:1.0.0'
    //api project(':applibrary:androidlibrary')
 }

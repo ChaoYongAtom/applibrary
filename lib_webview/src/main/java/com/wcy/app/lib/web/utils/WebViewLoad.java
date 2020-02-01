@@ -1,7 +1,6 @@
 package com.wcy.app.lib.web.utils;
 
-import android.content.Context;
-import android.content.Intent;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.wcy.app.lib.web.ui.WebXActivity;
 
 /**
@@ -13,9 +12,7 @@ import com.wcy.app.lib.web.ui.WebXActivity;
  * @description applibrary
  */
 public class WebViewLoad {
-    public static void load(Context context, String url) {
-        Intent intent = new Intent(context, WebXActivity.class);
-        intent.putExtra(WebXActivity.URL, url);
-        context.startActivity(intent);
+    public static void load(String url) {
+        ARouter.getInstance().build("/webview/web_activity").withString(WebXActivity.URL, url).navigation();
     }
 }

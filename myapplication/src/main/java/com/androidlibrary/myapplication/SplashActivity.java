@@ -28,14 +28,14 @@ public class SplashActivity extends AppCompatActivity {
 
     }
     private void init() {
-        FixDexLoad.init(this,"NNWEB1E47B1D72C43B0A018DA669632B7EDPTO",true);
+      //  FixDexLoad.init(this,"NNWEB1E47B1D72C43B0A018DA669632B7EDPTO",true);
 //        FixDexUtil fixDexUtil = FixDexUtil.getInstance();
 //        fixDexUtil.init(this, "");
 //        fixDexUtil.loadFixedDex("sophix-patch.jar");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, RefreshLayoutActivity.class));
                 finish();
             }
         }, 500);

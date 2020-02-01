@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="list_view" />
+    <declare-styleable name="EmptyLayout">
+        <!--是否启用刷新-->
+        <attr name="isRefresh" format="boolean" />
+        <!--是否为列表展示-->
+        <attr name="isList" format="boolean" />
+        <!--刷新页面背景-->
+        <attr name="refreshBackgroundColor" format="color" />
+        <!--列表背景-->
+        <attr name="listBackgroundColor" format="color" />
+        <!--列表高度-->
+        <attr name="listHeight" format="enum">
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+        <!--分割线颜色-->
+        <attr name="dividerLineColor" format="color" />
+        <!--分割线高度-->
+        <attr name="dividerLineWidth" format="integer" />
+    </declare-styleable>
+</resources>

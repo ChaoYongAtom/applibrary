@@ -35,7 +35,8 @@ ext {
             rxrelay        : "2.0.0",
             immersionbar   : "3.0.0",
             rxhttp         : "1.2.1",
-
+            arouterapi     : '1.5.0',
+            aroutercompiler: '1.2.2',
     ]
 
     depsLibs = [
@@ -98,6 +99,9 @@ ext {
             liveEventBus       : "com.jeremyliao:live-event-bus-x:${depsVersion.liveEventBus}",
             rxhttp: "com.rxjava.rxhttp:rxhttp:${depsVersion.rxhttp}",
             rxhttpCompiler: "com.rxjava.rxhttp:rxhttp-compiler:${depsVersion.rxhttp}",
+            //https://github.com/alibaba/ARouter/blob/master/README_CN.md
+            arouterapi     : "com.alibaba:arouter-api:${depsVersion.arouterapi}",
+            aroutercompiler: "com.alibaba:arouter-compiler:${depsVersion.aroutercompiler}",
     ]
 
 

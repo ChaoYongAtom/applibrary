@@ -9,17 +9,14 @@ import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.entity.LocalMedia;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.RxResult;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
 import com.ruiyun.comm.library.ui.BaseMActivity;
 import com.wcy.app.lib.network.HttpUtils;
 import com.wcy.app.lib.network.exception.ApiException;
-import com.wcy.app.lib.update.VersionBean;
 import com.wcy.app.lib.web.utils.WebViewLoad;
-import com.wcy.app.lib_dex.DeviceIdUtil;
 import com.wcy.app.time.ChangeTimeDialogUtils;
 import com.wcy.app.time.utils.DateUtil;
 
@@ -30,7 +27,6 @@ import org.wcy.android.utils.RxTool;
 import org.wcy.android.view.EmptyLayout;
 import org.wcy.android.view.refresh.MaterialRefreshListener;
 
-import java.util.List;
 
 public class MainActivity extends BaseMActivity<GuideModel> implements CallBack {
     TextView msg;
@@ -42,7 +38,7 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         super.onCreate(savedInstanceState);
         RxTool.init(getApplication());
         setView(R.layout.activity_main, "");
-        msg=findViewById(R.id.tv_msg);
+        msg = findViewById(R.id.tv_msg);
         emptyLayout = findViewById(R.id.emptylayout);
         emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
             @Override
@@ -66,7 +62,6 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
             e.printStackTrace();
             RxLogTool.e("httpUrl", "地址初始化失败");
         }
-        msg.setText(DeviceIdUtil.getMac(this));
         RxPermissionsTool.with(this).addPermission(RxPermissionsTool.PERMISSION_WRITE_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_PHONE_STATE).addPermission(RxPermissionsTool.PERMISSION_CAMERA).addPermission(RxPermissionsTool.PERMISSION_ACCESS_FINE_LOCATION).addPermission(RxPermissionsTool.PERMISSION_ACCESS_COARSE_LOCATION).addPermission(RxPermissionsTool.REQUEST_INSTALL_PACKAGES).initPermission();
         findViewById(R.id.btnLogin).setOnClickListener(view -> {
             ChangeTimeDialogUtils changeTimeDialogUtils = new ChangeTimeDialogUtils(MainActivity.this, true) {
@@ -80,7 +75,7 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         });
         findViewById(R.id.web_btn).setOnClickListener(view -> {
             // KotlinBug.Companion.show(getThisContext());
-            WebViewLoad.load(getThisContext(), "http://www.baidu.com");
+            WebViewLoad.load("http://www.baidu.com");
 
 //            PictureSelector.create(MainActivity.this)
 //                    .openGallery(PictureMimeType.ofImage())
@@ -98,6 +93,9 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         findViewById(R.id.btnAddKotlin).setOnClickListener(view -> {
             toast("还没有增加Kotlin文件");
         });
+        findViewById(R.id.btnScan).setOnClickListener(view -> {
+            ARouter.getInstance().build("/qrcode/scan_activity").withBoolean("isVoice",true).withBoolean("isVibrate",true).withString("triAngleColor","#ffcc0000").navigation(getThisActivity(),300);
+        });
     }
 
     @Override
@@ -111,10 +109,11 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        List<LocalMedia> list = PictureSelector.obtainMultipleResult(data);
-        toast(list.get(0).getPath());
-
-
+//        List<LocalMedia> list = PictureSelector.obtainMultipleResult(data);
+//        toast(list.get(0).getPath());
+        if (resultCode == RESULT_OK) {
+            msg.setText(data.getStringExtra("context"));
+        }
     }
 
     @Override
