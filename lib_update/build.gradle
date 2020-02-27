@@ -29,5 +29,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //https://github.com/AlexLiuSheng/CheckVersionLib
-    implementation rootProject.depsLibs.versionchecklib
+    api rootProject.depsLibs.versionchecklib
 }

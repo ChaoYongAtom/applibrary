@@ -14,7 +14,6 @@ import com.gyf.immersionbar.ImmersionBar;
 import org.wcy.android.interfaces.BackHandledInterface;
 
 import org.wcy.android.R;
-import org.wcy.android.live.event.LiveBus;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.view.HeaderLayout;
 
@@ -36,7 +35,6 @@ public abstract class BaseFragment extends SupportFragment {
     protected View rootView;
     protected BackHandledInterface mBackHandledInterface;
     protected ImmersionBar mImmersionBar;
-    protected List<String> eventKeys = new ArrayList<>();
 
     public int setCreatedLayoutViewId() {
         return 0;

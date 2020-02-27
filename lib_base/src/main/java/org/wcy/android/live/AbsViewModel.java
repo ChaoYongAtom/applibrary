@@ -7,18 +7,18 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import org.wcy.android.interfaces.StateConstants;
-import org.wcy.android.live.event.LiveBus;
 import org.wcy.android.utils.ParameterizedTypeUtil;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author：wcy on 18/7/26 16:15
  */
 public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
-
+    public HashMap<String, MutableLiveData<Object>> mLiveBus;
     public MutableLiveData<String> loadState;
     private String fragmentName = "";
     public T mRepository;
@@ -28,6 +28,7 @@ public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
         loadState = new MutableLiveData<>();
         mRepository = ParameterizedTypeUtil.getNewInstance(this, 0);
         if (mRepository != null) {
+            mLiveBus = new HashMap<>();
             mRepository.setmContext(RxActivityTool.currentActivity());
         }
     }
@@ -37,19 +38,22 @@ public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
         super.onCleared();
 
     }
-    public void unSubscribe(){
+
+    public void unSubscribe() {
         if (mRepository != null) {
+
             mRepository.unSubscribe();
         }
     }
+
     protected void postData(Object object, String tag) {
         if (!RxDataTool.isNullString(tag)) {
             if (object instanceof List) {
                 BaseListVo baseListVo = new BaseListVo();
                 baseListVo.data = (List) object;
-                LiveBus.getDefault().postEvent(fragmentName.concat(tag).concat("list"), baseListVo);
+               postEvent(fragmentName.concat(tag).concat("list"), baseListVo);
             } else {
-                LiveBus.getDefault().postEvent(fragmentName.concat(tag), object);
+                postEvent(fragmentName.concat(tag), object);
             }
         }
     }
@@ -88,9 +92,11 @@ public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
         this.fragmentName = fragmentName;
         if (mRepository != null) mRepository.setFragmentName(fragmentName);
     }
+
     protected void postData(BaseResult rxResult) {
         postData(rxResult.getResult(), rxResult.getClassName());
     }
+
     public void succeed(String result) {
         if (!RxDataTool.isNullString(result)) {
             loadState.postValue(getStateSuccess(1, result));
@@ -102,4 +108,18 @@ public class AbsViewModel<T extends AbsRepository> extends AndroidViewModel {
             loadState.postValue(getStateError(1, e));
         }
     }
+
+    public MutableLiveData putLiveBus(String key) {
+        MutableLiveData liveData = new MutableLiveData<>();
+        mLiveBus.put(key, liveData);
+        return liveData;
+    }
+
+    public <M> MutableLiveData<M> postEvent(String eventKey, M value) {
+        MutableLiveData<M> mutableLiveData = (MutableLiveData<M>) mLiveBus.get(eventKey);
+        mutableLiveData.postValue(value);
+        return mutableLiveData;
+    }
+
+
 }

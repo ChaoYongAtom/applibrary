@@ -92,7 +92,7 @@ ext {
             background         : "com.noober.background:${depsVersion.background}",
             //https://github.com/AlexLiuSheng/CheckVersionLib
             versionchecklib    : "com.allenliu.versionchecklib:library:${depsVersion.versionchecklib}",
-            mobstat            : 'com.baidu.mobstat:mtj-sdk-circle:latest.integration',
+            mobstat            : 'com.baidu.mobstat:mtj-sdk:latest.integration',
             //https://github.com/trello/RxLifecycle
             rxlifecycle        : "com.trello.rxlifecycle3:rxlifecycle-android-lifecycle:${depsVersion.rxlifecycle}",
             //https://github.com/JeremyLiao/LiveEventBus

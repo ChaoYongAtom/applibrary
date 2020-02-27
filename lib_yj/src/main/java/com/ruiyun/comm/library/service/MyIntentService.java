@@ -31,7 +31,7 @@ public abstract class MyIntentService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_FOO.equals(action)) {
-                StatService.autoTrace(getApplication());
+                StatService.start(getApplication());
                 StatService.setOn(getApplication(), StatService.JAVA_EXCEPTION_LOG);
             }
             init();

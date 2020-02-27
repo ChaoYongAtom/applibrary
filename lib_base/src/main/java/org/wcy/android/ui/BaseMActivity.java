@@ -9,11 +9,7 @@ import org.wcy.android.live.AbsViewModel;
 import org.wcy.android.live.BaseListVo;
 import org.wcy.android.live.LoadInterface;
 import org.wcy.android.live.LoadObserver;
-import org.wcy.android.live.event.LiveBus;
 import org.wcy.android.utils.ParameterizedTypeUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * BaseMActivity
@@ -25,8 +21,6 @@ import java.util.List;
  */
 public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implements LoadInterface {
     protected T mViewModel;
-    protected List<String> eventKeys = new ArrayList<>();
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +35,7 @@ public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implemen
             dataObserver();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -51,13 +46,8 @@ public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implemen
 
     @Override
     protected void onDestroy() {
-        if (eventKeys != null && eventKeys.size() > 0) {
-            for (int i = 0; i < eventKeys.size(); i++) {
-                LiveBus.getDefault().clear(eventKeys.get(i));
-            }
-        }
-        if(mViewModel!=null)mViewModel.unSubscribe();
-        mViewModel=null;
+        if (mViewModel != null) mViewModel.unSubscribe();
+        mViewModel = null;
         super.onDestroy();
     }
 
@@ -68,26 +58,25 @@ public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implemen
     protected <M> MutableLiveData<M> registerObserver(Class<M> tClass, String tag) {
         String event = getClassName().concat(tClass.getSimpleName());
         event = event.concat(tag);
-        eventKeys.add(event);
-        return LiveBus.getDefault().subscribe(event);
+        return mViewModel.putLiveBus(event);
     }
 
     protected <M> MutableLiveData<BaseListVo<M>> registerObservers(Class<M> tClass) {
         String event = getClassName().concat(tClass.getSimpleName()).concat("list");
-        eventKeys.add(event);
-        return LiveBus.getDefault().subscribe(event);
+        return mViewModel.putLiveBus(event);
     }
 
     protected <M> MutableLiveData<BaseListVo<M>> registerObservers(Class<M> tClass, String tag) {
         String event = getClassName().concat(tClass.getSimpleName()).concat("list");
         event = event.concat(tag);
-        eventKeys.add(event);
-        return LiveBus.getDefault().subscribe(event);
+        return mViewModel.putLiveBus(event);
     }
+
     @Override
     public void dataObserver() {
 
     }
+
     @Override
     public void showSuccess(int state, String msg) {
 
@@ -105,7 +94,7 @@ public class BaseMActivity<T extends AbsViewModel> extends BaseActivity implemen
 
     @Override
     public String getClassName() {
-        return  getClass().getSimpleName() + getStateEventKey();
+        return getClass().getSimpleName() + getStateEventKey();
     }
 
     @Override

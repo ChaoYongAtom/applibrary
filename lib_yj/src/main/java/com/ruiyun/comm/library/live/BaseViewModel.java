@@ -14,7 +14,6 @@ import com.wcy.app.lib.network.exception.ApiException;
  * @author：wcy on 18/7/26 16:15
  */
 public class BaseViewModel<T extends BaseRepository> extends AbsViewModel<T> implements CallBack {
-
     public BaseViewModel(@NonNull Application application) {
         super(application);
         if (mRepository != null) {

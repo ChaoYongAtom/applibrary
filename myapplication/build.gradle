@@ -25,9 +25,9 @@ android {
                 JPUSH_APPKEY : "acae2947f39c1e027a834fdd",
                 JPUSH_PKGNAME: "com.ruiyun.salesTools.app.dynatown",
                 BAIDU_APPID  : "ab33c19e61",
-                ENABLE_DEBUG : true,
+                ENABLE_DEBUG : false,
                 MAP_KEY      : "yv74GYf9b0rizFkImaNroGhRu8qjasea",
-                HTTP_URL     : "http://appadviser.hejuzg.cn/version2/",
+                HTTP_URL     : "http://appadviser.yuejiayun.com/version2/",
         ]
     }
     dexOptions {
@@ -85,7 +85,7 @@ dependencies {
     // Anko Commons
     implementation "org.jetbrains.anko:anko-commons:$anko_version"
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':lib_yj')
+    api project(':lib_yj')
     implementation project(':lib_time')
     implementation project(':lib_webview')
     implementation project(':lib_dex')

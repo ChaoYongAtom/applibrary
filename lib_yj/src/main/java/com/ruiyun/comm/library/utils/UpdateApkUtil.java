@@ -5,12 +5,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.BaseRepository;
 import com.ruiyun.comm.library.live.RxResult;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
 import com.wcy.app.lib.network.exception.ApiException;
 import com.wcy.app.lib.update.VersionBean;
+import com.wcy.app.lib.update.interfaces.UpdateInterface;
 
 /**
  * 版本更新处理
@@ -20,6 +22,10 @@ import com.wcy.app.lib.update.VersionBean;
 public class UpdateApkUtil {
 
     public static void Update(Context context, CallBack callBack) {
+        try {
+            AllenVersionChecker.getInstance().cancelAllMission();
+        } catch (Exception e) {
+        }
         if (callBack == null) toastTest(context, "正在获取最新版本号信息，请稍等......");
         BaseRepository baseRepository = new BaseRepository();
         baseRepository.setmContext(context);
@@ -28,8 +34,20 @@ public class UpdateApkUtil {
             public void onNext(RxResult result) {
                 VersionBean bean = result.getResult();
                 if (bean.isUpdate(context) && bean.isAlert) {
-                    com.wcy.app.lib.update.UpdateApkUtil.Update(context, bean, () -> {
-                        if (callBack != null) callBack.onNext(result);
+                    com.wcy.app.lib.update.UpdateApkUtil.Update(context, bean, new UpdateInterface() {
+                        @Override
+                        public void succeed() {
+                            if (callBack != null) callBack.onNext(result);
+                        }
+
+                        @Override
+                        public void error() {
+                            if (callBack != null) {
+                                callBack.onError(new ApiException(new Throwable("安装失败，请退出重试!")));
+                            } else {
+                                toastTest(context, "安装失败，请退出重试！");
+                            }
+                        }
                     });
                 } else {
                     if (callBack != null) {

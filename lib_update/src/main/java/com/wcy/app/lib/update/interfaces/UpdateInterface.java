@@ -10,4 +10,5 @@ package com.wcy.app.lib.update.interfaces;
  */
 public interface UpdateInterface {
     void succeed();
+    void error();
 }

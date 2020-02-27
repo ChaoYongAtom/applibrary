@@ -48,7 +48,7 @@ public class RxSubscriber implements NetWorkResult {
     protected String method;
 
     protected Context context;
-
+    public long startTime;
     public void setmSubscriberOnNextListener(CallBack mSubscriberOnNextListener) {
         this.mSubscriberOnNextListener = mSubscriberOnNextListener;
     }
@@ -96,6 +96,10 @@ public class RxSubscriber implements NetWorkResult {
      */
     @Override
     public void onNext(String result) {
+        if (RxActivityTool.isAppDebug(this.context)) {
+            long endTime = System.currentTimeMillis();
+            RxLogTool.d(this.method + "请求耗时--------------------------", (endTime - this.startTime) / 1000L + "秒");
+        }
         if (mSubscriberOnNextListener != null) {
             if (JConstant.getRxsubscriber() != null) {
                 handleResult(result, null);

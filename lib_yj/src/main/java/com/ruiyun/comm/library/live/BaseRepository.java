@@ -286,6 +286,7 @@ public class BaseRepository extends AbsRepository {
                 if (!RxDataTool.isNullString(JConstant.getToken()))
                     builder.getParameters().put("token", JConstant.getToken());
                 builder.setTag(getFragmentName()).setHeaders(JConstant.getHeardsVal());
+                subscriber.startTime = System.currentTimeMillis();
                 Disposable disposable = HttpUtils.post(builder, new NetWorkResult() {
                     @Override
                     public void onNext(String result) {

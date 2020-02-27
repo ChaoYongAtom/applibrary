@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
+import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.RxResult;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
@@ -17,8 +19,6 @@ import com.ruiyun.comm.library.ui.BaseMActivity;
 import com.wcy.app.lib.network.HttpUtils;
 import com.wcy.app.lib.network.exception.ApiException;
 import com.wcy.app.lib.web.utils.WebViewLoad;
-import com.wcy.app.time.ChangeTimeDialogUtils;
-import com.wcy.app.time.utils.DateUtil;
 
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxLogTool;
@@ -64,14 +64,21 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         }
         RxPermissionsTool.with(this).addPermission(RxPermissionsTool.PERMISSION_WRITE_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_EXTERNAL_STORAGE).addPermission(RxPermissionsTool.PERMISSION_READ_PHONE_STATE).addPermission(RxPermissionsTool.PERMISSION_CAMERA).addPermission(RxPermissionsTool.PERMISSION_ACCESS_FINE_LOCATION).addPermission(RxPermissionsTool.PERMISSION_ACCESS_COARSE_LOCATION).addPermission(RxPermissionsTool.REQUEST_INSTALL_PACKAGES).initPermission();
         findViewById(R.id.btnLogin).setOnClickListener(view -> {
-            ChangeTimeDialogUtils changeTimeDialogUtils = new ChangeTimeDialogUtils(MainActivity.this, true) {
-                @Override
-                public void changeedData(String date) {
-                    hide();
-                    toast(date);
-                }
-            };
-            changeTimeDialogUtils.showDialog(DateUtil.getCurrentDate(DateUtil.DF_YYYY_MM_DD_HH_MM), 2019, 2029);
+            mViewModel.loading();
+//            ChangeTimeDialogUtils changeTimeDialogUtils = new ChangeTimeDialogUtils(MainActivity.this, true) {
+//                @Override
+//                public void changeedData(String date) {
+//                    hide();
+//                    toast(date);
+//                }
+//            };
+//            changeTimeDialogUtils.showDialog(DateUtil.getCurrentDate(DateUtil.DF_YYYY_MM_DD_HH_MM), 2019, 2029);
+//
+//            UIData uiData = UIData.create();
+//            uiData.setDownloadUrl("http:\\/\\/ysyapp.yj.cn.com\\/apk\\/ysyapp4.4.0.apk");
+//            uiData.setTitle("aaa");
+//            uiData.setContent("");
+//            AllenVersionChecker.getInstance().downloadOnly(uiData).executeMission(getThisContext());
         });
         findViewById(R.id.web_btn).setOnClickListener(view -> {
             // KotlinBug.Companion.show(getThisContext());
