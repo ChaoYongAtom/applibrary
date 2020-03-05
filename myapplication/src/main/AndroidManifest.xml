@@ -36,7 +36,8 @@
         android:theme="@style/AAppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,android:theme,android:allowBackup">
-        <activity android:name=".RefreshLayoutActivity"></activity>
+        <activity android:name=".RefreshLayoutActivity"/>
+        <activity android:name=".RefreshLayoutListActivity"/>
         <activity android:name=".KotlinActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">

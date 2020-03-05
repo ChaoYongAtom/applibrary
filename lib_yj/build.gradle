@@ -27,12 +27,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation  rootProject.depsLibs.mobstat
-    api "${rootProject.depsLibs.ryapp}:lib_base:1.1.0-1"
+    api "${rootProject.depsLibs.ryapp}:lib_base:1.1.2"
     api "${rootProject.depsLibs.ryapp}:lib_update:1.0.5"
     api "${rootProject.depsLibs.ryapp}:lib_network:1.0.2"
     api "${rootProject.depsLibs.ryapp}:lib_imageloader:1.0.0"
   //  api project(':lib_update')
- //   api project(':lib_base')
+//    api project(':lib_base')
 //   api project(':lib_network')
 //    api project(':lib_imageloader')
 }

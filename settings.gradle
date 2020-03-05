@@ -2,3 +2,5 @@ include ':lib_base', ':lib_time', ':lib_refreshlayout',":X5WebDemo", ':myapplica
         ':lib_network', ':lib_webview', ':lib_imageloader',
         ':lib_update', ':lib_yj', ':lib_dex', "lib_qrcode",
         "lib_picture","lib_ucrop","lib_xpopup"
+include ':app'
+project(':app').projectDir=new File("../YjSales/app")

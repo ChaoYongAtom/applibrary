@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+apply from: "../upload.gradle"
 android {
     compileSdkVersion rootProject.android.compileSdkVersion
     lintOptions {
@@ -31,5 +31,5 @@ dependencies {
     api  'com.scwang.smart:refresh-layout-kernel:2.0.0-alpha-1'      //核心必须依赖
     api  'com.scwang.smart:refresh-header-material:2.0.0-alpha-1'    //谷歌刷新头
     api  'com.scwang.smart:refresh-footer-ball:2.0.0-alpha-1'        //球脉冲加载
-    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta11'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.1'
 }

@@ -15,4 +15,7 @@ public class ViewRecyclerHolder extends BaseViewHolder {
     public ViewRecyclerHolder(View view) {
         super(view);
     }
+    public View getConvertView(){
+        return itemView;
+    }
 }

@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.wcy.app.lib.refreshlayout.EmptyLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/emptylayout"
+    app:isRefresh="true">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        style="@style/AppTheme.Toolbar"
-        android:background="@color/colorPrimary"
-        app:navigationIcon="@mipmap/back_black"
-        app:title="上拉下拉刷新" />
-
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/refreshLayout"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.core.widget.NestedScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:text="asdfadfadsfadsf" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:text="asdfadfadsfadsf" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:text="asdfadfadsfadsf" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
-                    android:text="asdfadfadsfadsf"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
-                    android:text="asdfadfadsfadsf"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_30"
-                    android:text="asdfadfadsfadsf"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:nestedScrollingEnabled="true"/>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+                android:background="@color/white"
+                android:nestedScrollingEnabled="true" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-</LinearLayout>
+</com.wcy.app.lib.refreshlayout.EmptyLayout>

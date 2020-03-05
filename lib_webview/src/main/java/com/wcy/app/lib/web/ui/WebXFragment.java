@@ -45,6 +45,11 @@ public class WebXFragment extends BaseFragment {
     }
 
     @Override
+    public Object getTitleId() {
+        return R.id.title_layout;
+    }
+
+    @Override
     public int setCreatedLayoutViewId() {
         return R.layout.fragment_webx;
     }
@@ -108,6 +113,11 @@ public class WebXFragment extends BaseFragment {
     public void onDestroy() {
         mSuperWebX5.destroy();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean isStatusBarDarkFont() {
+        return true;
     }
 
     @Override

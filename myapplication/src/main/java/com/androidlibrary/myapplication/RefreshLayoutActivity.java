@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.ruiyun.comm.library.ui.BaseActivity;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.wcy.app.lib.refreshlayout.CommonRecyclerAdapter;
+import com.wcy.app.lib.refreshlayout.EmptyLayout;
+import com.wcy.app.lib.refreshlayout.MaterialRefreshListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RefreshLayoutActivity extends BaseActivity {
-    RefreshLayout refreshLayout;
+    EmptyLayout emptyLayout;
     private CommonRecyclerAdapter mAdapter;
     List<String> list = new ArrayList<>();
 
@@ -40,23 +43,20 @@ public class RefreshLayoutActivity extends BaseActivity {
 
             }
         };
+        emptyLayout=findViewById(R.id.emptylayout);
+       emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
+           @Override
+           public void onRefresh() {
+               emptyLayout.getPullToRefreshView().finishRefresh(2000/*,false*/);//传入false表示刷新失败
+           }
 
+           @Override
+           public void onRefreshLoadMore() {
+               emptyLayout.getPullToRefreshView().finishLoadMore(2000);//传入false表示加载失败
+           }
+       });
         recyclerView.addItemDecoration(new DividerItemDecoration(this, 1));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
-        refreshLayout = findViewById(R.id.refreshLayout);
-        refreshLayout.setEnableLoadMore(true);
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-            }
-        });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout rl) {
-                refreshLayout.finishLoadMore(2000);//传入false表示加载失败
-            }
-        });
     }
 }

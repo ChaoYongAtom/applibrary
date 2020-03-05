@@ -417,30 +417,60 @@ public class EmptyLayout extends RelativeLayout {
     public void notifyDataSetChanged() {
         if (adapter != null) {
             onRefreshComplete();
-            adapter.notifyDataSetChanged();
+            if(adapter instanceof CommonRecyclerAdapter){
+                ((CommonRecyclerAdapter) adapter).adaperNotifyDataSetChanged();
+            }else{
+                adapter.notifyDataSetChanged();
+            }
         }
         showView();
     }
 
     /**
      * 是否启用下拉刷新
+     *
      * @param falg
      */
     public void setEnableRefresh(boolean falg) {
-        if (pullToRefreshView != null){
+        if (pullToRefreshView != null) {
             pullToRefreshView.setEnableRefresh(falg);
         }
     }
 
     /**
      * 是否启用上拉加载更多
+     *
      * @param falg
      */
     public void setEnableLoadMore(boolean falg) {
-        if (pullToRefreshView != null){
+        if (pullToRefreshView != null) {
             pullToRefreshView.setEnableLoadMore(falg);
         }
     }
+
+    public void setMode(int mode) {
+        if (pullToRefreshView != null) {
+            switch (mode) {
+                case RefreshLyaoutMode.DISABLED:
+                    pullToRefreshView.setEnableRefresh(false);
+                    pullToRefreshView.setEnableLoadMore(false);
+                    break;
+                case RefreshLyaoutMode.BOTH:
+                    pullToRefreshView.setEnableRefresh(true);
+                    pullToRefreshView.setEnableLoadMore(true);
+                    break;
+                case RefreshLyaoutMode.START:
+                    pullToRefreshView.setEnableRefresh(true);
+                    pullToRefreshView.setEnableLoadMore(false);
+                    break;
+                case RefreshLyaoutMode.END:
+                    pullToRefreshView.setEnableRefresh(false);
+                    pullToRefreshView.setEnableLoadMore(true);
+                    break;
+            }
+        }
+    }
+
     public boolean isRefresh() {
         return isRefresh;
     }
