@@ -34,7 +34,7 @@ dependencies {
     compileOnly rootProject.depsLibs.appcompat
     compileOnly rootProject.depsLibs.design
     compileOnly rootProject.depsLibs.immersionbar
-    compileOnly "${rootProject.depsLibs.ryapp}:lib_base:1.1.0"
+    compileOnly "${rootProject.depsLibs.ryapp}:lib_base:1.1.2"
     compileOnly (rootProject.depsLibs.arouterapi)
     annotationProcessor rootProject.depsLibs.aroutercompiler
     //compileOnly project(':lib_base')

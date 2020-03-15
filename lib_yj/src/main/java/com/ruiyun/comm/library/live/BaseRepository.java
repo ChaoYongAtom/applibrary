@@ -19,6 +19,7 @@ import org.wcy.android.live.AbsRepository;
 import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxDataTool;
 import org.wcy.android.utils.RxKeyboardTool;
+import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxNetTool;
 import org.wcy.android.utils.RxTool;
 
@@ -134,9 +135,9 @@ public class BaseRepository extends AbsRepository {
      * @param sb
      * @param listener
      */
-    public void uplaod(UploadType uploadType, List<String> paths, Map<String,Object> map,StringBuffer sb, CallBack listener) {
+    public void uplaod(UploadType uploadType, List<String> paths, Map<String, Object> map, StringBuffer sb, CallBack listener) {
         String s = paths.get(0);
-        uplaod(uploadType, s,map, new CallBack() {
+        uplaod(uploadType, s, map, new CallBack() {
             @Override
             public void onNext(RxResult result) {
                 UploadBean uploadBean = result.getResult();
@@ -147,7 +148,7 @@ public class BaseRepository extends AbsRepository {
                     result.setResult(sb.toString());
                     listener.onNext(result);
                 } else {
-                    uplaod(uploadType, paths,map, sb, listener);
+                    uplaod(uploadType, paths, map, sb, listener);
                 }
             }
 
@@ -157,6 +158,7 @@ public class BaseRepository extends AbsRepository {
             }
         });
     }
+
     public void uplaod(UploadType uploadType, List<String> paths, StringBuffer sb, CallBack listener) {
         String s = paths.get(0);
         uplaod(uploadType, s, new CallBack() {
@@ -254,6 +256,9 @@ public class BaseRepository extends AbsRepository {
                 parameters.remove(key);
             }
             if (parameters.size() > 0) {
+                if (RxActivityTool.isAppDebug(RxTool.getContext())) {
+                    RxLogTool.d(builder.getUrl() + "params", JSONObject.toJSONString(parameters));
+                }
                 if (JConstant.isEncrypt()) {
                     map.put("params", AESOperator.encrypt(parameters.toJSONString()));
                 } else {

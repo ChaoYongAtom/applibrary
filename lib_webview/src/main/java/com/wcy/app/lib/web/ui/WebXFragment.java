@@ -53,10 +53,12 @@ public class WebXFragment extends BaseFragment {
     public int setCreatedLayoutViewId() {
         return R.layout.fragment_webx;
     }
+
     @Override
     public FragmentAnimator onCreateFragmentAnimator() {
         return new DefaultNoAnimator();
     }
+
     @Override
     public void onViewCreated(@NonNull View rootView, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(rootView, savedInstanceState);
@@ -71,6 +73,7 @@ public class WebXFragment extends BaseFragment {
             QbSdk.forceSysWebView();
         }
         mSuperWebX5 = SuperWebX5.create(this, rootView, title_tv, getArguments().getString(URL));
+        mSuperWebX5.getJsInterfaceHolder().addJavaObject("android", new AndroidInterface(getThisContext()));
     }
 
     /**

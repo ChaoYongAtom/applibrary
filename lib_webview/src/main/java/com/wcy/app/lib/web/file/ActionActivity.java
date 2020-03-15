@@ -100,7 +100,7 @@ public final class ActionActivity extends Activity {
 			i.addCategory(Intent.CATEGORY_OPENABLE);
 			i.setType("image/*");
 			this.startActivityForResult(Intent.createChooser(i,
-					"File Chooser"), REQUEST_CODE);
+					"Image Chooser"), REQUEST_CODE);
 		} catch (Throwable throwable) {
 			LogUtils.i(TAG, "找不到文件选择器");
 			mFileDataListener.onFileDataResult(REQUEST_CODE, -1, null);

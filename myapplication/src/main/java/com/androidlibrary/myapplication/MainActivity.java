@@ -10,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.allenliu.versionchecklib.v2.AllenVersionChecker;
-import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.ruiyun.comm.library.common.JConstant;
 import com.ruiyun.comm.library.live.RxResult;
 import com.ruiyun.comm.library.live.interfaces.CallBack;
@@ -24,14 +22,11 @@ import org.wcy.android.utils.RxActivityTool;
 import org.wcy.android.utils.RxLogTool;
 import org.wcy.android.utils.RxPermissionsTool;
 import org.wcy.android.utils.RxTool;
-import org.wcy.android.view.EmptyLayout;
-import org.wcy.android.view.refresh.MaterialRefreshListener;
 
 
 public class MainActivity extends BaseMActivity<GuideModel> implements CallBack {
     TextView msg;
     ImageView image_view;
-    EmptyLayout emptyLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +34,6 @@ public class MainActivity extends BaseMActivity<GuideModel> implements CallBack 
         RxTool.init(getApplication());
         setView(R.layout.activity_main, "");
         msg = findViewById(R.id.tv_msg);
-        emptyLayout = findViewById(R.id.emptylayout);
-        emptyLayout.setOnRefreshListener(new MaterialRefreshListener() {
-            @Override
-            public void onRefresh() {
-                emptyLayout.onRefreshComplete();
-            }
-
-            @Override
-            public void onRefreshLoadMore() {
-                emptyLayout.onRefreshComplete();
-            }
-        });
         try {
             ApplicationInfo appInfo = RxTool.getContext().getPackageManager().getApplicationInfo(RxTool.getContext().getPackageName(), PackageManager.GET_META_DATA);
             Bundle bundle = appInfo.metaData;
